@@ -12,14 +12,6 @@ const Navbar = () => {
       </div>
       <div className={styles.wrapper1}>
         <div className={styles.txt1}>
-          <h4>Installation</h4>
-        </div>
-        <div className={styles.txt2}> Install Next.js</div>
-        <div className={styles.txt2}> Install Tailwind CSS/ Mui </div>
-        <div className={styles.txt2}> Add Utilities</div>
-      </div>
-      <div className={styles.wrapper1}>
-        <div className={styles.txt1}>
           <h4>All Components</h4>
         </div>
 
