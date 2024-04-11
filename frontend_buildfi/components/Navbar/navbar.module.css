@@ -1,0 +1,58 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-width: 240px;
+  width: 240px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 100vh;
+  padding-top: 60px;
+}
+
+.wrapper1{
+  padding-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.txt1{
+  color: rgb(255 255 255/var(--tw-text-opacity));
+  font-size: .875rem;
+  padding-bottom: 0.25rem;
+  padding-top: 0.25rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  margin-bottom: 0.25rem;
+  line-height: 1.25rem;
+}
+.txt2{
+  cursor: pointer;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding-bottom: 0.25rem;
+  padding-top: 0.25rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  color: #a1a1aa;
+  font-size: 14px;
+  line-height: 1.25rem;
+  transition: padding 0.3s ease;
+}
+
+.txt2:hover{
+  font-weight: 200;
+  color: #10b981;
+  padding: 4px 8px;
+  animation: moveRight 0.3s ease forwards;
+}
+@keyframes moveRight {
+  from {
+    transform: translateX(0); /* Start from current position */
+  }
+  to {
+    transform: translateX(8px); /* Move 10px to the right */
+  }
+}
