@@ -3,11 +3,7 @@ import styles from "./header.module.css";
 import useConnection from "@/utils/useConnection";
 import { Button, CircularProgress } from "@mui/material";
 
-interface HeaderProps {
-  props: any;
-}
-
-const Header: React.FC<HeaderProps> = ({ props }: HeaderProps) => {
+const Header = () => {
   const { _connectToMetaMask, _disconnectFromMetaMask } = useConnection();
   const { signer, accountData } = useConnection();
 
@@ -34,12 +30,12 @@ const Header: React.FC<HeaderProps> = ({ props }: HeaderProps) => {
         <div>Looking for Funding? </div>
       </div>
 
-      {loading ? ( // Display CircularProgress while loading
+      {loading ? (
         <CircularProgress />
       ) : connected && accountData.address ? (
         <>
           <button
-            className="bg bg-red-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-[#03A9F4] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={handleDisconnect}
           >
             🟢{" "}
