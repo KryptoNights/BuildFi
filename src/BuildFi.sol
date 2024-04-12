@@ -2,6 +2,11 @@
 pragma solidity ^0.8.20;
 
 // a crowd-investment platform where developers can raise funds for their projects from day 1. it's milestone based and the funds get disbursed on successful milestone completion
+// TODO:
+// - penalization logic (credibility and payout)
+// - add voting deadline to a milestone (if it exceeds without getting closed, penalization)
+// - add proposals to project for investors to create vote on
+// - a way for attestations to be added
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
