@@ -17,7 +17,7 @@ const Navbar = () => {
 
         {data.map((item, index) => (
           <div className={styles.txt2} key={index}>
-            {item?.name}{" "}           
+            {item?.name}{" "}
           </div>
         ))}
       </div>

@@ -5,23 +5,16 @@ import Header from "../Header/Header";
 
 interface LayoutProps {
   children: React.ReactNode;
-
 }
 
-const Layout: React.FC<LayoutProps> = ({
-  children,
-
-}) => {
-
-    const res=useDetectDevice();
-
+const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const res = useDetectDevice();
 
   return (
     <>
-      <div className={styles.container} >
-        <Header/>
-         <div className={styles.subContainer}>{children}</div>
-
+      <div className={styles.container}>
+        <Header />
+        <div className={styles.subContainer}>{children}</div>
       </div>
     </>
   );
