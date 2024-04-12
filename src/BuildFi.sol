@@ -4,6 +4,7 @@ pragma solidity ^0.8.20;
 // a crowd-investment platform where developers can raise funds for their projects from day 1. it's milestone based and the funds get disbursed on successful milestone completion
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract BuildFi {
     struct Developer {
@@ -31,6 +32,7 @@ contract BuildFi {
         uint256 id;
         string name;
         string project_metadata_json;
+        address owner;
         // milestones
         uint16 milestone_count;
         uint16 last_milestone_completed;
@@ -46,9 +48,14 @@ contract BuildFi {
         // payouts
         address projectToken;
         bool token_set;
+        uint256 tokens_commited;
         // timestamps
         uint256 created_at;
         uint256 started_at;
+        uint256 funding_ends_at;
+        uint256 completed_at;
+        // status
+        bool abandoned;
     }
     mapping(uint256 => Project) public buildfi_projects;
 
@@ -84,7 +91,8 @@ contract BuildFi {
         string memory _project_metadata_json,
         uint16 _milestones,
         uint16[] memory _payout_percentages,
-        uint256 _total_budget
+        uint256 _total_budget,
+        uint256 funding_ends_at
     ) public {
         // ensure the developer exists
         require(
@@ -96,6 +104,12 @@ contract BuildFi {
         require(
             buildfi_projects[projectCount].id == 0,
             "Project already exists"
+        );
+
+        // ensure funding_ends_at is in the future
+        require(
+            funding_ends_at > block.timestamp,
+            "Invalid funding end timestamp"
         );
 
         // ensure payout percentages are valid
@@ -114,19 +128,107 @@ contract BuildFi {
         project.id = projectCount;
         project.name = _name;
         project.project_metadata_json = _project_metadata_json;
+        project.owner = msg.sender;
         project.milestone_count = _milestones;
         project.last_milestone_completed = 0;
         project.payout_percentages = _payout_percentages;
         project.total_budget = _total_budget;
         project.total_raised = 0;
+        project.created_at = block.timestamp;
+        project.funding_ends_at = funding_ends_at;
 
         // increment project count
         projectCount++;
     }
 
+    function abandon_project(uint256 _projectId) public {
+        // ensure the project exists
+        require(buildfi_projects[_projectId].id != 0, "Project does not exist");
+
+        // ensure it's the project owner
+        require(msg.sender == buildfi_projects[_projectId].owner, "Not owner");
+
+        // ensure the project is still open for funding
+        require(
+            block.timestamp < buildfi_projects[_projectId].funding_ends_at,
+            "Project funding is closed"
+        );
+
+        // mark the project as abandoned
+        buildfi_projects[_projectId].abandoned = true;
+    }
+
+    function reclaim_funds(uint256 _projectId) public {
+        // investors can reclaim funds if the project is abandoned
+
+        // ensure the project exists
+        require(buildfi_projects[_projectId].id != 0, "Project does not exist");
+
+        // ensure the project is abandoned
+        require(buildfi_projects[_projectId].abandoned, "Project not abandoned");
+
+        // ensure the investor has invested
+        require(
+            buildfi_projects[_projectId].investments[msg.sender] > 0,
+            "Sender has not invested"
+        );
+
+        // calculate refund
+        uint256 refund = buildfi_projects[_projectId].investments[msg.sender];
+
+        // pay out the refund
+        payable(msg.sender).transfer(refund);
+
+        // update investor investment
+        buildfi_projects[_projectId].investments[msg.sender] = 0;
+    }
+
+    function set_and_transfer_tokens(uint256 _projectId, address _projectToken)
+        public
+    {
+        // ensure the project exists
+        require(buildfi_projects[_projectId].id != 0, "Project does not exist");
+
+        // ensure it's the project owner
+        require(msg.sender == buildfi_projects[_projectId].owner, "Not owner");
+
+        // ensure the project is still open for funding
+        require(
+            block.timestamp < buildfi_projects[_projectId].funding_ends_at,
+            "Project funding is closed"
+        );
+
+        // ensure the project is not already completed
+        require(
+            buildfi_projects[_projectId].last_milestone_completed <
+                buildfi_projects[_projectId].milestone_count,
+            "Project already completed"
+        );
+
+        // set the project token
+        buildfi_projects[_projectId].projectToken = _projectToken;
+        buildfi_projects[_projectId].token_set = true;
+
+        ERC20 token = ERC20(_projectToken);
+        uint256 decimals = token.decimals();
+
+        // transfer the project token
+        token.transferFrom(
+            msg.sender,
+            address(this),
+            buildfi_projects[_projectId].tokens_commited * 10**decimals
+        );
+    }
+
     function invest(uint256 _projectId) public payable {
         // ensure the project exists
         require(buildfi_projects[_projectId].id != 0, "Project does not exist");
+
+        // ensure the project is still open for funding
+        require(
+            block.timestamp < buildfi_projects[_projectId].funding_ends_at,
+            "Project funding is closed"
+        );
 
         uint256 _amount = msg.value;
 
@@ -145,6 +247,9 @@ contract BuildFi {
     function start_voting(uint256 _projectId, uint16 _milestoneId) public {
         // ensure the project exists
         require(buildfi_projects[_projectId].id != 0, "Project does not exist");
+
+        // ensure it's the project owner
+        require(msg.sender == buildfi_projects[_projectId].owner, "Not owner");
 
         // ensure the milestone exists
         require(
@@ -275,5 +380,15 @@ contract BuildFi {
 
         // pay out the milestone budget
         payable(msg.sender).transfer(payout);
+
+        // if last milestone also payout tokens to investors
+        ERC20 token = ERC20(buildfi_projects[_projectId].projectToken);
+        if (_milestoneId == buildfi_projects[_projectId].milestone_count) {
+            for (uint256 i = 0; i < buildfi_projects[_projectId].investors.length; i++) {
+                uint256 invested = buildfi_projects[_projectId].investments[buildfi_projects[_projectId].investors[i]];
+                uint256 investor_payout = (buildfi_projects[_projectId].tokens_commited * uint256(token.decimals()) * invested) / buildfi_projects[_projectId].total_raised;
+                token.transfer(buildfi_projects[_projectId].investors[i], investor_payout);
+            }
+        }
     }
 }
