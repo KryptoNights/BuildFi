@@ -165,7 +165,10 @@ contract BuildFi {
         require(buildfi_projects[_projectId].id != 0, "Project does not exist");
 
         // ensure the project is abandoned
-        require(buildfi_projects[_projectId].abandoned, "Project not abandoned");
+        require(
+            buildfi_projects[_projectId].abandoned,
+            "Project not abandoned"
+        );
 
         // ensure the investor has invested
         require(
@@ -183,9 +186,10 @@ contract BuildFi {
         buildfi_projects[_projectId].investments[msg.sender] = 0;
     }
 
-    function set_and_transfer_tokens(uint256 _projectId, address _projectToken)
-        public
-    {
+    function set_and_transfer_tokens(
+        uint256 _projectId,
+        address _projectToken
+    ) public {
         // ensure the project exists
         require(buildfi_projects[_projectId].id != 0, "Project does not exist");
 
@@ -216,7 +220,7 @@ contract BuildFi {
         token.transferFrom(
             msg.sender,
             address(this),
-            buildfi_projects[_projectId].tokens_commited * 10**decimals
+            buildfi_projects[_projectId].tokens_commited * 10 ** decimals
         );
     }
 
@@ -370,7 +374,8 @@ contract BuildFi {
             buildfi_projects[_projectId].milestones[_milestoneId].votes_against
         ) {
             // update project last milestone completed
-            buildfi_projects[_projectId].last_milestone_completed = _milestoneId;
+            buildfi_projects[_projectId]
+                .last_milestone_completed = _milestoneId;
         }
 
         // calculate payout
@@ -384,10 +389,22 @@ contract BuildFi {
         // if last milestone also payout tokens to investors
         ERC20 token = ERC20(buildfi_projects[_projectId].projectToken);
         if (_milestoneId == buildfi_projects[_projectId].milestone_count) {
-            for (uint256 i = 0; i < buildfi_projects[_projectId].investors.length; i++) {
-                uint256 invested = buildfi_projects[_projectId].investments[buildfi_projects[_projectId].investors[i]];
-                uint256 investor_payout = (buildfi_projects[_projectId].tokens_commited * uint256(token.decimals()) * invested) / buildfi_projects[_projectId].total_raised;
-                token.transfer(buildfi_projects[_projectId].investors[i], investor_payout);
+            for (
+                uint256 i = 0;
+                i < buildfi_projects[_projectId].investors.length;
+                i++
+            ) {
+                uint256 invested = buildfi_projects[_projectId].investments[
+                    buildfi_projects[_projectId].investors[i]
+                ];
+                uint256 investor_payout = (buildfi_projects[_projectId]
+                    .tokens_commited *
+                    uint256(token.decimals()) *
+                    invested) / buildfi_projects[_projectId].total_raised;
+                token.transfer(
+                    buildfi_projects[_projectId].investors[i],
+                    investor_payout
+                );
             }
         }
     }
