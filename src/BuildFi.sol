@@ -8,10 +8,18 @@ pragma solidity ^0.8.20;
 // - add proposals to project for investors to create vote on
 // - a way for attestations to be added
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+// import {IERC20} from "openzeppelin/token/ERC20/IERC20.sol";
+// import "openzeppelin/token/ERC20/ERC20.sol";
+// import {IRiscZeroVerifier} from "risc0/IRiscZeroVerifier.sol";
+import {IERC20} from "openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {ERC20} from "openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {IRiscZeroVerifier} from "risc0/IRiscZeroVerifier.sol";
 
 contract BuildFi {
+    address deployer;
+    bytes32 public imageId;
+    IRiscZeroVerifier public immutable verifier;
+
     struct Developer {
         // identity
         string name;
@@ -66,8 +74,16 @@ contract BuildFi {
 
     uint256 public projectCount;
 
-    constructor() {
+    constructor(bytes32 _imageId, IRiscZeroVerifier _verifier) {
+        deployer = msg.sender;
+        imageId = _imageId;
+        verifier = IRiscZeroVerifier(_verifier);
         projectCount = 1;
+    }
+
+    function changeImageId(bytes32 _imageId) public {
+        require(msg.sender == deployer, "Not deployer");
+        imageId = _imageId;
     }
 
     function makeNewAccount(
