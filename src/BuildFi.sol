@@ -20,6 +20,8 @@ contract BuildFi {
     bytes32 public imageId;
     IRiscZeroVerifier public immutable verifier;
 
+    mapping(address => bytes32) public claims;
+
     struct Developer {
         // identity
         string name;
@@ -74,6 +76,8 @@ contract BuildFi {
 
     uint256 public projectCount;
 
+    error InvalidClaim(string message);
+
     constructor(bytes32 _imageId, IRiscZeroVerifier _verifier) {
         deployer = msg.sender;
         imageId = _imageId;
@@ -84,6 +88,16 @@ contract BuildFi {
     function changeImageId(bytes32 _imageId) public {
         require(msg.sender == deployer, "Not deployer");
         imageId = _imageId;
+    }
+
+    function verificationCallback(address sender, bytes32 claimId, bytes32 postStateDigest, bytes calldata seal) public {
+        if (sender == address(0)) revert InvalidClaim("Invalid recipient address");
+        if (claimId == bytes32(0)) revert InvalidClaim("Empty claimId");
+        if (!verifier.verify(seal, imageId, postStateDigest, sha256(abi.encode(sender, claimId)))) {
+            revert InvalidClaim("Invalid proof");
+        }
+
+        claims[sender] = claimId;
     }
 
     function makeNewAccount(
