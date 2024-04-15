@@ -139,7 +139,10 @@ contract BuildFi {
         claims[sender] = claimId;
     }
 
-    function makeNewAccount(string memory _name, string memory _email) public {
+    function makeNewAccount(
+        string memory _name,
+        string memory _email
+    ) public {
         // ensure the developer doesn't already exist
         require(
             bytes(buildfi_developers[msg.sender].name).length == 0,
@@ -148,7 +151,10 @@ contract BuildFi {
 
         // hash the email in sha256
         bytes32 email_hash = sha256(bytes(_email));
-        require(claims[msg.sender] == email_hash, "Email claim does not match");
+        require(
+            claims[msg.sender] == email_hash,
+            "Email claim does not match"
+        );
 
         // create a new developer account
         buildfi_developers[msg.sender] = Developer(
