@@ -8,17 +8,20 @@ pragma solidity ^0.8.20;
 // - add proposals to project for investors to create vote on
 // - a way for attestations to be added
 
-// import {IERC20} from "openzeppelin/token/ERC20/IERC20.sol";
-// import "openzeppelin/token/ERC20/ERC20.sol";
-// import {IRiscZeroVerifier} from "risc0/IRiscZeroVerifier.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import {IRiscZeroVerifier} from "@risc0/IRiscZeroVerifier.sol";
+import { Ownable } from "openzeppelin/contracts/access/Ownable.sol";
+import {IERC20} from "openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {ERC20} from "openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {IRiscZeroVerifier} from "risc0/IRiscZeroVerifier.sol";
+import {ISP} from "sign-protocol/interfaces/ISP.sol";
+import { Attestation } from "sign-protocol/models/Attestation.sol";
+import { DataLocation } from "sign-protocol/models/DataLocation.sol";
+
 
 contract BuildFi {
-    address deployer;
+    address public deployer;
     bytes32 public imageId;
     IRiscZeroVerifier public immutable verifier;
+    ISP public immutable isp;
 
     mapping(address => bytes32) public claims;
 
@@ -40,6 +43,7 @@ contract BuildFi {
         uint256 votes_for;
         uint256 votes_against;
         mapping(address => bool) voters;
+        // add witness here
     }
 
     struct Project {
@@ -50,7 +54,8 @@ contract BuildFi {
         address owner;
         // milestones
         uint16 milestone_count;
-        uint16 last_milestone_completed;
+        int last_milestone_completed;
+        uint256[] milestone_timestamps;
         uint16[] payout_percentages;
         string milestone_metadata_json;
         mapping(uint16 => Milestone) milestones;
@@ -71,23 +76,40 @@ contract BuildFi {
         uint256 completed_at;
         // status
         bool abandoned;
+        // attestations
+        uint64 projectCommitted;
+        uint64 projectWrapped;
+        // wrapped includes funds have been locked and distributed etc
     }
     mapping(uint256 => Project) public buildfi_projects;
 
     uint256 public projectCount;
 
+    struct SCHEMA_IDS {
+        uint64 committed;
+        uint64 wrapped;
+    }
+    SCHEMA_IDS public schema_ids;
+
     error InvalidClaim(string message);
 
-    constructor(bytes32 _imageId, IRiscZeroVerifier _verifier) {
+    constructor(bytes32 _imageId, IRiscZeroVerifier _verifier, address _sign_deployed_addr) {
         deployer = msg.sender;
         imageId = _imageId;
         verifier = IRiscZeroVerifier(_verifier);
+        isp = ISP(_sign_deployed_addr);
         projectCount = 1;
     }
 
     function changeImageId(bytes32 _imageId) public {
         require(msg.sender == deployer, "Not deployer");
         imageId = _imageId;
+    }
+
+    function setSchemaIds(uint64 _committed, uint64 _wrapped) public {
+        require(msg.sender == deployer, "Not deployer");
+        schema_ids.committed = _committed;
+        schema_ids.wrapped = _wrapped;
     }
 
     function verificationCallback(address sender, bytes32 claimId, bytes32 postStateDigest, bytes calldata seal) public {
@@ -102,8 +124,7 @@ contract BuildFi {
 
     function makeNewAccount(
         string memory _name,
-        string memory _email,
-        string memory _zkKYC_proof_id
+        string memory _email
     ) public {
         // ensure the developer doesn't already exist
         require(
@@ -111,11 +132,18 @@ contract BuildFi {
             "Developer already exists"
         );
 
+        // hash the email in sha256
+        bytes32 email_hash = sha256(bytes(_email));
+        require(
+            claims[msg.sender] == email_hash,
+            "Email claim does not match"
+        );
+
         // create a new developer account
         buildfi_developers[msg.sender] = Developer(
             _name,
-            _email,
-            _zkKYC_proof_id,
+            sha256(bytes(_email)),
+            "0",
             0,
             5
         );
@@ -124,11 +152,13 @@ contract BuildFi {
     function createProject(
         string memory _name,
         string memory _project_metadata_json,
-        uint16 _milestones,
+        uint256[] memory _milestone_timestamps,
         uint16[] memory _payout_percentages,
         uint256 _total_budget,
         uint256 funding_ends_at
     ) public {
+        uint16 _milestones = uint16(_milestone_timestamps.length);
+
         // ensure the developer exists
         require(
             bytes(buildfi_developers[msg.sender].name).length != 0,
@@ -149,8 +179,8 @@ contract BuildFi {
 
         // ensure payout percentages are valid
         require(
-            _payout_percentages.length == _milestones,
-            "Invalid payout percentages"
+            _payout_percentages.length == _milestones == _milestone_timestamps.length,
+            "Lengths of arrays do not match"
         );
         uint256 total_percentage = 0;
         for (uint16 i = 0; i < _milestones; i++) {
@@ -165,7 +195,8 @@ contract BuildFi {
         project.project_metadata_json = _project_metadata_json;
         project.owner = msg.sender;
         project.milestone_count = _milestones;
-        project.last_milestone_completed = 0;
+        project.last_milestone_completed = -1;
+        project.milestone_timestamps = _milestone_timestamps;
         project.payout_percentages = _payout_percentages;
         project.total_budget = _total_budget;
         project.total_raised = 0;
@@ -240,7 +271,7 @@ contract BuildFi {
         // ensure the project is not already completed
         require(
             buildfi_projects[_projectId].last_milestone_completed <
-                buildfi_projects[_projectId].milestone_count,
+                buildfi_projects[_projectId].milestone_count - 1,
             "Project already completed"
         );
 
@@ -257,6 +288,48 @@ contract BuildFi {
             address(this),
             buildfi_projects[_projectId].tokens_commited * 10 ** decimals
         );
+    }
+
+    function start_project(uint256 _projectId, bytes memory commitAttestationData) {
+        // ensure the project exists
+        require(buildfi_projects[_projectId].id != 0, "Project does not exist");
+
+        // ensure it's the project owner
+        require(msg.sender == buildfi_projects[_projectId].owner, "Not owner");
+
+        // ensure it is after funding period
+        require(
+            block.timestamp > buildfi_projects[_projectId].funding_ends_at,
+            "Project funding is closed"
+        );
+
+        // ensure the project is not already completed
+        require(
+            buildfi_projects[_projectId].last_milestone_completed <
+                buildfi_projects[_projectId].milestone_count - 1,
+            "Project already completed"
+        );
+
+        // add attestation to the project
+        Attestation memory projectCommitted = Attestation({
+            schemaId: schemaId,
+            linkedAttestationId: 0,
+            attestTimestamp: 0,
+            revokeTimestamp: 0,
+            attester: msg.sender,
+            validUntil: 0,
+            dataLocation: DataLocation.ONCHAIN,
+            revoked: false,
+            recipients: recipients,
+            data: commitAttestationData // SignScan assumes this is from `abi.encode(...)`
+        });
+
+        // create a new attestation
+        uint64 attestationId = spInstance.attest(projectCommitted, "", "", "");
+        buildfi_projects[_projectId].projectCommitted = attestationId;
+
+        // update project started at
+        buildfi_projects[_projectId].started_at = block.timestamp;
     }
 
     function invest(uint256 _projectId) public payable {
