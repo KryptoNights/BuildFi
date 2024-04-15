@@ -8,14 +8,13 @@ pragma solidity ^0.8.20;
 // - add proposals to project for investors to create vote on
 // - a way for attestations to be added
 
-import { Ownable } from "openzeppelin/contracts/access/Ownable.sol";
+import {Ownable} from "openzeppelin/contracts/access/Ownable.sol";
 import {IERC20} from "openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ERC20} from "openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {IRiscZeroVerifier} from "risc0/IRiscZeroVerifier.sol";
 import {ISP} from "sign-protocol/interfaces/ISP.sol";
-import { Attestation } from "sign-protocol/models/Attestation.sol";
-import { DataLocation } from "sign-protocol/models/DataLocation.sol";
-
+import {Attestation} from "sign-protocol/models/Attestation.sol";
+import {DataLocation} from "sign-protocol/models/DataLocation.sol";
 
 contract BuildFi {
     address public deployer;
@@ -93,7 +92,11 @@ contract BuildFi {
 
     error InvalidClaim(string message);
 
-    constructor(bytes32 _imageId, IRiscZeroVerifier _verifier, address _sign_deployed_addr) {
+    constructor(
+        bytes32 _imageId,
+        IRiscZeroVerifier _verifier,
+        address _sign_deployed_addr
+    ) {
         deployer = msg.sender;
         imageId = _imageId;
         verifier = IRiscZeroVerifier(_verifier);
@@ -112,20 +115,30 @@ contract BuildFi {
         schema_ids.wrapped = _wrapped;
     }
 
-    function verificationCallback(address sender, bytes32 claimId, bytes32 postStateDigest, bytes calldata seal) public {
-        if (sender == address(0)) revert InvalidClaim("Invalid recipient address");
+    function verificationCallback(
+        address sender,
+        bytes32 claimId,
+        bytes32 postStateDigest,
+        bytes calldata seal
+    ) public {
+        if (sender == address(0))
+            revert InvalidClaim("Invalid recipient address");
         if (claimId == bytes32(0)) revert InvalidClaim("Empty claimId");
-        if (!verifier.verify(seal, imageId, postStateDigest, sha256(abi.encode(sender, claimId)))) {
+        if (
+            !verifier.verify(
+                seal,
+                imageId,
+                postStateDigest,
+                sha256(abi.encode(sender, claimId))
+            )
+        ) {
             revert InvalidClaim("Invalid proof");
         }
 
         claims[sender] = claimId;
     }
 
-    function makeNewAccount(
-        string memory _name,
-        string memory _email
-    ) public {
+    function makeNewAccount(string memory _name, string memory _email) public {
         // ensure the developer doesn't already exist
         require(
             bytes(buildfi_developers[msg.sender].name).length == 0,
@@ -134,10 +147,7 @@ contract BuildFi {
 
         // hash the email in sha256
         bytes32 email_hash = sha256(bytes(_email));
-        require(
-            claims[msg.sender] == email_hash,
-            "Email claim does not match"
-        );
+        require(claims[msg.sender] == email_hash, "Email claim does not match");
 
         // create a new developer account
         buildfi_developers[msg.sender] = Developer(
@@ -179,7 +189,8 @@ contract BuildFi {
 
         // ensure payout percentages are valid
         require(
-            _payout_percentages.length == _milestones == _milestone_timestamps.length,
+            _payout_percentages.length == _milestones ==
+                _milestone_timestamps.length,
             "Lengths of arrays do not match"
         );
         uint256 total_percentage = 0;
@@ -290,7 +301,10 @@ contract BuildFi {
         );
     }
 
-    function start_project(uint256 _projectId, bytes memory commitAttestationData) {
+    function start_project(
+        uint256 _projectId,
+        bytes memory commitAttestationData
+    ) {
         // ensure the project exists
         require(buildfi_projects[_projectId].id != 0, "Project does not exist");
 
