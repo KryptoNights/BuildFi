@@ -3,8 +3,9 @@ import "tailwindcss/tailwind.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import NextNProgress from "nextjs-progressbar";
-import Layout from "../../components/Layout/Layout";
 import { Provider } from "react-redux";
+import { useStore } from "react-redux";
+import Layout from "../../components/Layout/Layout";
 import { store } from "../store/index";
 import { createWrapper } from "next-redux-wrapper";
 

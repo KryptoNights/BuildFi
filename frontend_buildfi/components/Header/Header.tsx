@@ -2,17 +2,20 @@ import React, { useState } from "react";
 import styles from "./header.module.css";
 import useConnection from "@/utils/useConnection";
 import { Button, CircularProgress } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../src/store/index";
 
 interface HeaderProps {
   onConnect: () => void;
   onDisconnect: () => void;
 }
+import { useRouter } from "next/router";
+import { resetWalletInfo } from "@/store/slice/walletinfo";
 
 const Header = ({ onConnect, onDisconnect }: HeaderProps) => {
   const walletInfo = useSelector((state: RootState) => state.walletInfo);
   console.log(walletInfo);
+  const dispatch = useDispatch();
 
   const { signer, accountData } = useConnection();
 
@@ -23,36 +26,46 @@ const Header = ({ onConnect, onDisconnect }: HeaderProps) => {
     setLoading(true);
     await onConnect();
     setLoading(false);
-    setConnected(true);
   };
-
   const handleDisconnect = () => {
     onDisconnect();
-    setConnected(false);
+    dispatch(resetWalletInfo());
+    localStorage.removeItem("walletData");
+  };
+
+  const router = useRouter();
+  const handleRedirect = () => {
+    router.push("./");
+  };
+  const handleRedirect2 = () => {
+    router.push("./kyc");
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.subContainer1}>
-        <h1 className={styles.txt1}>BuildFI</h1>
-        <a href="/components">Components</a>
-        <div className="">Looking for Funding? </div>
+        <h1 className={styles.txt1} onClick={handleRedirect}>
+          BuildFI
+        </h1>
+        <a href="/components">Projects</a>
+        <div className={styles.txt2} onClick={handleRedirect2}>
+          Looking for Funding?{" "}
+        </div>
       </div>
 
       {loading ? (
         <CircularProgress />
-      ) :  walletInfo.address ? (
+      ) : walletInfo.address ? (
         <>
           <button
-            className="bg-[#03A9F4] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-[#03A9F4] hover:bg-blue-700 text-white font-bold py-2 px-8 rounded"
             onClick={handleDisconnect}
           >
             🟢{" "}
             {walletInfo.address && walletInfo.address.length > 8
-              ? `${walletInfo.address.slice(
-                  0,
-                  4
-                )}...${walletInfo.address.slice(-4)}`
+              ? `${walletInfo.address.slice(0, 4)}...${walletInfo.address.slice(
+                  -4
+                )}`
               : walletInfo.address}
           </button>
         </>
