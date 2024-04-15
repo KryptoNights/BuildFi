@@ -26,8 +26,8 @@ const Header = () => {
     <div className={styles.container}>
       <div className={styles.subContainer1}>
         <h1 className={styles.txt1}>BuildFI</h1>
-        <div>Components</div>
-        <div>Looking for Funding? </div>
+        <a href="/components">Components</a>
+        <div className="">Looking for Funding? </div>
       </div>
 
       {loading ? (

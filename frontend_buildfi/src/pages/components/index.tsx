@@ -1,24 +1,13 @@
 import React from "react";
-import Navbar from "../../../components/Navbar/Navbar";
+import Sidebar from "../../../components/Sidebar/Sidebar";
 import WrapperCards from "../../../components/WrapperCard/WrapperCards";
-import Layout from "../../../components/Layout/Layout";
 
 const index = () => {
   return (
-    <Layout>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          width: "100%",
-          margin: "auto",
-          justifyContent: "space-between",
-        }}
-      >
-        <Navbar />
-        <WrapperCards />
-      </div>
-    </Layout>
+    <div className="flex flex-row w-full m-auto z-999 justify-between">
+      <Sidebar />
+      <WrapperCards />
+    </div>
   );
 };
 

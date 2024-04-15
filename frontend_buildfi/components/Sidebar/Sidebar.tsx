@@ -1,7 +1,7 @@
 import React from "react";
-import styles from "./navbar.module.css";
-import data from "./../../constant/constant";
-const Navbar = () => {
+import styles from "./sidebar.module.css";
+import data from "../../constant/constant";
+const Sidebar = () => {
   return (
     <div className={styles.container}>
       <div className={styles.wrapper1}>
@@ -25,4 +25,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Sidebar;

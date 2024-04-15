@@ -1,10 +1,10 @@
-// import "@/styles/globals.css";
-import '../styles/globals.css'
-import 'tailwindcss/tailwind.css'
+import "../styles/globals.css";
+import "tailwindcss/tailwind.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import styles from "../styles/Home.module.css";
 import NextNProgress from "nextjs-progressbar";
+import Layout from "../../components/Layout/Layout";
+
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <main>
@@ -23,9 +23,17 @@ export default function App({ Component, pageProps }: AppProps) {
         <NextNProgress color="#9FF6DF" />
       </div>
 
-      <div className={styles.page}>
-        <div className={styles.main}>
-          <Component {...pageProps} />
+      <div
+        className="flex justify-center"
+        style={{
+          maxInlineSize: "1408px",
+          margin: "auto",
+        }}
+      >
+        <div className="w-full bg-black">
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </div>
       </div>
     </main>

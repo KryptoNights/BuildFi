@@ -12,9 +12,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <>
-      <div className={styles.container}>
-        <Header />
-        <div className={styles.subContainer}>{children}</div>
+      <div className="flex flex-col w-full">
+        <Header/>
+        <div className="mt-[100px]">{children}</div>
       </div>
     </>
   );
