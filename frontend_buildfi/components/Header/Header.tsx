@@ -44,13 +44,13 @@ const Header = ({ onConnect, onDisconnect }: HeaderProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.subContainer1}>
-        <h1 className={styles.txt1} onClick={handleRedirect}>
+        <h1 className="text-[24px]/[0px] cursor-pointer" onClick={handleRedirect}>
           BuildFI
         </h1>
         <a href="/components">Projects</a>
-        <div className={styles.txt2} onClick={handleRedirect2}>
+        <a href="/kyc" className="text-[16px]/[0px] cursor-pointer" onClick={handleRedirect2} >
           Looking for Funding?{" "}
-        </div>
+        </a>
       </div>
 
       {loading ? (
