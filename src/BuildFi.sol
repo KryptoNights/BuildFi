@@ -42,6 +42,7 @@ contract BuildFi {
         uint256 votes_for;
         uint256 votes_against;
         mapping(address => bool) voters;
+        uint256 voting_deadline;
         // add witness here
     }
 
@@ -370,7 +371,7 @@ contract BuildFi {
         buildfi_projects[_projectId].investments[msg.sender] += _amount;
     }
 
-    function start_voting(uint256 _projectId, uint16 _milestoneId) public {
+    function start_voting(uint256 _projectId, uint16 _milestoneId, uint256 _voting_deadline) public {
         // ensure the project exists
         require(buildfi_projects[_projectId].id != 0, "Project does not exist");
 
@@ -404,6 +405,12 @@ contract BuildFi {
             _milestoneId ==
                 buildfi_projects[_projectId].last_milestone_completed + 1,
             "Milestone not next in line"
+        );
+
+        // ensure voting deadline is at least 2 days from now
+        require(
+            _voting_deadline > block.timestamp + 2 days,
+            "Invalid voting deadline"
         );
 
         // start voting
@@ -475,6 +482,15 @@ contract BuildFi {
         require(
             buildfi_projects[_projectId].milestones[_milestoneId].voting_active,
             "Voting is not active"
+        );
+
+        // ensure voting deadline has passed
+        require(
+            block.timestamp >
+                buildfi_projects[_projectId]
+                    .milestones[_milestoneId]
+                    .voting_deadline,
+            "Voting deadline has not passed"
         );
 
         // if this is the last milestone, ensure token is set
