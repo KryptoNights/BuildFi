@@ -2,9 +2,18 @@ import React, { useState } from "react";
 import styles from "./header.module.css";
 import useConnection from "@/utils/useConnection";
 import { Button, CircularProgress } from "@mui/material";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../src/store/index";
 
-const Header = () => {
-  const { _connectToMetaMask, _disconnectFromMetaMask } = useConnection();
+interface HeaderProps {
+  onConnect: () => void;
+  onDisconnect: () => void;
+}
+
+const Header = ({ onConnect, onDisconnect }: HeaderProps) => {
+  const walletInfo = useSelector((state: RootState) => state.walletInfo);
+  console.log(walletInfo);
+
   const { signer, accountData } = useConnection();
 
   const [connected, setConnected] = useState(false);
@@ -12,13 +21,13 @@ const Header = () => {
 
   const handleConnect = async () => {
     setLoading(true);
-    await _connectToMetaMask();
+    await onConnect();
     setLoading(false);
     setConnected(true);
   };
 
   const handleDisconnect = () => {
-    _disconnectFromMetaMask();
+    onDisconnect();
     setConnected(false);
   };
 
@@ -32,19 +41,19 @@ const Header = () => {
 
       {loading ? (
         <CircularProgress />
-      ) : connected && accountData.address ? (
+      ) :  walletInfo.address ? (
         <>
           <button
             className="bg-[#03A9F4] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={handleDisconnect}
           >
             🟢{" "}
-            {accountData.address && accountData.address.length > 8
-              ? `${accountData.address.slice(
+            {walletInfo.address && walletInfo.address.length > 8
+              ? `${walletInfo.address.slice(
                   0,
                   4
-                )}...${accountData.address.slice(-4)}`
-              : accountData.address}
+                )}...${walletInfo.address.slice(-4)}`
+              : walletInfo.address}
           </button>
         </>
       ) : (
@@ -58,7 +67,6 @@ const Header = () => {
         </>
       )}
     </div>
-    // </div>
   );
 };
 

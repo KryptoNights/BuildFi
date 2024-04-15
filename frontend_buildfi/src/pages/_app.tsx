@@ -4,8 +4,11 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import NextNProgress from "nextjs-progressbar";
 import Layout from "../../components/Layout/Layout";
+import { Provider } from "react-redux";
+import { store } from "../store/index";
+import { createWrapper } from "next-redux-wrapper";
 
-export default function App({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
   return (
     <main>
       <Head>
@@ -31,11 +34,14 @@ export default function App({ Component, pageProps }: AppProps) {
         }}
       >
         <div className="w-full bg-black">
+          <Provider store={store}>
           <Layout>
             <Component {...pageProps} />
           </Layout>
+          </Provider>
         </div>
       </div>
     </main>
   );
 }
+export default App;
