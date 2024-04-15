@@ -136,7 +136,7 @@ import { ethers } from "ethers";
     const buildfi = new ethers.Contract(ADDR, ABI, provider);
     const res = await buildfi.imageId();
     console.log("Obtained value at deployed contract is: " + res);
-    const claims = await buildfi.claims("0x48D74743caA686e52D77be3Cdb90704e60E3b110");
-    console.log("Obtained value at deployed contract is: " + claims);
+    const claims = await buildfi.claims("0xed7BF904D369aba6A0244E7b2CfB5f92B31FF11a");
+    console.log("Obtained value at deployed contract is: " + claims, claims === `0x73c09d2c8f161bab31f4ea1276f303abc84f2d7d0ee5396a7ffa9c87ded1cfc0`);
     return res;
 })("https://arb-sepolia.g.alchemy.com/v2/gdoWsVkAdoopk0ijXAAOtvq-CsXT8PTO")
