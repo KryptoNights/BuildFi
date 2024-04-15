@@ -9,10 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ethersproject/providers": "^5.7.2",
     "@mui/material": "^5.14.6",
+    "@reduxjs/toolkit": "^1.9.2",
     "@types/node": "20.5.3",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
+    "@types/react-redux": "^7.1.25",
     "aos": "^2.3.4",
     "axios": "^1.4.0",
     "classnames": "^2.3.2",
@@ -20,11 +23,13 @@
     "framer-motion": "^10.16.1",
     "gsap-trial": "3.11.3",
     "next": "13.4.19",
+    "next-redux-wrapper": "^8.1.0",
     "nextjs-progressbar": "^0.0.16",
     "react": "18.2.0",
     "react-animate-height": "^3.2.2",
     "react-dom": "18.2.0",
     "react-material-ui-carousel": "^3.4.2",
+    "redux-persist": "^6.0.0",
     "typescript": "5.1.6"
   },
   "devDependencies": {

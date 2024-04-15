@@ -3,9 +3,12 @@ import "tailwindcss/tailwind.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import NextNProgress from "nextjs-progressbar";
+import { Provider } from "react-redux";
+import { useStore } from "react-redux";
 import Layout from "../../components/Layout/Layout";
+import { wrapper } from "./../store/index";
 
-export default function App({ Component, pageProps }: AppProps) {
+export  function App({ Component, pageProps }: AppProps) {
   return (
     <main>
       <Head>
@@ -39,3 +42,5 @@ export default function App({ Component, pageProps }: AppProps) {
     </main>
   );
 }
+
+export default wrapper.withRedux(App);
