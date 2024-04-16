@@ -73,7 +73,7 @@ const useConnection = () => {
 
   const _disconnectFromMetaMask = useCallback(async () => {
     console.log("here");
-    setAccountData({});
+    dispatch(setWalletInfo({}));
     localStorage.removeItem("walletData");
   }, []);
 
