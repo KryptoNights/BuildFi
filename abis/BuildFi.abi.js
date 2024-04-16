@@ -1,4 +1,4 @@
-const BUILDFO_ABI = [
+export const BUILDFI_ABI = [
     {
         "type": "constructor",
         "inputs": [
