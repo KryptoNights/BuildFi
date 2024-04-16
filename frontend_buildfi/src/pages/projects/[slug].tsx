@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import data from './../../../constant/constant'; // Import your data file
+import data from '../../../constant/constant'; // Import your data file
 
 const YourComponent = () => {
     const router = useRouter();

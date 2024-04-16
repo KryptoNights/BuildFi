@@ -47,7 +47,7 @@ const Header = ({ onConnect, onDisconnect }: HeaderProps) => {
         <h1 className="text-[24px]/[0px] cursor-pointer" onClick={handleRedirect}>
           BuildFI
         </h1>
-        <a href="/components">Projects</a>
+        <a href="/projects">Projects</a>
         <a href="/kyc" className="text-[16px]/[0px] cursor-pointer" onClick={handleRedirect2} >
           Looking for Funding?{" "}
         </a>

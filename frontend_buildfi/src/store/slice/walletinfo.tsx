@@ -1,24 +1,21 @@
-import { createSlice,PayloadAction } from "@reduxjs/toolkit";
-  
-  const initialState = {
-    address: "",
-    balance: "",
-  };
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+const initialState = {
+  address: "",
+  balance: "",
+};
 
 export const walletInfoSlice = createSlice({
   name: "WalletInfo",
   initialState,
   reducers: {
-    setWalletInfo(
-      state, action
-    ) {
+    setWalletInfo(state, action) {
       state.address = action.payload.address;
-      state.balance =  action.payload.balance;
+      state.balance = action.payload.balance;
     },
     resetWalletInfo(state) {
-      return initialState; 
-    }
-  
+      return initialState;
+    },
   },
 });
 

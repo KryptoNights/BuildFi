@@ -11,11 +11,8 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const res = useDetectDevice();
 
-  const {
-    accountData,
-    _connectToMetaMask,
-    _disconnectFromMetaMask,
-  } = useConnection();
+  const { accountData, _connectToMetaMask, _disconnectFromMetaMask } =
+    useConnection();
 
   return (
     <>
