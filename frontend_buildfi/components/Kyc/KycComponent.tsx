@@ -3,6 +3,7 @@ import { useState } from "react";
 import { createTheme } from "@mui/material/styles";
 import { TextField, Button, Container, ThemeProvider } from "@mui/material";
 import styles from "./kyc.module.css";
+import axios from "axios";
 
 const theme = createTheme({
   palette: {
@@ -24,11 +25,24 @@ const theme = createTheme({
 const CodeForm = () => {
   const [code, setCode] = useState("");
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    if (code.length === 0) return;
+  const handleSubmit = async () => {
     try {
-      console.log("Submitted code:", code);
+      console.log("code:", code);
+      const data = { code: code };
+
+      console.log("data:", data);
+
+      const headers = {
+        "Content-Type": "application/x-www-form-urlencoded",
+      };
+
+      const response = await axios.post(
+        "https://us-central1-my-project-5269-1684667148053.cloudfunctions.net/buildfi-code-exchange",
+        data,
+        { headers }
+      );
+
+      console.log("Response:", response.data);
     } catch (error) {
       console.error("Error submitting code:", error);
     }
@@ -56,7 +70,9 @@ const CodeForm = () => {
           onChange={(e) => setCode(e.target.value)}
           className={styles.inputtext}
         />
-        <div className={styles.btn}>Submit</div>
+        <div className={styles.btn} onClick={handleSubmit}>
+          Submit
+        </div>
       </form>
 
       <div className={styles.txt3}>
