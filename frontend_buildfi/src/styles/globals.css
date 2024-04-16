@@ -6,7 +6,6 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  background: black;
   color: white;
 }
 
@@ -14,6 +13,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Patua+One&display=swap');
 html,
 body {
+  background: rgba(16,24,38,255);
   max-width: 100vw;
   overflow-x: hidden;
   font-family: "Outfit", sans-serif;

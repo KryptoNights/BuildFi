@@ -1,6 +1,7 @@
 import React from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import WrapperCards from "../../../components/WrapperCard/WrapperCards";
+import Layout from "../../../components/Layout/Layout";
 
 const index = () => {
   return (

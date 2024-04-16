@@ -15,10 +15,13 @@ export const walletInfoSlice = createSlice({
       state.address = action.payload.address;
       state.balance =  action.payload.balance;
     },
+    resetWalletInfo(state) {
+      return initialState; 
+    }
   
   },
 });
 
-export const { setWalletInfo } = walletInfoSlice.actions;
+export const { setWalletInfo, resetWalletInfo } = walletInfoSlice.actions;
 
 export default walletInfoSlice.reducer;

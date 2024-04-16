@@ -69,6 +69,9 @@ const CodeForm = () => {
           value={code}
           onChange={(e) => setCode(e.target.value)}
           className={styles.inputtext}
+          style={{
+            color: "black"
+          }}
         />
         <div className={styles.btn} onClick={handleSubmit}>
           Submit

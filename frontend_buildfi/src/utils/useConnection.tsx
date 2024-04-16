@@ -3,6 +3,10 @@ import { useCallback } from "react";
 import React from "react";
 import { ethers } from "ethers";
 import useEthersProviderAndSigner from "./getProvider";
+import { setWalletInfo } from "@/store/slice/walletinfo";
+import { useDispatch } from "react-redux";
+import { parse } from "path";
+
 export interface AccountType {
   address?: string;
   balance?: string;
@@ -14,7 +18,7 @@ const useConnection = () => {
   const [accountData, setAccountData] = useState<AccountType>({});
   const [message, setMessage] = useState<string>("");
   const [provider, signer] = useEthersProviderAndSigner();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   // console.log('daa',signer)
 
   const _onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,6 +30,8 @@ const useConnection = () => {
     if (storedWalletData) {
       const parsedData = JSON.parse(storedWalletData);
       setAccountData(parsedData);
+      console.log(parsedData);
+      dispatch(setWalletInfo(parsedData));
     }
   }, []);
 
@@ -54,7 +60,7 @@ const useConnection = () => {
           network: network.name,
         };
         setAccountData(preparedData);
-        // dispatch(setWalletInfo(preparedData));
+        dispatch(setWalletInfo(preparedData));
 
         localStorage.setItem("walletData", JSON.stringify(preparedData));
       } catch (error: Error | any) {

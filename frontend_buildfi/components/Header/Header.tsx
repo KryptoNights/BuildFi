@@ -2,10 +2,21 @@ import React, { useState } from "react";
 import styles from "./header.module.css";
 import useConnection from "@/utils/useConnection";
 import { Button, CircularProgress } from "@mui/material";
-import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../../src/store/index";
 
-const Header = () => {
-  const { _connectToMetaMask, _disconnectFromMetaMask } = useConnection();
+interface HeaderProps {
+  onConnect: () => void;
+  onDisconnect: () => void;
+}
+import { useRouter } from "next/router";
+import { resetWalletInfo } from "@/store/slice/walletinfo";
+
+const Header = ({ onConnect, onDisconnect }: HeaderProps) => {
+  const walletInfo = useSelector((state: RootState) => state.walletInfo);
+  console.log(walletInfo);
+  const dispatch = useDispatch();
+
   const { signer, accountData } = useConnection();
 
   const [connected, setConnected] = useState(false);
@@ -13,44 +24,49 @@ const Header = () => {
 
   const handleConnect = async () => {
     setLoading(true);
-    await _connectToMetaMask();
+    await onConnect();
     setLoading(false);
   };
   const handleDisconnect = () => {
-    _disconnectFromMetaMask();
+    onDisconnect();
+    dispatch(resetWalletInfo());
     localStorage.removeItem("walletData");
   };
-  const router=useRouter();
+
+  const router = useRouter();
   const handleRedirect = () => {
-     router.push('./')
+    router.push("./");
   };
   const handleRedirect2 = () => {
-     router.push('./kyc')
+    router.push("./kyc");
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.subContainer1}>
-        <h1 className={styles.txt1} onClick={handleRedirect}>BuildFI</h1>
+        <h1 className="text-[24px]/[0px] cursor-pointer" onClick={handleRedirect}>
+          BuildFI
+        </h1>
         <a href="/components">Projects</a>
-        <div  className={styles.txt2} onClick={handleRedirect2}>Looking for Funding? </div>
+        <a href="/kyc" className="text-[16px]/[0px] cursor-pointer" onClick={handleRedirect2} >
+          Looking for Funding?{" "}
+        </a>
       </div>
 
       {loading ? (
         <CircularProgress />
-      ) :  accountData.address ? (
+      ) : walletInfo.address ? (
         <>
           <button
             className="bg-[#03A9F4] hover:bg-blue-700 text-white font-bold py-2 px-8 rounded"
             onClick={handleDisconnect}
           >
             🟢{" "}
-            {accountData.address && accountData.address.length > 8
-              ? `${accountData.address.slice(
-                  0,
-                  4
-                )}...${accountData.address.slice(-4)}`
-              : accountData.address}
+            {walletInfo.address && walletInfo.address.length > 8
+              ? `${walletInfo.address.slice(0, 4)}...${walletInfo.address.slice(
+                  -4
+                )}`
+              : walletInfo.address}
           </button>
         </>
       ) : (
@@ -64,7 +80,6 @@ const Header = () => {
         </>
       )}
     </div>
-    // </div>
   );
 };
 

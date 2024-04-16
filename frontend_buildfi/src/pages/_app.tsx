@@ -6,9 +6,10 @@ import NextNProgress from "nextjs-progressbar";
 import { Provider } from "react-redux";
 import { useStore } from "react-redux";
 import Layout from "../../components/Layout/Layout";
-import { wrapper } from "./../store/index";
+import { store } from "../store/index";
+import { createWrapper } from "next-redux-wrapper";
 
-export  function App({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
   return (
     <main>
       <Head>
@@ -34,13 +35,14 @@ export  function App({ Component, pageProps }: AppProps) {
         }}
       >
         <div className="w-full bg-black">
+          <Provider store={store}>
           <Layout>
             <Component {...pageProps} />
           </Layout>
+          </Provider>
         </div>
       </div>
     </main>
   );
 }
-
-export default wrapper.withRedux(App);
+export default App;
