@@ -14,7 +14,7 @@ import { resetWalletInfo } from "@/store/slice/walletinfo";
 
 const Header = ({ onConnect, onDisconnect }: HeaderProps) => {
   const walletInfo = useSelector((state: RootState) => state.walletInfo);
-  console.log(walletInfo);
+  // console.log(walletInfo);
   const dispatch = useDispatch();
 
   const { signer, accountData } = useConnection();

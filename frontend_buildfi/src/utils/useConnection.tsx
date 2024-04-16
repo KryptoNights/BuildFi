@@ -30,7 +30,7 @@ const useConnection = () => {
     if (storedWalletData) {
       const parsedData = JSON.parse(storedWalletData);
       setAccountData(parsedData);
-      console.log(parsedData);
+      // console.log(parsedData);
       dispatch(setWalletInfo(parsedData));
     }
   }, []);
