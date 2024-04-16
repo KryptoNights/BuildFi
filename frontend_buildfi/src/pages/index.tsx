@@ -22,7 +22,7 @@ const index = () => {
     <>
       <>
         <div className="m-auto max-w-6xl  justify-center align-center">
-          <Image src={Poster} alt={"poster"} width={1124} draggable={false}/>
+          <Image height={524} src={Poster} alt={"poster"} width={1124} draggable={false} className="m-auto"/>
           <Home
             headerText="Do you need funding for your project or startup?"
             text="Complete your KYC and list your project to investors."
