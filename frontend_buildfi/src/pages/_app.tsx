@@ -17,7 +17,6 @@ function App({ Component, pageProps }: AppProps) {
         backgroundImage:
           "url(https://assets-global.website-files.com/63996d8b3c061af402fa0609/65c1a9a0012fe086763d8e0c_Illustration.png)",
         backgroundPosition: "0 0",
-        backgroundSize: "cover",
       }
     : {};
   return (
