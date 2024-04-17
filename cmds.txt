@@ -1,0 +1,8 @@
+forge script script/Deploy.s.sol --rpc-url "https://arb-sepolia.g.alchemy.com/v2/gdoWsVkAdoopk0ijXAAOtvq-CsXT8PTO" --broadcast --etherscan-api-key JTH1QAJK79WJNB2WXSGP1VTV8IEDFWNHJM --verify
+
+
+
+
+cargo run --bin pubsub -- --chain-id 421614 --eth-wallet-private-key ETH_WALLET_PRIVATE_KEY=a43d806ebdaf3cb8af297665bf0d6f1866050d4b9aa67bc9306557232794d2cc --rpc-url "https://arb-sepolia.g.alchemy.com/v2/gdoWsVkAdoopk0ijXAAOtvq-CsXT8PTO" --contract 0x22010cc0839245dd801702c22165b45f13faffbd
+
+RUST_BACKTRACE=1 RUST_LOG=info cargo run --bin pubsub -- --chain-id 421614 --eth-wallet-private-key=a43d806ebdaf3cb8af297665bf0d6f1866050d4b9aa67bc9306557232794d2cc --rpc-url "https://arb-sepolia.g.alchemy.com/v2/gdoWsVkAdoopk0ijXAAOtvq-CsXT8PTO" --contract 0x1ce7d0bf2e9b27532bdaf2834bdc4cb4a0914bf0

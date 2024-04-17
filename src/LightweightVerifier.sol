@@ -11,9 +11,9 @@ pragma solidity ^0.8.20;
 // import {IERC20} from "openzeppelin/token/ERC20/IERC20.sol";
 // import "openzeppelin/token/ERC20/ERC20.sol";
 // import {IRiscZeroVerifier} from "risc0/IRiscZeroVerifier.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import {IRiscZeroVerifier} from "@risc0/IRiscZeroVerifier.sol";
+import {IERC20} from "openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {ERC20} from "openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {IRiscZeroVerifier} from "risc0/IRiscZeroVerifier.sol";
 
 contract BuildFi {
     address deployer;

@@ -6,6 +6,7 @@ import {console2} from "forge-std/console2.sol";
 import {IRiscZeroVerifier} from "risc0/IRiscZeroVerifier.sol";
 import {ControlID, RiscZeroGroth16Verifier} from "risc0/groth16/RiscZeroGroth16Verifier.sol";
 import {BuildFi} from "../src/BuildFi.sol";
+import {IspTest} from "../src/IspTest.sol";
 
 contract CounterScript is Script {
     function setUp() public {}
@@ -13,15 +14,31 @@ contract CounterScript is Script {
     function run() public {
         uint256 deployerKey = uint256(vm.envBytes32("ETH_WALLET_PRIVATE_KEY"));
         vm.startBroadcast(deployerKey);
+        address SIGN_DEPLOYED_ADDRESS = address(
+            0x4e4af2a21ebf62850fD99Eb6253E1eFBb56098cD
+        );
 
-        IRiscZeroVerifier verifier = new RiscZeroGroth16Verifier(ControlID.CONTROL_ID_0, ControlID.CONTROL_ID_1, ControlID.BN254_CONTROL_ID);
+        IRiscZeroVerifier verifier = new RiscZeroGroth16Verifier(
+            ControlID.CONTROL_ID_0,
+            ControlID.CONTROL_ID_1,
+            ControlID.BN254_CONTROL_ID
+        );
         console2.log("Deployed RiscZeroGroth16Verifier to", address(verifier));
 
-        // BonsaiPay bonsaiPay = new BonsaiPay(verifier);
-        // console2.log("Deployed BonsaiPay to", address(bonsaiPay));
+        // BuildFi lightBuildFi = new BuildFi(bytes32(0x81fc3071b00c7f7d4edff773e7ca4a90ef31219c15a444fb19d5fea7a43febfd), verifier);
+        // console2.log("Deployed LightBuildFi to", address(lightBuildFi));
 
-        BuildFi lightBuildFi = new BuildFi(bytes32(0x81fc3071b00c7f7d4edff773e7ca4a90ef31219c15a444fb19d5fea7a43febfd), verifier);
-        console2.log("Deployed LightBuildFi to", address(lightBuildFi));
+        BuildFi buildFi = new BuildFi(
+            bytes32(
+                0x81fc3071b00c7f7d4edff773e7ca4a90ef31219c15a444fb19d5fea7a43febfd
+            ),
+            verifier,
+            SIGN_DEPLOYED_ADDRESS
+        );
+        console2.log("Deployed BuildFi to", address(buildFi));
+
+        // IspTest ispTest = new IspTest(SIGN_DEPLOYED_ADDRESS);
+        // console2.log("Deployed IspTest to", address(ispTest));
 
         vm.stopBroadcast();
     }

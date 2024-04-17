@@ -27,7 +27,7 @@ contract BuildFi {
     struct Developer {
         // identity
         string name;
-        string email;
+        bytes32 email;
         string zkKYC_proof_id;
         // financial
         uint256 balance;
@@ -37,7 +37,7 @@ contract BuildFi {
     mapping(address => Developer) public buildfi_developers;
 
     struct Milestone {
-        uint16 id;
+        int16 id;
         bool voting_active;
         uint256 votes_for;
         uint256 votes_against;
@@ -53,8 +53,8 @@ contract BuildFi {
         string project_metadata_json;
         address owner;
         // milestones
-        uint16 milestone_count;
-        int last_milestone_completed;
+        int16 milestone_count;
+        int16 last_milestone_completed;
         uint256[] milestone_timestamps;
         uint16[] payout_percentages;
         string milestone_metadata_json;
@@ -153,7 +153,7 @@ contract BuildFi {
         // create a new developer account
         buildfi_developers[msg.sender] = Developer(
             _name,
-            sha256(bytes(_email)),
+            sha256(bytes (_email)),
             "0",
             0,
             5
@@ -168,7 +168,8 @@ contract BuildFi {
         uint256 _total_budget,
         uint256 funding_ends_at
     ) public {
-        uint16 _milestones = uint16(_milestone_timestamps.length);
+        uint256 _milestones = _milestone_timestamps.length;
+        int16 _milestones16 = int16(uint16(_milestones));
 
         // ensure the developer exists
         require(
@@ -190,8 +191,8 @@ contract BuildFi {
 
         // ensure payout percentages are valid
         require(
-            _payout_percentages.length == _milestones ==
-                _milestone_timestamps.length,
+            (_payout_percentages.length == _milestones) &&
+            (_milestones == _milestone_timestamps.length),
             "Lengths of arrays do not match"
         );
         uint256 total_percentage = 0;
@@ -206,7 +207,7 @@ contract BuildFi {
         project.name = _name;
         project.project_metadata_json = _project_metadata_json;
         project.owner = msg.sender;
-        project.milestone_count = _milestones;
+        project.milestone_count = _milestones16;
         project.last_milestone_completed = -1;
         project.milestone_timestamps = _milestone_timestamps;
         project.payout_percentages = _payout_percentages;
@@ -305,7 +306,7 @@ contract BuildFi {
     function start_project(
         uint256 _projectId,
         bytes memory commitAttestationData
-    ) {
+    ) public {
         // ensure the project exists
         require(buildfi_projects[_projectId].id != 0, "Project does not exist");
 
@@ -327,7 +328,7 @@ contract BuildFi {
 
         // add attestation to the project
         Attestation memory projectCommitted = Attestation({
-            schemaId: schemaId,
+            schemaId: schema_ids.committed,
             linkedAttestationId: 0,
             attestTimestamp: 0,
             revokeTimestamp: 0,
@@ -335,12 +336,12 @@ contract BuildFi {
             validUntil: 0,
             dataLocation: DataLocation.ONCHAIN,
             revoked: false,
-            recipients: recipients,
+            recipients: new bytes[](0),
             data: commitAttestationData // SignScan assumes this is from `abi.encode(...)`
         });
 
         // create a new attestation
-        uint64 attestationId = spInstance.attest(projectCommitted, "", "", "");
+        uint64 attestationId = isp.attest(projectCommitted, "", "", "");
         buildfi_projects[_projectId].projectCommitted = attestationId;
 
         // update project started at
@@ -371,7 +372,9 @@ contract BuildFi {
         buildfi_projects[_projectId].investments[msg.sender] += _amount;
     }
 
-    function start_voting(uint256 _projectId, uint16 _milestoneId, uint256 _voting_deadline) public {
+    function start_voting(uint256 _projectId, int16 _milestoneId, uint256 _voting_deadline) public {
+        uint16 milestoneId = uint16(_milestoneId);
+
         // ensure the project exists
         require(buildfi_projects[_projectId].id != 0, "Project does not exist");
 
@@ -380,7 +383,7 @@ contract BuildFi {
 
         // ensure the milestone exists
         require(
-            buildfi_projects[_projectId].milestones[_milestoneId].id ==
+            buildfi_projects[_projectId].milestones[milestoneId].id ==
                 _milestoneId,
             "Milestone does not exist"
         );
@@ -395,7 +398,7 @@ contract BuildFi {
         // ensure the milestone is not already voted on
         require(
             !buildfi_projects[_projectId]
-                .milestones[_milestoneId]
+                .milestones[milestoneId]
                 .voting_active,
             "Milestone already voted on"
         );
@@ -415,17 +418,19 @@ contract BuildFi {
 
         // start voting
         buildfi_projects[_projectId]
-            .milestones[_milestoneId]
+            .milestones[milestoneId]
             .voting_active = true;
     }
 
-    function vote(uint256 _projectId, uint16 _milestoneId, bool _vote) public {
+    function vote(uint256 _projectId, int16 _milestoneId, bool _vote) public {
+        uint16 milestoneId = uint16(_milestoneId);
+
         // ensure the project exists
         require(buildfi_projects[_projectId].id != 0, "Project does not exist");
 
         // ensure the milestone exists
         require(
-            buildfi_projects[_projectId].milestones[_milestoneId].id ==
+            buildfi_projects[_projectId].milestones[milestoneId].id ==
                 _milestoneId,
             "Milestone does not exist"
         );
@@ -438,7 +443,7 @@ contract BuildFi {
 
         // sender must not have already voted
         require(
-            !buildfi_projects[_projectId].milestones[_milestoneId].voters[
+            !buildfi_projects[_projectId].milestones[milestoneId].voters[
                 msg.sender
             ],
             "Sender has already voted"
@@ -446,41 +451,43 @@ contract BuildFi {
 
         // ensure voting is active
         require(
-            buildfi_projects[_projectId].milestones[_milestoneId].voting_active,
+            buildfi_projects[_projectId].milestones[milestoneId].voting_active,
             "Voting is not active"
         );
 
         // update milestone votes
         if (_vote) {
             buildfi_projects[_projectId]
-                .milestones[_milestoneId]
+                .milestones[milestoneId]
                 .votes_for += 1;
         } else {
             buildfi_projects[_projectId]
-                .milestones[_milestoneId]
+                .milestones[milestoneId]
                 .votes_against += 1;
         }
 
         // update voter status
-        buildfi_projects[_projectId].milestones[_milestoneId].voters[
+        buildfi_projects[_projectId].milestones[milestoneId].voters[
             msg.sender
         ] = true;
     }
 
-    function close_voting(uint256 _projectId, uint16 _milestoneId) public {
+    function close_voting(uint256 _projectId, int16 _milestoneId) public {
+        uint16 milestoneId = uint16(_milestoneId);
+
         // ensure the project exists
         require(buildfi_projects[_projectId].id != 0, "Project does not exist");
 
         // ensure the milestone exists
         require(
-            buildfi_projects[_projectId].milestones[_milestoneId].id ==
+            buildfi_projects[_projectId].milestones[milestoneId].id ==
                 _milestoneId,
             "Milestone does not exist"
         );
 
         // ensure voting is active
         require(
-            buildfi_projects[_projectId].milestones[_milestoneId].voting_active,
+            buildfi_projects[_projectId].milestones[milestoneId].voting_active,
             "Voting is not active"
         );
 
@@ -488,7 +495,7 @@ contract BuildFi {
         require(
             block.timestamp >
                 buildfi_projects[_projectId]
-                    .milestones[_milestoneId]
+                    .milestones[milestoneId]
                     .voting_deadline,
             "Voting deadline has not passed"
         );
@@ -503,13 +510,13 @@ contract BuildFi {
 
         // mark voting as closed
         buildfi_projects[_projectId]
-            .milestones[_milestoneId]
+            .milestones[milestoneId]
             .voting_active = false;
 
         // ensure voting is successful
         if (
-            buildfi_projects[_projectId].milestones[_milestoneId].votes_for >
-            buildfi_projects[_projectId].milestones[_milestoneId].votes_against
+            buildfi_projects[_projectId].milestones[milestoneId].votes_for >
+            buildfi_projects[_projectId].milestones[milestoneId].votes_against
         ) {
             // update project last milestone completed
             buildfi_projects[_projectId]
@@ -518,7 +525,7 @@ contract BuildFi {
 
         // calculate payout
         uint256 payout = (buildfi_projects[_projectId].total_budget *
-            buildfi_projects[_projectId].payout_percentages[_milestoneId]) /
+            buildfi_projects[_projectId].payout_percentages[milestoneId]) /
             100;
 
         // pay out the milestone budget
