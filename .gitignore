@@ -16,3 +16,8 @@ docs/
 node_modules/
 oauth.url.md
 cmds.txt
+
+# Added by cargo
+
+/target
+zk-kyc/target/
