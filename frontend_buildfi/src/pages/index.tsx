@@ -2,9 +2,6 @@ import React from "react";
 import useDetectDevice from "../../customhook/useDetectDevice";
 import { useRouter } from "next/router";
 import Home from "../../components/Home/Home";
-import { styled } from "@mui/material/styles";
-import Poster from "public/Poster.webp";
-import Image from "next/image";
 
 // const StyledProductImg = styled("img")(({ width, style }) => ({
 //   width: width || "25%", // Default width is 25% if width prop is not provided
@@ -29,7 +26,6 @@ const index = () => {
           marginTop: "16vh",
         }}
       >
-        {/* <Image height={524} src={Poster} alt={"poster"} width={1124} draggable={false} className="m-auto"/> */}
         <div
           className=""
           style={{
@@ -128,6 +124,7 @@ const index = () => {
             Investor
           </a>
         </div>
+        <Home />
       </div>
     </>
   );
