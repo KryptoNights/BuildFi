@@ -1,13 +1,9 @@
 .container {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 5rem;
-  width: 100%;
-  padding-bottom: 10rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* Changed from 2 to 3 columns */
+  gap: 2rem; /* Adjusted gap */
+  padding: 2.85rem 2rem 10rem; /* Adjusted padding */
   max-width: 1024px;
-  padding-top: 2.85rem;
-  padding-left: 2rem;
-  padding-right: 2rem;
   align-items: flex-start;
   z-index: 40;
 }
