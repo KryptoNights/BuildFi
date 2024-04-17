@@ -7,7 +7,7 @@ import { BUILDFI_ABI } from "../../../abis/BuildFi.abi";
 // );
 
 const sepoliaProvider = new JsonRpcProvider(
-  "https://1rpc.io/sepolia",
+  "https://arb-sepolia.g.alchemy.com/v2/gdoWsVkAdoopk0ijXAAOtvq-CsXT8PTO",
   undefined,
   {
     staticNetwork: true,

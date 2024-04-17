@@ -14,6 +14,25 @@
   color: white;
   background: transparent;
 }
+.ncontainer {
+  display: flex;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  background-color: rgba(13,17,23,0);
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1408px;
+  margin: auto;
+  height: 85px;
+  padding-left: 20px;
+  padding-right: 20px;
+  position: fixed;
+  z-index: 99;
+  color: white;
+  background: transparent;
+}
 
 .subContainer1 {
   display: flex;

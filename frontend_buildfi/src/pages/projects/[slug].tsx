@@ -1,26 +1,23 @@
-import React from 'react';
-import { useRouter } from 'next/router';
-import data from '../../../constant/constant'; // Import your data file
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
-const YourComponent = () => {
-    const router = useRouter();
-    const { slug } = router.query;
-  
-    // Find the item from data using slug
-    const item = data.find((item:any) => item.slug === slug);
-  
-    if (!item) {
-      return <div>Page not found</div>;
-    }
+import { CircularProgress } from "@mui/material";
+
+const Slug = (props: any) => {
+  const router = useRouter();
+  const { slug }: any = router.query;
+
+  const [post, setPost]: any = React.useState([]);
+  const [replies, setReplies] = useState([]);
+  const [address, setAddress] = React.useState("");
+  const [loading, setLoading] = useState(false);
 
   return (
-    <div>
-      <h1>Your Component</h1>
-       <div>
-        {item.name}
-       </div>
-    </div>
+    <>
+      {console.log("inside")}
+      <div>hey</div>
+    </>
   );
 };
 
-export default YourComponent;
+export default Slug;

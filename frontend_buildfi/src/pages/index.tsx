@@ -2,9 +2,6 @@ import React from "react";
 import useDetectDevice from "../../customhook/useDetectDevice";
 import { useRouter } from "next/router";
 import Home from "../../components/Home/Home";
-import { styled } from "@mui/material/styles";
-import Poster from "public/Poster.webp";
-import Image from "next/image";
 
 // const StyledProductImg = styled("img")(({ width, style }) => ({
 //   width: width || "25%", // Default width is 25% if width prop is not provided
@@ -26,13 +23,13 @@ const index = () => {
       <div
         className="max-w-6xl "
         style={{
-          height: "100vh",
+          height: "80vh",
           display: "flex",
           flexDirection: "column",
           marginTop: "16vh",
+          overflow:'hidden'
         }}
       >
-        {/* <Image height={524} src={Poster} alt={"poster"} width={1124} draggable={false} className="m-auto"/> */}
         <div
           className=""
           style={{
@@ -102,8 +99,9 @@ const index = () => {
               width: "max-content",
               marginTop: 0,
               padding: "12px 24px",
-              lineHeight: 1.5,
+              lineHeight: 2,
               display: "inline-block",
+              fontSize:'1.5rem'
             }}
             href="/kyc"
           >
@@ -121,16 +119,20 @@ const index = () => {
               marginTop: 0,
               marginLeft: "15px",
               padding: "12px 24px",
-              lineHeight: 1.5,
+              lineHeight: 2,
               display: "inline-block",
               color: "#000",
               backgroundColor: "#fff",
+              fontSize:'1.5rem',
+         
             }}
+            
             href="/projects"
           >
             Investor
           </a>
         </div>
+        <Home />
       </div>
     </>
   );
