@@ -31,35 +31,39 @@ const CodeForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-xl font-semibold mb-4 text-teal-900">
+    <div style={{height:'100vh',display:'flex',justifyContent:'center',alignItems:'center'}}>
+
+
+    <div className="mx-auto mb-28 p-8 bg-white rounded-lg shadow-md " style={{width:'70%'}} >
+      <h2 className="text-6xl font-bold mb-8 text-teal-900">
         Start Your Founder's Journey
       </h2>
-      <form onSubmit={handleSubmit} className="mb-6">
+      <form onSubmit={handleSubmit} className="mb-12">
         <input
           type="text"
           placeholder="Paste Your Code"
           value={code}
           onChange={(e) => setCode(e.target.value)}
-          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-400 text-black"
+          className="w-full px-4 py-4 border rounded-lg focus:outline-none focus:border-blue-400 text-black"
         />
         <button
           type="submit"
-          className="w-full mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg focus:outline-none hover:bg-blue-600"
+          className="w-full mt-8 px-4 py-4 bg-blue-500 text-white text-2xl rounded-lg focus:outline-none hover:bg-blue-600"
           disabled={submitting}
         >
           {submitting ? "Submitting..." : "Submit"}
         </button>
       </form>
-      <p className="text-sm text-gray-600 mb-4">
+      <p className="text-xl text-gray-600 mb-4">
         Don't have a high-security code? Generate one below:
       </p>
       <button
-        className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg focus:outline-none hover:bg-blue-600"
+        className="w-full px-4 py-4 bg-blue-500 text-white text-2xl rounded-lg focus:outline-none hover:bg-blue-600"
         onClick={handleGenerateCode}
       >
         Get Your Code
       </button>
+    </div>
     </div>
   );
 };

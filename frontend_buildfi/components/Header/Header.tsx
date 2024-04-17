@@ -5,8 +5,7 @@ import { Button, CircularProgress } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../src/store/index";
 import Image from "next/image";
-import BuildFI from "public/Build.png"
-
+import BuildFI from "public/Build.png";
 
 interface HeaderProps {
   onConnect: () => void;
@@ -19,6 +18,24 @@ const Header = ({ onConnect, onDisconnect }: HeaderProps) => {
   const walletInfo = useSelector((state: RootState) => state.walletInfo);
   // console.log(walletInfo);
   const dispatch = useDispatch();
+  const [show, setShow] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  const controlNavbar = () => {
+    if (window.scrollY > lastScrollY) {
+      setShow(false);
+    } else {
+      setShow(true);
+    }
+    setLastScrollY(window.scrollY);
+  };
+
+  React.useEffect(() => {
+    window.addEventListener("scroll", controlNavbar);
+    return () => {
+      window.removeEventListener("scroll", controlNavbar);
+    };
+  }, [lastScrollY]);
 
   const { signer, accountData } = useConnection();
 
@@ -45,11 +62,23 @@ const Header = ({ onConnect, onDisconnect }: HeaderProps) => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={show ? styles.container : styles.ncontainer}>
       <div className={styles.subContainer1}>
-        <Image src={BuildFI} alt={'BuildFi'} width={180} height={40} onClick={handleRedirect} className="cursor-pointer" style={{filter:'invert(1)',borderRadius:'8px'}}/>
+        <Image
+          src={BuildFI}
+          alt={"BuildFi"}
+          width={180}
+          height={40}
+          onClick={handleRedirect}
+          className="cursor-pointer"
+          style={{ filter: "invert(1)", borderRadius: "8px" }}
+        />
         <a href="/projects">Projects</a>
-        <a href="/kyc" className="text-[16px]/[0px] cursor-pointer" onClick={handleRedirect2} >
+        <a
+          href="/kyc"
+          className="text-[16px]/[0px] cursor-pointer"
+          onClick={handleRedirect2}
+        >
           Looking for Funding?{" "}
         </a>
       </div>
@@ -59,7 +88,7 @@ const Header = ({ onConnect, onDisconnect }: HeaderProps) => {
       ) : walletInfo.address ? (
         <>
           <button
-            className="bg-[#03A9F4] hover:bg-blue-700 text-white font-bold py-2 px-8 rounded"
+            className="bg-[#ffffff] hover:bg-[#b7b5b5] text-black font-bold py-2 px-8 rounded"
             onClick={handleDisconnect}
           >
             🟢{" "}
