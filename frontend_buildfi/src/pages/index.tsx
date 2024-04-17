@@ -14,9 +14,12 @@ import Image from "next/image";
 //   className: style || "",
 // }));
 
+
+
 const index = () => {
   const res = useDetectDevice();
   const router = useRouter();
+  
 
   return (
     <>
@@ -53,12 +56,12 @@ const index = () => {
               marginTop: 0,
               marginBottom: 0,
               paddingTop: 0,
-              fontSize: "2em",
+              fontSize: "4em",
               fontWeight: 700,
               lineHeight: "120%",
               position: "relative",
-              width: "572px",
-              height: "74px",
+              width: "972px",
+              height: "100%",
               margin: "20px 0px",
             }}
           >
@@ -68,11 +71,11 @@ const index = () => {
             className="text-description-18px"
             style={{
               color: "#828282",
-              maxWidth: "56ch",
-              fontSize: "1.125em",
+              maxWidth: "86ch",
+              fontSize: "1.625em",
               fontWeight: 300,
               lineHeight: "1.5em",
-              padding: "0px 4px",
+              padding: "40px 4px",
             }}
           >
             You can invest on startups as well as list your startup/project for

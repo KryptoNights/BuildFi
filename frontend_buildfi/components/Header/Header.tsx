@@ -47,7 +47,7 @@ const Header = ({ onConnect, onDisconnect }: HeaderProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.subContainer1}>
-        <Image src={BuildFI} alt={'BuildFi'} width={180} height={40} onClick={handleRedirect} className="cursor-pointer"/>
+        <Image src={BuildFI} alt={'BuildFi'} width={180} height={40} onClick={handleRedirect} className="cursor-pointer" style={{filter:'invert(1)',borderRadius:'8px'}}/>
         <a href="/projects">Projects</a>
         <a href="/kyc" className="text-[16px]/[0px] cursor-pointer" onClick={handleRedirect2} >
           Looking for Funding?{" "}
