@@ -23,10 +23,11 @@ const index = () => {
       <div
         className="max-w-6xl "
         style={{
-          height: "100vh",
+          height: "80vh",
           display: "flex",
           flexDirection: "column",
           marginTop: "16vh",
+          overflow:'hidden'
         }}
       >
         <div
@@ -98,8 +99,9 @@ const index = () => {
               width: "max-content",
               marginTop: 0,
               padding: "12px 24px",
-              lineHeight: 1.5,
+              lineHeight: 2,
               display: "inline-block",
+              fontSize:'1.5rem'
             }}
             href="/kyc"
           >
@@ -117,11 +119,14 @@ const index = () => {
               marginTop: 0,
               marginLeft: "15px",
               padding: "12px 24px",
-              lineHeight: 1.5,
+              lineHeight: 2,
               display: "inline-block",
               color: "#000",
               backgroundColor: "#fff",
+              fontSize:'1.5rem',
+         
             }}
+            
             href="/projects"
           >
             Investor
