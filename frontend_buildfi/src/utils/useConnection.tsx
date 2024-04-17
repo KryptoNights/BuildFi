@@ -3,6 +3,10 @@ import { useCallback } from "react";
 import React from "react";
 import { ethers } from "ethers";
 import useEthersProviderAndSigner from "./getProvider";
+import { setWalletInfo } from "@/store/slice/walletinfo";
+import { useDispatch } from "react-redux";
+import { parse } from "path";
+
 export interface AccountType {
   address?: string;
   balance?: string;
@@ -14,7 +18,7 @@ const useConnection = () => {
   const [accountData, setAccountData] = useState<AccountType>({});
   const [message, setMessage] = useState<string>("");
   const [provider, signer] = useEthersProviderAndSigner();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   // console.log('daa',signer)
 
   const _onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,6 +30,8 @@ const useConnection = () => {
     if (storedWalletData) {
       const parsedData = JSON.parse(storedWalletData);
       setAccountData(parsedData);
+      // console.log(parsedData);
+      dispatch(setWalletInfo(parsedData));
     }
   }, []);
 
@@ -49,12 +55,12 @@ const useConnection = () => {
 
         const preparedData = {
           address,
-          balance: ethers.formatEther(balance),
+          // balance: ethers.formatEther(balance),
           chainId: network.chainId.toString(),
           network: network.name,
         };
         setAccountData(preparedData);
-        // dispatch(setWalletInfo(preparedData));
+        dispatch(setWalletInfo(preparedData));
 
         localStorage.setItem("walletData", JSON.stringify(preparedData));
       } catch (error: Error | any) {
@@ -67,7 +73,7 @@ const useConnection = () => {
 
   const _disconnectFromMetaMask = useCallback(async () => {
     console.log("here");
-    setAccountData({});
+    dispatch(setWalletInfo({}));
     localStorage.removeItem("walletData");
   }, []);
 
@@ -75,7 +81,7 @@ const useConnection = () => {
     const ethereum: any = await window.ethereum;
     // Create an ethers.js provider using the injected provider from MetaMask
     // And get the signer (account) from the provider
-    const signer = await new ethers.providers.Web3Provider(ethereum).getSigner();
+    const signer = await new ethers.BrowserProvider(ethereum).getSigner();
     try {
       // Sign the message
       console.log("ass", signer);

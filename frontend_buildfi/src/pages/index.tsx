@@ -1,19 +1,24 @@
-import Head from "next/head";
 import React from "react";
-import styles from '../styles/Home.module.css'
 import useDetectDevice from "../../customhook/useDetectDevice";
 import { useRouter } from "next/router";
-export default function Home() {
+import Home from "../../components/Home/Home";
+
+const index = () => {
   const res = useDetectDevice();
-  const router=useRouter();
-  
+  const router = useRouter();
+
   return (
     <>
-      <div className={styles.page}>
-        <div className={styles.main}>
-          <h1>Navigate to Route :localhost:300/components</h1>
-        </div>
-      </div>
+      {router.asPath == "/" && (
+        <>
+          <div className="flex flex-row">
+            <Home headerText="Do you need funding for your project or startup?" text="Complete your KYC and list your project to investors." route="kyc"/>
+            <Home headerText="Here to invest in some cool projects?" text="Checkout the list of the projects." route="projects"/>
+          </div>
+        </>
+      )}
     </>
   );
-}
+};
+
+export default index;

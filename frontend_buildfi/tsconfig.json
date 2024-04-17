@@ -17,6 +17,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "SmootherContext.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "SmootherContext.tsx", "components/Home"],
   "exclude": ["node_modules"]
 }
