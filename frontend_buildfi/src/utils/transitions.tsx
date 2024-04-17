@@ -3,15 +3,11 @@ import { sepolia } from "./config";
 import { BUILDFI_ABI } from "../../../abis/BuildFi.abi";
 
 // const sepoliaProvider = new ethers.providers.JsonRpcProvider(
-//   "https://1rpc.io/sepolia"
+//   "https://arb-sepolia.g.alchemy.com/v2/gdoWsVkAdoopk0ijXAAOtvq-CsXT8PTO"
 // );
 
 const sepoliaProvider = new JsonRpcProvider(
-  "https://arb-sepolia.g.alchemy.com/v2/gdoWsVkAdoopk0ijXAAOtvq-CsXT8PTO",
-  undefined,
-  {
-    staticNetwork: true,
-  }
+  "https://arb-sepolia.g.alchemy.com/v2/gdoWsVkAdoopk0ijXAAOtvq-CsXT8PTO"
 );
 
 export async function abondon_project(project_id: number) {

@@ -1,4 +1,4 @@
 // ADDRESSES
 export const sepolia = {
-    buildfi: "0x0c3C77F1302F98f15D0151866f810cFF2955EECA",
+    buildfi: "0x638FaBcc5c96e3bD97eea29e85e067D17Af1ae05",
 }
