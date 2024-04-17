@@ -7,45 +7,70 @@
   width: 240px;
   overflow-y: scroll;
   overflow-x: hidden;
-  height: 100vh;
+  height: 800px;
   padding-top: 60px;
 }
 
-.wrapper1{
+/* width */
+.container::-webkit-scrollbar {
+  display: block;
+  width: 2px;
+}
+/* Track */
+.container::-webkit-scrollbar-track {
+  /* background: transparent; */
+  /* border-radius: 2px; */
+  width: 2px;
+}
+
+/* Handle */
+.container::-webkit-scrollbar-thumb {
+  background: rgba(159, 246, 223, 0.5);
+  border-radius: 2px;
+}
+/* 
+  /* Handle on hover */
+.container::-webkit-scrollbar-thumb:hover {
+  background: rgba(159, 246, 223, 0.6);
+  border-radius: 2px;
+}
+
+.wrapper1 {
   padding-bottom: 1rem;
   display: flex;
   flex-direction: column;
 }
 
-.txt1{
-  color: rgb(255 255 255/var(--tw-text-opacity));
-  font-size: .875rem;
+.txt1 {
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+  font-size: 1.275rem;
   padding-bottom: 0.25rem;
-  padding-top: 0.25rem;
+  padding-top: 0.95rem;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
   margin-bottom: 0.25rem;
   line-height: 1.25rem;
+  font-family: "Patua One", serif;
 }
-.txt2{
+.txt2 {
+  font-family: "Patua One", serif;
   cursor: pointer;
   display: flex;
   width: 100%;
   align-items: center;
-  padding-bottom: 0.25rem;
-  padding-top: 0.25rem;
+  padding-bottom: 1rem;
+  padding-top: 0.5rem;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
   color: #a1a1aa;
-  font-size: 14px;
+  font-size: 18px;
   line-height: 1.25rem;
   transition: padding 0.3s ease;
 }
 
-.txt2:hover{
+.txt2:hover {
   font-weight: 200;
   color: #10b981;
-  padding: 4px 8px;
   animation: moveRight 0.3s ease forwards;
 }
 @keyframes moveRight {
