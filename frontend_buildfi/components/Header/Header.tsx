@@ -4,6 +4,9 @@ import useConnection from "@/utils/useConnection";
 import { Button, CircularProgress } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../src/store/index";
+import Image from "next/image";
+import BuildFI from "public/Build.png"
+
 
 interface HeaderProps {
   onConnect: () => void;
@@ -44,9 +47,7 @@ const Header = ({ onConnect, onDisconnect }: HeaderProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.subContainer1}>
-        <h1 className="text-[24px]/[0px] cursor-pointer" onClick={handleRedirect}>
-          BuildFI
-        </h1>
+        <Image src={BuildFI} alt={'BuildFi'} width={180} height={40} onClick={handleRedirect} className="cursor-pointer" style={{filter:'invert(1)',borderRadius:'8px'}}/>
         <a href="/projects">Projects</a>
         <a href="/kyc" className="text-[16px]/[0px] cursor-pointer" onClick={handleRedirect2} >
           Looking for Funding?{" "}

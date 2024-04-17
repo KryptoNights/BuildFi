@@ -12,6 +12,7 @@
   position: fixed;
   z-index: 99;
   color: white;
+  background: transparent;
 }
 
 .subContainer1 {
