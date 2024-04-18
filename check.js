@@ -678,19 +678,32 @@ import { ethers } from "ethers";
     const buildFi = new ethers.Contract(ADDR, ABI, signer);
     // const res = await buildFi.changeImageId("0xaceac4faee5f55dde55fcc4e922317a3a74017b952b4c305e36eaae412b52bf5");
     // const res = await buildFi.imageId();
-    const claimId = "0x73c09d2c8f161bab31f4ea1276f303abc84f2d7d0ee5396a7ffa9c87ded1cfc0"
-    const postStateDigest = "0xb04d470703992bd3f3c9cd8fa3459c35aef56466fd4cbfa9e5c45f814047678a"
-    const messageSender = "0xed7BF904D369aba6A0244E7b2CfB5f92B31FF11a"
-    const seal = [26, 88, 71, 6, 43, 174, 131, 55, 169, 241, 145, 236, 173, 209, 206, 52, 110, 163, 189, 221, 78, 48, 6, 145, 114, 113, 162, 64, 250, 60, 236, 51, 9, 93, 139, 171, 175, 87, 215, 67, 247, 35, 107, 49, 241, 47, 164, 183, 56, 210, 213, 46, 130, 6, 202, 96, 157, 99, 124, 55, 128, 108, 145, 56, 25, 183, 197, 252, 90, 33, 48, 110, 49, 64, 60, 30, 147, 151, 43, 63, 228, 196, 176, 197, 239, 103, 162, 200, 134, 153, 180, 26, 196, 28, 28, 253, 40, 60, 178, 179, 62, 14, 88, 79, 249, 85, 148, 192, 35, 204, 155, 3, 78, 1, 49, 5, 250, 3, 198, 90, 117, 137, 171, 109, 59, 53, 131, 24, 19, 104, 228, 105, 84, 88, 184, 213, 119, 76, 103, 63, 99, 183, 147, 213, 230, 175, 65, 55, 89, 161, 198, 7, 157, 192, 254, 208, 103, 101, 93, 232, 38, 37, 115, 105, 160, 131, 74, 23, 24, 77, 111, 31, 125, 195, 8, 181, 154, 213, 131, 240, 223, 114, 19, 126, 226, 97, 230, 8, 215, 11, 131, 193, 28, 209, 19, 44, 171, 114, 196, 189, 137, 116, 100, 156, 238, 154, 36, 28, 81, 229, 158, 190, 244, 233, 17, 200, 91, 65, 253, 191, 209, 8, 79, 206, 15, 176, 251, 132, 41, 95, 177, 105, 131, 51, 243, 25, 4, 50, 7, 55, 8, 79, 155, 57, 178, 235, 204, 25, 13, 45, 46, 171, 171, 182, 106, 255]
-    // // Convert each element to hex string 
-    const sealHexString = ethers.hexlify(new Uint8Array(seal));
-    console.log("sealHexArray: ", sealHexString, typeof sealHexString)
-    const res = await buildFi.verificationCallback(
-        messageSender,
-        claimId,
-        postStateDigest,
-        sealHexString
-    )
+    // const claimId = "0x73c09d2c8f161bab31f4ea1276f303abc84f2d7d0ee5396a7ffa9c87ded1cfc0"
+    // const postStateDigest = "0xb04d470703992bd3f3c9cd8fa3459c35aef56466fd4cbfa9e5c45f814047678a"
+    // const messageSender = "0xed7BF904D369aba6A0244E7b2CfB5f92B31FF11a"
+    // const seal = [26, 88, 71, 6, 43, 174, 131, 55, 169, 241, 145, 236, 173, 209, 206, 52, 110, 163, 189, 221, 78, 48, 6, 145, 114, 113, 162, 64, 250, 60, 236, 51, 9, 93, 139, 171, 175, 87, 215, 67, 247, 35, 107, 49, 241, 47, 164, 183, 56, 210, 213, 46, 130, 6, 202, 96, 157, 99, 124, 55, 128, 108, 145, 56, 25, 183, 197, 252, 90, 33, 48, 110, 49, 64, 60, 30, 147, 151, 43, 63, 228, 196, 176, 197, 239, 103, 162, 200, 134, 153, 180, 26, 196, 28, 28, 253, 40, 60, 178, 179, 62, 14, 88, 79, 249, 85, 148, 192, 35, 204, 155, 3, 78, 1, 49, 5, 250, 3, 198, 90, 117, 137, 171, 109, 59, 53, 131, 24, 19, 104, 228, 105, 84, 88, 184, 213, 119, 76, 103, 63, 99, 183, 147, 213, 230, 175, 65, 55, 89, 161, 198, 7, 157, 192, 254, 208, 103, 101, 93, 232, 38, 37, 115, 105, 160, 131, 74, 23, 24, 77, 111, 31, 125, 195, 8, 181, 154, 213, 131, 240, 223, 114, 19, 126, 226, 97, 230, 8, 215, 11, 131, 193, 28, 209, 19, 44, 171, 114, 196, 189, 137, 116, 100, 156, 238, 154, 36, 28, 81, 229, 158, 190, 244, 233, 17, 200, 91, 65, 253, 191, 209, 8, 79, 206, 15, 176, 251, 132, 41, 95, 177, 105, 131, 51, 243, 25, 4, 50, 7, 55, 8, 79, 155, 57, 178, 235, 204, 25, 13, 45, 46, 171, 171, 182, 106, 255]
+    // // // Convert each element to hex string 
+    // const sealHexString = ethers.hexlify(new Uint8Array(seal));
+    // console.log("sealHexArray: ", sealHexString, typeof sealHexString)
+    // const res = await buildFi.verificationCallback(
+    //     messageSender,
+    //     claimId,
+    //     postStateDigest,
+    //     sealHexString
+    // )
+    // const res = await buildFi.projectCount()
+    // const res = await buildFi.createProject(
+    //     "BuildFi: Raise funds from day 1",
+    //     "https://github.com/KryptoNights/BuildFi/blob/main/frontend_buildfi/public/Build.png?raw=true",
+    //     [1713701114000, 1713901114000, 1714301114000, 1714901114000],
+    //     [10, 20, 30, 40],
+    //     "10000000000000000000",
+    //     1713661114000
+    // )
+    const res = await buildFi.buildfi_projects(1)
+    // const res = await buildFi.makeNewAccount("deb", "debjitbhowal.db@gmail.com")
+    console.log("Obtained value at deployed contract is: " + res[1]);
+
 
     // console.log("Obtained value at deployed contract is: " + res);
 

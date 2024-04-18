@@ -1,6 +1,7 @@
 import { Contract, ethers, JsonRpcProvider } from "ethers";
 import { sepolia } from "./config";
 import { BUILDFI_ABI } from "../../../abis/BuildFi.abi";
+import axios from "axios";
 
 // const sepoliaProvider = new ethers.providers.JsonRpcProvider(
 //   "https://arb-sepolia.g.alchemy.com/v2/gdoWsVkAdoopk0ijXAAOtvq-CsXT8PTO"
@@ -25,6 +26,19 @@ export async function isKycDone(address: string): Promise<boolean>{
     // console.error("Error creating account:", error);
     return false;
   }
+}
+
+export async function vote_operator(projectId: number, milestoneId: number, vote: boolean, signer: ethers.Signer) {
+  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, signer);
+  const vote_through_witness_api = "https://us-central1-my-project-5269-1684667148053.cloudfunctions.net/buildfi-vote-casting"
+  const vote_intermediate = await axios.post(vote_through_witness_api, {
+    address: await signer.getAddress(),
+    vote: vote,
+    project_id: projectId,
+    milestone_id: milestoneId
+  });
+  // TODO logic to send data to chain
+  console.log("vote_intermediate", vote_intermediate);
 }
 
 export async function abondon_project(project_id: number) {
