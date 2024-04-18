@@ -536,7 +536,7 @@ const ABI = [
         ]
     }
 ];
-const ADDR = "0x638FaBcc5c96e3bD97eea29e85e067D17Af1ae05";
+const ADDR = "0x883F94eF06f3F28eea30453aDaAB7d6130743a7B";
 
 const ISP_ABI = [
     {
@@ -659,38 +659,38 @@ import { ethers } from "ethers";
     // console.log("Obtained value at deployed contract is: " + claims, claims === `0x73c09d2c8f161bab31f4ea1276f303abc84f2d7d0ee5396a7ffa9c87ded1cfc0`);
     // return res;
 
-    const ispTest = new ethers.Contract(ISP_ADDR, ISP_ABI, signer);
-    const res = await ispTest.setSchemaIds(14, 14);
-    console.log("Obtained value at deployed contract is: " + res);
-    const res2 = await ispTest.schema_ids();
-    console.log("Obtained value at deployed contract is: " + res2);
-    const args = AbiCoder.encode(
-        ["string", "uint256"],
-        ["hello world", 20]
-    )
-    const res4 = await ispTest.testAttestation(
-        args
-    )
-    console.log("Obtained value at deployed contract is: " + res4);
-    const res3 = await ispTest.attestation()
-    console.log("Obtained value at deployed contract is: " + res3);
+    // const ispTest = new ethers.Contract(ISP_ADDR, ISP_ABI, signer);
+    // const res = await ispTest.setSchemaIds(14, 14);
+    // console.log("Obtained value at deployed contract is: " + res);
+    // const res2 = await ispTest.schema_ids();
+    // console.log("Obtained value at deployed contract is: " + res2);
+    // const args = AbiCoder.encode(
+    //     ["string", "uint256"],
+    //     ["hello world", 20]
+    // )
+    // const res4 = await ispTest.testAttestation(
+    //     args
+    // )
+    // console.log("Obtained value at deployed contract is: " + res4);
+    // const res3 = await ispTest.attestation()
+    // console.log("Obtained value at deployed contract is: " + res3);
 
-    // const buildFi = new ethers.Contract(ADDR, ABI, signer);
+    const buildFi = new ethers.Contract(ADDR, ABI, signer);
     // const res = await buildFi.changeImageId("0xaceac4faee5f55dde55fcc4e922317a3a74017b952b4c305e36eaae412b52bf5");
     // const res = await buildFi.imageId();
-    // const claimId = "0x73c09d2c8f161bab31f4ea1276f303abc84f2d7d0ee5396a7ffa9c87ded1cfc0"
-    // const postStateDigest = "0x1cc583801d72279b5278e9c6f7f5783072b43c6a1a03018c563515544388d624"
-    // const messageSender = "0x48d74743caa686e52d77be3cdb90704e60e3b110"
-    // const seal = [18, 210, 17, 42, 99, 5, 129, 43, 255, 76, 74, 88, 185, 202, 94, 32, 210, 162, 69, 181, 58, 47, 148, 33, 156, 125, 65, 175, 24, 244, 144, 250, 8, 191, 247, 56, 120, 52, 174, 7, 49, 85, 167, 134, 113, 189, 28, 74, 90, 56, 183, 56, 62, 54, 53, 196, 73, 230, 239, 136, 96, 127, 75, 127, 19, 213, 199, 217, 226, 172, 175, 254, 58, 186, 191, 254, 127, 225, 48, 207, 251, 72, 202, 101, 112, 184, 143, 136, 224, 151, 100, 241, 6, 203, 9, 173, 16, 224, 222, 132, 56, 49, 15, 29, 66, 125, 86, 67, 124, 95, 184, 14, 92, 64, 147, 213, 232, 61, 25, 172, 198, 177, 102, 166, 41, 32, 172, 70, 44, 63, 230, 13, 107, 58, 71, 237, 218, 74, 232, 227, 101, 101, 227, 99, 190, 76, 222, 208, 82, 205, 217, 83, 75, 211, 201, 236, 21, 255, 221, 214, 33, 124, 72, 129, 87, 123, 47, 60, 30, 174, 28, 127, 149, 214, 213, 46, 33, 233, 62, 254, 191, 53, 34, 102, 245, 208, 57, 252, 129, 109, 233, 23, 33, 204, 81, 3, 79, 246, 198, 142, 143, 245, 206, 185, 44, 21, 38, 207, 241, 204, 95, 187, 69, 174, 195, 126, 84, 202, 218, 215, 87, 10, 160, 133, 21, 219, 248, 215, 148, 180, 210, 91, 6, 18, 249, 145, 227, 98, 196, 191, 131, 78, 73, 87, 219, 82, 249, 144, 167, 36, 12, 60, 118, 21, 88, 65]
+    const claimId = "0xf244d77da78a8f624aeccde06ccebb99d94e296224edd4361156381f556c5b9b"
+    const postStateDigest = "0xc52561afe2b01a26f9a368fe109fdaaeb6c5cf2e17999faf5df1b8ae3b103426"
+    const messageSender = "0xd6f285aff13129f0e27a2079e343c9af3b19a776"
+    const seal = [25, 89, 179, 199, 116, 41, 140, 149, 226, 146, 100, 29, 90, 90, 211, 121, 196, 40, 215, 155, 189, 252, 99, 212, 187, 50, 144, 136, 159, 204, 165, 207, 9, 251, 110, 168, 137, 192, 64, 172, 157, 239, 9, 23, 210, 157, 175, 112, 17, 143, 36, 132, 225, 173, 237, 233, 214, 28, 52, 175, 125, 12, 54, 173, 45, 78, 31, 228, 203, 215, 65, 35, 17, 80, 138, 10, 27, 98, 225, 159, 116, 133, 222, 89, 68, 45, 178, 103, 119, 146, 1, 188, 90, 17, 20, 238, 7, 223, 122, 195, 91, 203, 199, 248, 30, 215, 16, 242, 157, 191, 207, 41, 240, 178, 180, 225, 218, 185, 160, 168, 75, 63, 232, 123, 210, 70, 123, 71, 16, 123, 146, 46, 242, 205, 216, 60, 212, 17, 48, 136, 153, 114, 42, 158, 174, 65, 238, 166, 83, 171, 194, 241, 31, 253, 132, 172, 35, 91, 147, 73, 25, 49, 131, 107, 226, 237, 45, 114, 209, 123, 39, 46, 61, 162, 43, 24, 168, 46, 246, 124, 227, 81, 66, 37, 113, 83, 76, 130, 45, 221, 121, 182, 8, 99, 246, 186, 223, 26, 141, 108, 128, 113, 249, 110, 145, 45, 128, 251, 209, 22, 83, 118, 251, 97, 157, 7, 89, 154, 202, 120, 50, 77, 48, 138, 45, 211, 148, 55, 35, 170, 157, 153, 144, 64, 3, 104, 174, 77, 106, 35, 162, 109, 251, 39, 147, 108, 96, 5, 189, 191, 1, 40, 249, 36, 23, 123]
     // // Convert each element to hex string 
-    // const sealHexString = ethers.hexlify(new Uint8Array(seal));
-    // console.log("sealHexArray: ", sealHexString, typeof sealHexString)
-    // const res = await buildFi.verificationCallback(
-    //     messageSender,
-    //     claimId,
-    //     postStateDigest,
-    //     sealHexString
-    // )
+    const sealHexString = ethers.hexlify(new Uint8Array(seal));
+    console.log("sealHexArray: ", sealHexString, typeof sealHexString)
+    const res = await buildFi.verificationCallback(
+        messageSender,
+        claimId,
+        postStateDigest,
+        sealHexString
+    )
 
     // console.log("Obtained value at deployed contract is: " + res);
 

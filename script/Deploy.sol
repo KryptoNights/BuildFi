@@ -44,8 +44,8 @@ contract CounterScript is Script {
         console2.log("Deployed BuildFi to", address(buildFi));
 
         // ## ## IspTest
-        IspTest ispTest = new IspTest(SIGN_DEPLOYED_ADDRESS);
-        console2.log("Deployed IspTest to", address(ispTest));
+        // IspTest ispTest = new IspTest(SIGN_DEPLOYED_ADDRESS);
+        // console2.log("Deployed IspTest to", address(ispTest));
 
         vm.stopBroadcast();
     }
