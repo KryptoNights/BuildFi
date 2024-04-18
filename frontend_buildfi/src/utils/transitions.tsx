@@ -91,9 +91,10 @@ export async function invest(projectId: number) {
 export async function makeNewAccount(
   name: string,
   email: string,
-  signer: any
+  signer: ethers.Signer
 ) {
   const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, signer);
+  console.log("makeNewAccount:", name, email, await signer.getAddress());
 
   const result = await buildfi.makeNewAccount(name, email);
   console.log("makeNewAccount result:", result);

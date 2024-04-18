@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import {Provider} from "@ethersproject/providers";
+// import {Provider} from "@ethersproject/providers";
+import { JsonRpcProvider } from "ethers";
 
-type ProviderType = Provider;
+type ProviderType = JsonRpcProvider;
 type SignerType = ethers.Signer | null;
 
 declare global {
@@ -14,7 +15,7 @@ declare global {
 
 const useEthersProviderAndSigner = (): [ProviderType, SignerType] => {
   const [provider, setProvider] = useState<ProviderType>(
-    new ethers.JsonRpcProvider("https://arb-sepolia.g.alchemy.com/v2/gdoWsVkAdoopk0ijXAAOtvq-CsXT8PTO");
+    new ethers.JsonRpcProvider("https://arb-sepolia.g.alchemy.com/v2/gdoWsVkAdoopk0ijXAAOtvq-CsXT8PTO")
   );
   const [signer, setSigner] = useState<SignerType>(null);
 
