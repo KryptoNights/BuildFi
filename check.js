@@ -702,7 +702,10 @@ import { ethers } from "ethers";
     // )
     const res = await buildFi.buildfi_projects(1)
     // const res = await buildFi.makeNewAccount("deb", "debjitbhowal.db@gmail.com")
-    console.log("Obtained value at deployed contract is: " + res[1]);
+    console.log("Obtained value at deployed contract is: " + res);
+    for (let i = 0; i < res.length; i++) {
+        console.log(res[i])
+    }
 
 
     // console.log("Obtained value at deployed contract is: " + res);

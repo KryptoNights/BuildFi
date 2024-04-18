@@ -41,6 +41,30 @@ export async function vote_operator(projectId: number, milestoneId: number, vote
   console.log("vote_intermediate", vote_intermediate);
 }
 
+export async function getAllProjects() {
+  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
+  const projectCount = await buildfi.projectCount();
+  const projects = []
+  for (let i = 1; i < projectCount; i++) {
+    const project = await buildfi.buildfi_projects(i);
+    console.log("Project:", project);
+    projects.push({
+      id: project[0],
+      name: project[1],
+      metadata: project[2],
+      owner: project[3],
+      milestone_count: project[4],
+      // last_milestone_completed: project[5],
+      total_budget: project[6],
+      token_set: project[9],
+      // milestone_timestamps: project[6],
+      // payout_percentages: project[7],
+      // milestone_metadata_json: project[8],
+    })
+  }
+  return projects;
+}
+
 export async function abondon_project(project_id: number) {
   console.log(project_id);
   const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
