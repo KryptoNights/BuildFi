@@ -12,6 +12,7 @@ import {Ownable} from "openzeppelin/contracts/access/Ownable.sol";
 import {IERC20} from "openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ERC20} from "openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {IRiscZeroVerifier} from "risc0/IRiscZeroVerifier.sol";
+import {IWitness, Proof} from "witness/interfaces/IWitness.sol";
 import {ISP} from "sign-protocol/interfaces/ISP.sol";
 import {Attestation} from "sign-protocol/models/Attestation.sol";
 import {DataLocation} from "sign-protocol/models/DataLocation.sol";
@@ -41,7 +42,7 @@ contract BuildFi {
         bool voting_active;
         uint256 votes_for;
         uint256 votes_against;
-        mapping(address => bool) voters;
+        // mapping(address => bool) voters; (NOW DONE THROUGH WITNESS)
         uint256 voting_deadline;
         // add witness here
     }
@@ -473,6 +474,40 @@ contract BuildFi {
         buildfi_projects[_projectId].milestones[milestoneId].voters[
             msg.sender
         ] = true;
+    }
+
+    function witness_voting(uint256 _projectId, int16 _milestoneId, uint256 _votes_for, uint256 _votes_against, Proof calldata proof) public {
+        uint16 milestoneId = uint16(_milestoneId);
+
+        // ensure the project exists
+        require(buildfi_projects[_projectId].id != 0, "Project does not exist");
+
+        // ensure the milestone exists
+        require(
+            buildfi_projects[_projectId].milestones[milestoneId].id ==
+                _milestoneId,
+            "Milestone does not exist"
+        );
+
+        // sender must be an investor
+        require(
+            buildfi_projects[_projectId].investments[msg.sender] > 0,
+            "Sender is not an investor"
+        );
+
+        // ensure voting is active
+        require(
+            buildfi_projects[_projectId].milestones[milestoneId].voting_active,
+            "Voting is not active"
+        );
+
+        // ensure the proof is valid
+        bool isValid = IWitness.safeVerifyProof(proof);
+        require(isValid, "Invalid proof");
+
+        // update milestone votes
+        buildfi_projects[_projectId].milestones[milestoneId].votes_for = _votes_for;
+        buildfi_projects[_projectId].milestones[milestoneId].votes_against = _votes_against;
     }
 
     function close_voting(uint256 _projectId, int16 _milestoneId) public {

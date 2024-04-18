@@ -15,17 +15,33 @@ def vote_through_witness(request):
     # address, vote (True/False)
 	address = None
 	vote = False
+	project_id = None
+	milestone_id = None
 	if request.content_type == 'application/x-www-form-urlencoded':
 		address = request.form.get('address')
 		vote = request.form.get('vote')
+		project_id = request.form.get('project_id')
+		milestone_id = request.form.get('milestone_id')
 	elif request.content_type == 'application/json':
 		address = request.get_json().get('address')
 		vote = request.get_json().get('vote')
+		project_id = request.get_json().get('project_id')
+		milestone_id = request.get_json().get('milestone_id')
 	print(address, type(address))
 	print(vote, type(vote))
+	print(project_id, type(project_id))
+	print(milestone_id, type(milestone_id))
+
+	# create basic doc (f"{project_id}#{milestone_id}") if it doesn't exist
+	vote_doc = db.collection("buildfi").document(f"{project_id}#{milestone_id}")
+	if not vote_doc.get().exists:
+		vote_doc.set({
+			"yes": 0,
+			"no": 0
+		})
 	
     # check if address already in database
-	doc_ref = db.collection("buildfi").document("witness_votes").collection("votes").document(address)
+	doc_ref = db.collection("buildfi").document(f"{project_id}#{milestone_id}").collection("votes").document(address)
 	doc = doc_ref.get()
 	doc_dict = doc.to_dict()
 	if doc.exists:
@@ -38,7 +54,7 @@ def vote_through_witness(request):
 			"error": True,
         }
 	else:
-		witness_votes_doc = db.collection("buildfi").document("witness_votes")
+		witness_votes_doc = db.collection("buildfi").document(f"{project_id}#{milestone_id}")
 		witness_votes = witness_votes_doc.get().to_dict()
 		if vote:
 			witness_votes["yes"] += 1
