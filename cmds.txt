@@ -13,3 +13,6 @@ RUST_BACKTRACE=1 RUST_LOG=info cargo run --bin pubsub -- --chain-id 421614 --eth
 
 export BONSAI_API_KEY=WdKpVodEeB4NsyLPfLj7baGcoLWbJUgp5j5LAvs7
 export BONSAI_API_URL="https://api.bonsai.xyz"
+export ETH_WALLET_PRIVATE_KEY=a43d806ebdaf3cb8af297665bf0d6f1866050d4b9aa67bc9306557232794d2cc
+
+0xaceac4faee5f55dde55fcc4e922317a3a74017b952b4c305e36eaae412b52bf5

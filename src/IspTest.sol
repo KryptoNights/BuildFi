@@ -42,7 +42,7 @@ contract IspTest {
 
     function testAttestation(bytes memory commitAttestationData) public {
         bytes[] memory recipients = new bytes[](1);
-        recipients[0] = abi.encodePacked(address(msg.sender));
+        recipients[0] = abi.encodePacked(msg.sender);
         // add attestation to the project
         Attestation memory projectCommitted = Attestation({
             schemaId: schema_ids.committed,
