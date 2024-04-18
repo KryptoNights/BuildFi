@@ -7,15 +7,16 @@ type ProviderType = JsonRpcProvider;
 type SignerType = ethers.Signer | null;
 
 declare global {
-    interface Window {
-      ethereum: any; // Adjust the type as per your requirement
-    }
+  interface Window {
+    ethereum: any; // Adjust the type as per your requirement
   }
-  
+}
 
 const useEthersProviderAndSigner = (): [ProviderType, SignerType] => {
   const [provider, setProvider] = useState<ProviderType>(
-    new ethers.JsonRpcProvider("https://arb-sepolia.g.alchemy.com/v2/gdoWsVkAdoopk0ijXAAOtvq-CsXT8PTO")
+    new ethers.JsonRpcProvider(
+      "https://arb-sepolia.g.alchemy.com/v2/gdoWsVkAdoopk0ijXAAOtvq-CsXT8PTO"
+    )
   );
   const [signer, setSigner] = useState<SignerType>(null);
 
@@ -25,17 +26,16 @@ const useEthersProviderAndSigner = (): [ProviderType, SignerType] => {
         console.log("MetaMask not installed; using read-only defaults");
       } else {
         const browserProvider = new ethers.BrowserProvider(window.ethereum);
-        const fetchedSigner =  await new ethers.BrowserProvider(window.ethereum).getSigner();
+        const fetchedSigner = await new ethers.BrowserProvider(
+          window.ethereum
+        ).getSigner();
         setProvider(browserProvider);
         setSigner(fetchedSigner);
       }
     };
 
-
     checkMetaMask();
-    return () => {
-        
-    };
+    return () => {};
   }, []);
 
   return [provider, signer];

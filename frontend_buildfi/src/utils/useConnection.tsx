@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import React from "react";
 import { ethers } from "ethers";
 import useEthersProviderAndSigner from "./getProvider";
-import { setWalletInfo } from "@/store/slice/walletinfo";
+import { setWalletInfo, resetWalletInfo } from "@/store/slice/walletinfo";
 import { useDispatch } from "react-redux";
 import { parse } from "path";
 
@@ -73,8 +73,9 @@ const useConnection = () => {
 
   const _disconnectFromMetaMask = useCallback(async () => {
     console.log("here");
-    dispatch(setWalletInfo({}));
+    dispatch(resetWalletInfo());
     localStorage.removeItem("walletData");
+    setAccountData({});
   }, []);
 
   const _sendMessageToMetaMask = useCallback(async () => {

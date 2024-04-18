@@ -16,7 +16,6 @@ import { resetWalletInfo } from "@/store/slice/walletinfo";
 
 const Header = ({ onConnect, onDisconnect }: HeaderProps) => {
   const walletInfo = useSelector((state: RootState) => state.walletInfo);
-  // console.log(walletInfo);
   const dispatch = useDispatch();
   const [show, setShow] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -37,9 +36,6 @@ const Header = ({ onConnect, onDisconnect }: HeaderProps) => {
     };
   }, [lastScrollY]);
 
-  const { signer, accountData } = useConnection();
-
-  const [connected, setConnected] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleConnect = async () => {
@@ -55,7 +51,7 @@ const Header = ({ onConnect, onDisconnect }: HeaderProps) => {
 
   const router = useRouter();
   const handleRedirect = () => {
-    router.push("./");
+    router.push("/");
   };
   const handleRedirect2 = () => {
     router.push("./kyc");

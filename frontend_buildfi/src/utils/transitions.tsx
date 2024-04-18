@@ -11,13 +11,16 @@ const sepoliaProvider = new JsonRpcProvider(
   "https://arb-sepolia.g.alchemy.com/v2/gdoWsVkAdoopk0ijXAAOtvq-CsXT8PTO"
 );
 
-export async function isKycDone(address: string): Promise<boolean>{
-  console.log("in isKycDone")
+export async function isKycDone(address: string): Promise<boolean> {
+  console.log("in isKycDone");
   const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
 
   try {
     const result = await buildfi.claims(address);
-    if (result === "0x0000000000000000000000000000000000000000000000000000000000000000") {
+    if (
+      result ===
+      "0x0000000000000000000000000000000000000000000000000000000000000000"
+    ) {
       return false;
     } else {
       return true;
@@ -28,14 +31,20 @@ export async function isKycDone(address: string): Promise<boolean>{
   }
 }
 
-export async function vote_operator(projectId: number, milestoneId: number, vote: boolean, signer: ethers.Signer) {
+export async function vote_operator(
+  projectId: number,
+  milestoneId: number,
+  vote: boolean,
+  signer: ethers.Signer
+) {
   const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, signer);
-  const vote_through_witness_api = "https://us-central1-my-project-5269-1684667148053.cloudfunctions.net/buildfi-vote-casting"
+  const vote_through_witness_api =
+    "https://us-central1-my-project-5269-1684667148053.cloudfunctions.net/buildfi-vote-casting";
   const vote_intermediate = await axios.post(vote_through_witness_api, {
     address: await signer.getAddress(),
     vote: vote,
     project_id: projectId,
-    milestone_id: milestoneId
+    milestone_id: milestoneId,
   });
   // TODO logic to send data to chain
   console.log("vote_intermediate", vote_intermediate);
@@ -44,7 +53,7 @@ export async function vote_operator(projectId: number, milestoneId: number, vote
 export async function getAllProjects() {
   const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
   const projectCount = await buildfi.projectCount();
-  const projects = []
+  const projects = [];
   for (let i = 1; i < projectCount; i++) {
     const project = await buildfi.buildfi_projects(i);
     console.log("Project:", project);
@@ -63,7 +72,7 @@ export async function getAllProjects() {
       // milestone_timestamps: project[6],
       // payout_percentages: project[7],
       // milestone_metadata_json: project[8],
-    })
+    });
   }
   return projects;
 }
@@ -88,6 +97,7 @@ export async function getProjectInfo(projectId: number) {
 
   const info = await buildfi.buildfi_projects(projectId);
   console.log("Project info:", info);
+  return info;
 }
 
 export async function changeImageId(imageId: string) {
@@ -175,7 +185,11 @@ export async function setAndTransferTokens(
   console.log("set_and_transfer_tokens result:", result);
 }
 
-export async function startVoting(projectId: number, milestoneId: number, signer: ethers.Signer) {
+export async function startVoting(
+  projectId: number,
+  milestoneId: number,
+  signer: ethers.Signer
+) {
   const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, signer);
 
   const result = await buildfi.start_voting(projectId, milestoneId);
