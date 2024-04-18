@@ -327,16 +327,19 @@ contract BuildFi {
         );
 
         // add attestation to the project
+        bytes[] memory recipients = new bytes[](1);
+        recipients[0] = abi.encodePacked(address(msg.sender));
+
         Attestation memory projectCommitted = Attestation({
             schemaId: schema_ids.committed,
             linkedAttestationId: 0,
             attestTimestamp: 0,
             revokeTimestamp: 0,
-            attester: msg.sender,
+            attester: address(this),
             validUntil: 0,
             dataLocation: DataLocation.ONCHAIN,
             revoked: false,
-            recipients: new bytes[](0),
+            recipients: recipients,
             data: commitAttestationData // SignScan assumes this is from `abi.encode(...)`
         });
 
