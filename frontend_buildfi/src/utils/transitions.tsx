@@ -10,6 +10,23 @@ const sepoliaProvider = new JsonRpcProvider(
   "https://arb-sepolia.g.alchemy.com/v2/gdoWsVkAdoopk0ijXAAOtvq-CsXT8PTO"
 );
 
+export async function isKycDone(address: string): Promise<boolean>{
+  console.log("in isKycDone")
+  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
+
+  try {
+    const result = await buildfi.claims(address);
+    if (result === "0x0000000000000000000000000000000000000000000000000000000000000000") {
+      return false;
+    } else {
+      return true;
+    }
+  } catch (error) {
+    // console.error("Error creating account:", error);
+    return false;
+  }
+}
+
 export async function abondon_project(project_id: number) {
   console.log(project_id);
   const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
@@ -74,15 +91,8 @@ export async function createProject(
   console.log("createProject result:", result);
 }
 
-export async function getImageId() {
-  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
-
-  const imageId = await buildfi.imageId();
-  console.log("Image ID:", imageId);
-}
-
-export async function invest(projectId: number) {
-  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
+export async function invest(projectId: number, signer: ethers.Signer) {
+  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, signer);
 
   const result = await buildfi.invest(projectId);
   console.log("invest result:", result);
@@ -124,41 +134,18 @@ export async function setAndTransferTokens(
   console.log("set_and_transfer_tokens result:", result);
 }
 
-export async function startVoting(projectId: number, milestoneId: number) {
-  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
+export async function startVoting(projectId: number, milestoneId: number, signer: ethers.Signer) {
+  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, signer);
 
   const result = await buildfi.start_voting(projectId, milestoneId);
   console.log("start voting result:", result);
 }
 
-export async function verificationCallback(
-  sender: string,
-  claimId: string,
-  postStateDigest: string,
-  seal: string
-) {
-  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
-
-  const result = await buildfi.verificationCallback(
-    sender,
-    claimId,
-    postStateDigest,
-    seal
-  );
-  console.log("verificationCallback result:", result);
-}
-
-export async function verifier() {
-  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
-
-  const verifierAddress = await buildfi.verifier();
-  console.log("Verifier address:", verifierAddress);
-}
-
 export async function vote(
   projectId: number,
   milestoneId: number,
-  vote: boolean
+  vote: boolean,
+  signer: ethers.Signer
 ) {
   const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
 
