@@ -1,15 +1,19 @@
 import { makeNewAccount } from "@/utils/transitions";
+import useConnection from "@/utils/useConnection";
 import React, { useState } from "react";
 
 const SignInComp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const { signer } = useConnection();
+  console.log(signer);
+  
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     try {
-      await makeNewAccount(name, email, "");
+      await makeNewAccount(name, email, signer);
       console.log("Account created successfully!");
     } catch (error) {
       console.error("Error creating account:", error);

@@ -91,11 +91,11 @@ export async function invest(projectId: number) {
 export async function makeNewAccount(
   name: string,
   email: string,
-  zkKYCProofId: string
+  signer: any
 ) {
-  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
+  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, signer);
 
-  const result = await buildfi.makeNewAccount(name, email, zkKYCProofId);
+  const result = await buildfi.makeNewAccount(name, email);
   console.log("makeNewAccount result:", result);
 }
 
