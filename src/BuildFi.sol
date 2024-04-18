@@ -12,6 +12,7 @@ import {Ownable} from "openzeppelin/contracts/access/Ownable.sol";
 import {IERC20} from "openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ERC20} from "openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {IRiscZeroVerifier} from "risc0/IRiscZeroVerifier.sol";
+import {IWitness, Proof} from "witness/interfaces/IWitness.sol";
 import {ISP} from "sign-protocol/interfaces/ISP.sol";
 import {Attestation} from "sign-protocol/models/Attestation.sol";
 import {DataLocation} from "sign-protocol/models/DataLocation.sol";
@@ -41,7 +42,7 @@ contract BuildFi {
         bool voting_active;
         uint256 votes_for;
         uint256 votes_against;
-        mapping(address => bool) voters;
+        // mapping(address => bool) voters; (NOW DONE THROUGH WITNESS)
         uint256 voting_deadline;
         // add witness here
     }
@@ -153,7 +154,7 @@ contract BuildFi {
         // create a new developer account
         buildfi_developers[msg.sender] = Developer(
             _name,
-            sha256(bytes (_email)),
+            sha256(bytes(_email)),
             "0",
             0,
             5
@@ -192,7 +193,7 @@ contract BuildFi {
         // ensure payout percentages are valid
         require(
             (_payout_percentages.length == _milestones) &&
-            (_milestones == _milestone_timestamps.length),
+                (_milestones == _milestone_timestamps.length),
             "Lengths of arrays do not match"
         );
         uint256 total_percentage = 0;
@@ -327,16 +328,19 @@ contract BuildFi {
         );
 
         // add attestation to the project
+        bytes[] memory recipients = new bytes[](1);
+        recipients[0] = abi.encodePacked(address(msg.sender));
+
         Attestation memory projectCommitted = Attestation({
             schemaId: schema_ids.committed,
             linkedAttestationId: 0,
             attestTimestamp: 0,
             revokeTimestamp: 0,
-            attester: msg.sender,
+            attester: address(this),
             validUntil: 0,
             dataLocation: DataLocation.ONCHAIN,
             revoked: false,
-            recipients: new bytes[](0),
+            recipients: recipients,
             data: commitAttestationData // SignScan assumes this is from `abi.encode(...)`
         });
 
@@ -372,7 +376,11 @@ contract BuildFi {
         buildfi_projects[_projectId].investments[msg.sender] += _amount;
     }
 
-    function start_voting(uint256 _projectId, int16 _milestoneId, uint256 _voting_deadline) public {
+    function start_voting(
+        uint256 _projectId,
+        int16 _milestoneId,
+        uint256 _voting_deadline
+    ) public {
         uint16 milestoneId = uint16(_milestoneId);
 
         // ensure the project exists
@@ -397,9 +405,7 @@ contract BuildFi {
 
         // ensure the milestone is not already voted on
         require(
-            !buildfi_projects[_projectId]
-                .milestones[milestoneId]
-                .voting_active,
+            !buildfi_projects[_projectId].milestones[milestoneId].voting_active,
             "Milestone already voted on"
         );
 
@@ -422,7 +428,61 @@ contract BuildFi {
             .voting_active = true;
     }
 
-    function vote(uint256 _projectId, int16 _milestoneId, bool _vote) public {
+    // function vote(uint256 _projectId, int16 _milestoneId, bool _vote) public {
+    //     uint16 milestoneId = uint16(_milestoneId);
+
+    //     // ensure the project exists
+    //     require(buildfi_projects[_projectId].id != 0, "Project does not exist");
+
+    //     // ensure the milestone exists
+    //     require(
+    //         buildfi_projects[_projectId].milestones[milestoneId].id ==
+    //             _milestoneId,
+    //         "Milestone does not exist"
+    //     );
+
+    //     // sender must be an investor
+    //     require(
+    //         buildfi_projects[_projectId].investments[msg.sender] > 0,
+    //         "Sender is not an investor"
+    //     );
+
+    //     // sender must not have already voted
+    //     // require(
+    //     //     !buildfi_projects[_projectId].milestones[milestoneId].voters[
+    //     //         msg.sender
+    //     //     ],
+    //     //     "Sender has already voted"
+    //     // );
+
+    //     // ensure voting is active
+    //     require(
+    //         buildfi_projects[_projectId].milestones[milestoneId].voting_active,
+    //         "Voting is not active"
+    //     );
+
+    //     // update milestone votes
+    //     if (_vote) {
+    //         buildfi_projects[_projectId].milestones[milestoneId].votes_for += 1;
+    //     } else {
+    //         buildfi_projects[_projectId]
+    //             .milestones[milestoneId]
+    //             .votes_against += 1;
+    //     }
+
+    //     // update voter status
+    //     // buildfi_projects[_projectId].milestones[milestoneId].voters[
+    //     //     msg.sender
+    //     // ] = true;
+    // }
+
+    function witness_voting(
+        uint256 _projectId,
+        int16 _milestoneId,
+        uint256 _votes_for,
+        uint256 _votes_against
+        // Proof calldata proof
+    ) public {
         uint16 milestoneId = uint16(_milestoneId);
 
         // ensure the project exists
@@ -441,35 +501,23 @@ contract BuildFi {
             "Sender is not an investor"
         );
 
-        // sender must not have already voted
-        require(
-            !buildfi_projects[_projectId].milestones[milestoneId].voters[
-                msg.sender
-            ],
-            "Sender has already voted"
-        );
-
         // ensure voting is active
         require(
             buildfi_projects[_projectId].milestones[milestoneId].voting_active,
             "Voting is not active"
         );
 
-        // update milestone votes
-        if (_vote) {
-            buildfi_projects[_projectId]
-                .milestones[milestoneId]
-                .votes_for += 1;
-        } else {
-            buildfi_projects[_projectId]
-                .milestones[milestoneId]
-                .votes_against += 1;
-        }
+        // ensure the proof is valid
+        // bool isValid = IWitness.safeVerifyProof(proof);
+        // require(isValid, "Invalid proof");
 
-        // update voter status
-        buildfi_projects[_projectId].milestones[milestoneId].voters[
-            msg.sender
-        ] = true;
+        // update milestone votes
+        buildfi_projects[_projectId]
+            .milestones[milestoneId]
+            .votes_for = _votes_for;
+        buildfi_projects[_projectId]
+            .milestones[milestoneId]
+            .votes_against = _votes_against;
     }
 
     function close_voting(uint256 _projectId, int16 _milestoneId) public {
@@ -525,8 +573,7 @@ contract BuildFi {
 
         // calculate payout
         uint256 payout = (buildfi_projects[_projectId].total_budget *
-            buildfi_projects[_projectId].payout_percentages[milestoneId]) /
-            100;
+            buildfi_projects[_projectId].payout_percentages[milestoneId]) / 100;
 
         // pay out the milestone budget
         payable(msg.sender).transfer(payout);

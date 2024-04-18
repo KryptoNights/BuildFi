@@ -11,6 +11,11 @@ export const BUILDFI_ABI = [
                 "name": "_verifier",
                 "type": "address",
                 "internalType": "contract IRiscZeroVerifier"
+            },
+            {
+                "name": "_sign_deployed_addr",
+                "type": "address",
+                "internalType": "address"
             }
         ],
         "stateMutability": "nonpayable"
@@ -46,8 +51,8 @@ export const BUILDFI_ABI = [
             },
             {
                 "name": "email",
-                "type": "string",
-                "internalType": "string"
+                "type": "bytes32",
+                "internalType": "bytes32"
             },
             {
                 "name": "zkKYC_proof_id",
@@ -100,13 +105,13 @@ export const BUILDFI_ABI = [
             },
             {
                 "name": "milestone_count",
-                "type": "uint16",
-                "internalType": "uint16"
+                "type": "int16",
+                "internalType": "int16"
             },
             {
                 "name": "last_milestone_completed",
-                "type": "uint16",
-                "internalType": "uint16"
+                "type": "int16",
+                "internalType": "int16"
             },
             {
                 "name": "milestone_metadata_json",
@@ -162,6 +167,16 @@ export const BUILDFI_ABI = [
                 "name": "abandoned",
                 "type": "bool",
                 "internalType": "bool"
+            },
+            {
+                "name": "projectCommitted",
+                "type": "uint64",
+                "internalType": "uint64"
+            },
+            {
+                "name": "projectWrapped",
+                "type": "uint64",
+                "internalType": "uint64"
             }
         ],
         "stateMutability": "view"
@@ -209,8 +224,8 @@ export const BUILDFI_ABI = [
             },
             {
                 "name": "_milestoneId",
-                "type": "uint16",
-                "internalType": "uint16"
+                "type": "int16",
+                "internalType": "int16"
             }
         ],
         "outputs": [],
@@ -231,9 +246,9 @@ export const BUILDFI_ABI = [
                 "internalType": "string"
             },
             {
-                "name": "_milestones",
-                "type": "uint16",
-                "internalType": "uint16"
+                "name": "_milestone_timestamps",
+                "type": "uint256[]",
+                "internalType": "uint256[]"
             },
             {
                 "name": "_payout_percentages",
@@ -253,6 +268,19 @@ export const BUILDFI_ABI = [
         ],
         "outputs": [],
         "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "deployer",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "stateMutability": "view"
     },
     {
         "type": "function",
@@ -282,6 +310,19 @@ export const BUILDFI_ABI = [
     },
     {
         "type": "function",
+        "name": "isp",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "contract ISP"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
         "name": "makeNewAccount",
         "inputs": [
             {
@@ -291,11 +332,6 @@ export const BUILDFI_ABI = [
             },
             {
                 "name": "_email",
-                "type": "string",
-                "internalType": "string"
-            },
-            {
-                "name": "_zkKYC_proof_id",
                 "type": "string",
                 "internalType": "string"
             }
@@ -331,6 +367,42 @@ export const BUILDFI_ABI = [
     },
     {
         "type": "function",
+        "name": "schema_ids",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "committed",
+                "type": "uint64",
+                "internalType": "uint64"
+            },
+            {
+                "name": "wrapped",
+                "type": "uint64",
+                "internalType": "uint64"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "setSchemaIds",
+        "inputs": [
+            {
+                "name": "_committed",
+                "type": "uint64",
+                "internalType": "uint64"
+            },
+            {
+                "name": "_wrapped",
+                "type": "uint64",
+                "internalType": "uint64"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
         "name": "set_and_transfer_tokens",
         "inputs": [
             {
@@ -349,6 +421,24 @@ export const BUILDFI_ABI = [
     },
     {
         "type": "function",
+        "name": "start_project",
+        "inputs": [
+            {
+                "name": "_projectId",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "commitAttestationData",
+                "type": "bytes",
+                "internalType": "bytes"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
         "name": "start_voting",
         "inputs": [
             {
@@ -358,8 +448,13 @@ export const BUILDFI_ABI = [
             },
             {
                 "name": "_milestoneId",
-                "type": "uint16",
-                "internalType": "uint16"
+                "type": "int16",
+                "internalType": "int16"
+            },
+            {
+                "name": "_voting_deadline",
+                "type": "uint256",
+                "internalType": "uint256"
             }
         ],
         "outputs": [],
@@ -408,7 +503,7 @@ export const BUILDFI_ABI = [
     },
     {
         "type": "function",
-        "name": "vote",
+        "name": "witness_voting",
         "inputs": [
             {
                 "name": "_projectId",
@@ -417,13 +512,18 @@ export const BUILDFI_ABI = [
             },
             {
                 "name": "_milestoneId",
-                "type": "uint16",
-                "internalType": "uint16"
+                "type": "int16",
+                "internalType": "int16"
             },
             {
-                "name": "_vote",
-                "type": "bool",
-                "internalType": "bool"
+                "name": "_votes_for",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "_votes_against",
+                "type": "uint256",
+                "internalType": "uint256"
             }
         ],
         "outputs": [],

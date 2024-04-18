@@ -18,12 +18,11 @@ contract CounterScript is Script {
             0x4e4af2a21ebf62850fD99Eb6253E1eFBb56098cD
         );
 
-        // MAIN DEPLOYMENT STARTS
-        // IRiscZeroVerifier verifier = new RiscZeroGroth16Verifier(
-        //     ControlID.CONTROL_ID_0,
-        //     ControlID.CONTROL_ID_1
-        // );
-        // console2.log("Deployed RiscZeroGroth16Verifier to", address(verifier));
+        IRiscZeroVerifier verifier = new RiscZeroGroth16Verifier(
+            ControlID.CONTROL_ID_0,
+            ControlID.CONTROL_ID_1
+        );
+        console2.log("Deployed RiscZeroGroth16Verifier to", address(verifier));
 
         // BuildFi buildFi = new BuildFi(
         //     bytes32(
@@ -35,9 +34,14 @@ contract CounterScript is Script {
         // console2.log("Deployed BuildFi to", address(buildFi));
         // MAIN DEPLOYMENT ENDS
 
-        // ## ## Light BuildFi
-        // // BuildFi lightBuildFi = new BuildFi(bytes32(0x81fc3071b00c7f7d4edff773e7ca4a90ef31219c15a444fb19d5fea7a43febfd), verifier);
-        // // console2.log("Deployed LightBuildFi to", address(lightBuildFi));
+        BuildFi buildFi = new BuildFi(
+            bytes32(
+                0xaceac4faee5f55dde55fcc4e922317a3a74017b952b4c305e36eaae412b52bf5
+            ),
+            verifier,
+            SIGN_DEPLOYED_ADDRESS
+        );
+        console2.log("Deployed BuildFi to", address(buildFi));
 
         // ## ## IspTest
         IspTest ispTest = new IspTest(SIGN_DEPLOYED_ADDRESS);

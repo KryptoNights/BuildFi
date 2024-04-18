@@ -3,3 +3,4 @@ openzeppelin/=lib/openzeppelin-contracts/
 @openzeppelin/=lib/openzeppelin-contracts/
 risc0/=lib/risc0-ethereum/contracts/src/
 sign-protocol/=lib/sign-protocol-evm/src/
+witness/=lib/contracts-core/src/
