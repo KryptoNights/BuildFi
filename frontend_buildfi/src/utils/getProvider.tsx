@@ -14,7 +14,7 @@ declare global {
 
 const useEthersProviderAndSigner = (): [ProviderType, SignerType] => {
   const [provider, setProvider] = useState<ProviderType>(
-    ethers.getDefaultProvider("mainnet")
+    new ethers.JsonRpcProvider("https://arb-sepolia.g.alchemy.com/v2/gdoWsVkAdoopk0ijXAAOtvq-CsXT8PTO");
   );
   const [signer, setSigner] = useState<SignerType>(null);
 
