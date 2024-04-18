@@ -20,8 +20,7 @@ contract CounterScript is Script {
 
         IRiscZeroVerifier verifier = new RiscZeroGroth16Verifier(
             ControlID.CONTROL_ID_0,
-            ControlID.CONTROL_ID_1,
-            ControlID.BN254_CONTROL_ID
+            ControlID.CONTROL_ID_1
         );
         console2.log("Deployed RiscZeroGroth16Verifier to", address(verifier));
 
@@ -30,7 +29,7 @@ contract CounterScript is Script {
 
         BuildFi buildFi = new BuildFi(
             bytes32(
-                0x81fc3071b00c7f7d4edff773e7ca4a90ef31219c15a444fb19d5fea7a43febfd
+                0xaceac4faee5f55dde55fcc4e922317a3a74017b952b4c305e36eaae412b52bf5
             ),
             verifier,
             SIGN_DEPLOYED_ADDRESS

@@ -428,53 +428,53 @@ contract BuildFi {
             .voting_active = true;
     }
 
-    function vote(uint256 _projectId, int16 _milestoneId, bool _vote) public {
-        uint16 milestoneId = uint16(_milestoneId);
+    // function vote(uint256 _projectId, int16 _milestoneId, bool _vote) public {
+    //     uint16 milestoneId = uint16(_milestoneId);
 
-        // ensure the project exists
-        require(buildfi_projects[_projectId].id != 0, "Project does not exist");
+    //     // ensure the project exists
+    //     require(buildfi_projects[_projectId].id != 0, "Project does not exist");
 
-        // ensure the milestone exists
-        require(
-            buildfi_projects[_projectId].milestones[milestoneId].id ==
-                _milestoneId,
-            "Milestone does not exist"
-        );
+    //     // ensure the milestone exists
+    //     require(
+    //         buildfi_projects[_projectId].milestones[milestoneId].id ==
+    //             _milestoneId,
+    //         "Milestone does not exist"
+    //     );
 
-        // sender must be an investor
-        require(
-            buildfi_projects[_projectId].investments[msg.sender] > 0,
-            "Sender is not an investor"
-        );
+    //     // sender must be an investor
+    //     require(
+    //         buildfi_projects[_projectId].investments[msg.sender] > 0,
+    //         "Sender is not an investor"
+    //     );
 
-        // sender must not have already voted
-        require(
-            !buildfi_projects[_projectId].milestones[milestoneId].voters[
-                msg.sender
-            ],
-            "Sender has already voted"
-        );
+    //     // sender must not have already voted
+    //     // require(
+    //     //     !buildfi_projects[_projectId].milestones[milestoneId].voters[
+    //     //         msg.sender
+    //     //     ],
+    //     //     "Sender has already voted"
+    //     // );
 
-        // ensure voting is active
-        require(
-            buildfi_projects[_projectId].milestones[milestoneId].voting_active,
-            "Voting is not active"
-        );
+    //     // ensure voting is active
+    //     require(
+    //         buildfi_projects[_projectId].milestones[milestoneId].voting_active,
+    //         "Voting is not active"
+    //     );
 
-        // update milestone votes
-        if (_vote) {
-            buildfi_projects[_projectId].milestones[milestoneId].votes_for += 1;
-        } else {
-            buildfi_projects[_projectId]
-                .milestones[milestoneId]
-                .votes_against += 1;
-        }
+    //     // update milestone votes
+    //     if (_vote) {
+    //         buildfi_projects[_projectId].milestones[milestoneId].votes_for += 1;
+    //     } else {
+    //         buildfi_projects[_projectId]
+    //             .milestones[milestoneId]
+    //             .votes_against += 1;
+    //     }
 
-        // update voter status
-        buildfi_projects[_projectId].milestones[milestoneId].voters[
-            msg.sender
-        ] = true;
-    }
+    //     // update voter status
+    //     // buildfi_projects[_projectId].milestones[milestoneId].voters[
+    //     //     msg.sender
+    //     // ] = true;
+    // }
 
     function witness_voting(
         uint256 _projectId,
