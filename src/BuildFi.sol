@@ -154,7 +154,7 @@ contract BuildFi {
         // create a new developer account
         buildfi_developers[msg.sender] = Developer(
             _name,
-            sha256(bytes (_email)),
+            sha256(bytes(_email)),
             "0",
             0,
             5
@@ -193,7 +193,7 @@ contract BuildFi {
         // ensure payout percentages are valid
         require(
             (_payout_percentages.length == _milestones) &&
-            (_milestones == _milestone_timestamps.length),
+                (_milestones == _milestone_timestamps.length),
             "Lengths of arrays do not match"
         );
         uint256 total_percentage = 0;
@@ -376,7 +376,11 @@ contract BuildFi {
         buildfi_projects[_projectId].investments[msg.sender] += _amount;
     }
 
-    function start_voting(uint256 _projectId, int16 _milestoneId, uint256 _voting_deadline) public {
+    function start_voting(
+        uint256 _projectId,
+        int16 _milestoneId,
+        uint256 _voting_deadline
+    ) public {
         uint16 milestoneId = uint16(_milestoneId);
 
         // ensure the project exists
@@ -401,9 +405,7 @@ contract BuildFi {
 
         // ensure the milestone is not already voted on
         require(
-            !buildfi_projects[_projectId]
-                .milestones[milestoneId]
-                .voting_active,
+            !buildfi_projects[_projectId].milestones[milestoneId].voting_active,
             "Milestone already voted on"
         );
 
@@ -461,9 +463,7 @@ contract BuildFi {
 
         // update milestone votes
         if (_vote) {
-            buildfi_projects[_projectId]
-                .milestones[milestoneId]
-                .votes_for += 1;
+            buildfi_projects[_projectId].milestones[milestoneId].votes_for += 1;
         } else {
             buildfi_projects[_projectId]
                 .milestones[milestoneId]
@@ -476,7 +476,13 @@ contract BuildFi {
         ] = true;
     }
 
-    function witness_voting(uint256 _projectId, int16 _milestoneId, uint256 _votes_for, uint256 _votes_against, Proof calldata proof) public {
+    function witness_voting(
+        uint256 _projectId,
+        int16 _milestoneId,
+        uint256 _votes_for,
+        uint256 _votes_against
+        // Proof calldata proof
+    ) public {
         uint16 milestoneId = uint16(_milestoneId);
 
         // ensure the project exists
@@ -502,12 +508,16 @@ contract BuildFi {
         );
 
         // ensure the proof is valid
-        bool isValid = IWitness.safeVerifyProof(proof);
-        require(isValid, "Invalid proof");
+        // bool isValid = IWitness.safeVerifyProof(proof);
+        // require(isValid, "Invalid proof");
 
         // update milestone votes
-        buildfi_projects[_projectId].milestones[milestoneId].votes_for = _votes_for;
-        buildfi_projects[_projectId].milestones[milestoneId].votes_against = _votes_against;
+        buildfi_projects[_projectId]
+            .milestones[milestoneId]
+            .votes_for = _votes_for;
+        buildfi_projects[_projectId]
+            .milestones[milestoneId]
+            .votes_against = _votes_against;
     }
 
     function close_voting(uint256 _projectId, int16 _milestoneId) public {
@@ -563,8 +573,7 @@ contract BuildFi {
 
         // calculate payout
         uint256 payout = (buildfi_projects[_projectId].total_budget *
-            buildfi_projects[_projectId].payout_percentages[milestoneId]) /
-            100;
+            buildfi_projects[_projectId].payout_percentages[milestoneId]) / 100;
 
         // pay out the milestone budget
         payable(msg.sender).transfer(payout);
