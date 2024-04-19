@@ -1,11 +1,16 @@
+import { RootState } from "@/store";
 import { vote_operator } from "@/utils/transitions";
 import useConnection from "@/utils/useConnection";
+import { current } from "@reduxjs/toolkit";
 import React from "react";
+import { useSelector } from "react-redux";
 
 const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
   const { signer } = useConnection();
 
   console.log(projectInfo);
+
+  const walletInfo = useSelector((state: RootState) => state.walletInfo);
 
   const convertToNormalDate = (timestamp: number) => {
     const date = new Date(timestamp);
@@ -57,7 +62,9 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
     const data = localStorage.getItem("walletData");
     if (data) {
       try {
+        console.log("check", data);
         const walletData = JSON.parse(data);
+        // setCurrentAddress(walletData.address);
         return walletData.address === projectInfo.owner;
       } catch (error) {
         console.error("Error parsing wallet data:", error);
@@ -65,6 +72,25 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
       }
     }
   };
+
+  const check = (address: any, find: any) => {
+    const match = address.map((data: any) => data === find);
+    return match;
+  };
+  // const AddressMatcher = () => {
+  //   const addressList = projectInfo?.investors;
+  //   const addressMatch = addressList.map((address: any) => address === curaddress);
+
+  //   // Using includes method
+  //   const exists = addressMatch.includes(true);
+
+  //   // Using some method
+  //   // const exists = addressMatch.some(match => match === true);
+
+  //   return exists;
+  // };
+
+  console.log("ss1", Number(projectInfo.last_milestone_completed + 1));
 
   const milestones = projectInfo.milestone_timestamps.map(
     (timestamp: number, index: number) => {
@@ -94,29 +120,61 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
             <p className="text-base font-normal text-gray-500 dark:text-gray-400">
               Lorem ipsum dolor sit amet consectetur adipisicing elit.
             </p>
-            {!milestoneData[index].votingActive && (
-              <div className="mt-2">
-                <p>Voting active</p>
-                <p>Upvotes: {milestoneData[index].votingUp}</p>
-                <button
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                  onClick={handleVoteWrapper(true, index)}
-                  disabled={isOwner()}
-                >
-                  Upvote
-                </button>
-                <p>Downvotes: {milestoneData[index].votingDown}</p>
-                <button
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                  onClick={handleVoteWrapper(false, index)}
-                >
-                  Downvote
-                </button>
-                <p>
-                  Voting ends on:{" "}
-                  {convertToNormalDate(milestoneData[index].votingEndTime)}
-                </p>
-              </div>
+            {(check(projectInfo.investors, walletInfo.address) || isOwner()) && (
+              <>
+                {index === Number(projectInfo.last_milestone_completed + 1) ? (
+                  <div className="mt-2">
+                    <p>Voting active</p>
+                    <p>Upvotes: {milestoneData[index].votingUp}</p>
+
+                    {isOwner() ? (
+                      <button
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                        onClick={handleVoteWrapper(true, index)}
+                      >
+                        Start Vote
+                      </button>
+                    ) : (
+                      <button
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                        onClick={handleVoteWrapper(true, index)}
+                      >
+                        Upvote
+                      </button>
+                    )}
+
+                    <p>Downvotes: {milestoneData[index].votingDown}</p>
+
+                    {isOwner() ? (
+                      <button
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                        onClick={handleVoteWrapper(false, index)}
+                      >
+                        End Vote
+                      </button>
+                    ) : (
+                      <button
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                        onClick={handleVoteWrapper(false, index)}
+                      >
+                        Downvote
+                      </button>
+                    )}
+
+                    <p>
+                      Voting ends on:{" "}
+                      {convertToNormalDate(milestoneData[index].votingEndTime)}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="mt-2">
+                    <p>Voting active</p>
+                    <p>Upvotes: {milestoneData[index].votingUp}</p>
+
+                    <div>Voting will start when previous milestone start</div>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </li>
