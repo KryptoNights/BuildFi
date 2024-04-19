@@ -147,8 +147,8 @@ export async function claim(address: string) {
   console.log("Claim ID:", claimId);
 }
 
-export async function closeVoting(projectId: number, milestoneId: number) {
-  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
+export async function closeVoting(projectId: number, milestoneId: number, signer: ethers.Signer) {
+  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, signer);
 
   const result = await buildfi.close_voting(projectId, milestoneId);
   console.log("close_voting result:", result);
