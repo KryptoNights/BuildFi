@@ -1,12 +1,17 @@
+import { vote_operator } from "@/utils/transitions";
+import useConnection from "@/utils/useConnection";
 import React from "react";
 
-const Timeline = ({ projectInfo }: { projectInfo: any }) => {
+const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
+  const { signer } = useConnection();
+
   console.log(projectInfo);
 
   const convertToNormalDate = (timestamp: number) => {
     const date = new Date(timestamp);
     return date.toLocaleString();
   };
+
   const milestoneData: any[] = [];
 
   projectInfo.milestones.forEach((milestone: any, index: number) => {
@@ -23,7 +28,30 @@ const Timeline = ({ projectInfo }: { projectInfo: any }) => {
       votingEndTime: votingEndTime,
     });
   });
-  console.log(milestoneData);
+
+  const handleVoteWrapper = (vote: boolean, index: number) => {
+    return async (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+
+      try {
+        if (!signer) {
+          console.error("Signer not available.");
+          return;
+        }
+        console.log(index);
+
+        const result = await vote_operator(
+          projectInfo.id,
+          index - 1,
+          vote,
+          signer
+        );
+        console.log(result);
+      } catch (error) {
+        console.error("Error occurred while voting:", error);
+      }
+    };
+  };
 
   const milestones = projectInfo.milestone_timestamps.map(
     (timestamp: number, index: number) => {
@@ -53,11 +81,23 @@ const Timeline = ({ projectInfo }: { projectInfo: any }) => {
             <p className="text-base font-normal text-gray-500 dark:text-gray-400">
               Lorem ipsum dolor sit amet consectetur adipisicing elit.
             </p>
-            {milestoneData[index].votingActive && (
+            {!milestoneData[index].votingActive && (
               <div className="mt-2">
                 <p>Voting active</p>
                 <p>Upvotes: {milestoneData[index].votingUp}</p>
+                <button
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                  onClick={handleVoteWrapper(true, index)}
+                >
+                  Upvote
+                </button>
                 <p>Downvotes: {milestoneData[index].votingDown}</p>
+                <button
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                  onClick={handleVoteWrapper(false, index)}
+                >
+                  Downvote
+                </button>
                 <p>
                   Voting ends on:{" "}
                   {convertToNormalDate(milestoneData[index].votingEndTime)}
