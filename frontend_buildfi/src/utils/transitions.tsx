@@ -113,9 +113,41 @@ export async function getDeveloperInfo(address: string) {
 export async function getProjectInfo(projectId: number) {
   const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
 
-  const info = await buildfi.buildfi_projects(projectId);
-  console.log("Project info:", info);
-  return info;
+  const project = await buildfi.getProjectInfo(projectId);
+  const project_parsed = {
+    id: Number(project[0]),
+    name: project[1],
+    image: project[2],
+    description: project[3],
+    owner: project[4],
+    milestone_count: Number(project[5]),
+    last_milestone_completed: Number(project[6]),
+    milestone_timestamps: project[7].map((e: BigInt) => Number(e)),
+    payout_percentages: project[8].map((e: BigInt) => Number(e)),
+    total_budget: Number(project[9]),
+    total_raised: Number(project[10]),
+    investors: project[11].map((e: string) => e),
+    project_token: project[12],
+    token_set: project[13],
+    tokens_commited: Number(project[14]),
+    created_at: Number(project[15]),
+    started_at: Number(project[16]),
+    funding_ends_at: Number(project[17]),
+    completed_at: Number(project[18]),
+    abandoned: project[19],
+    projectCommitted: Number(project[20]),
+    projectWrapped: Number(project[21]),
+    milestones: project[22].map((e: any) => ({
+      id: Number(e[0]),
+      voting_active: e[1],
+      votes_for: Number(e[2]),
+      votes_against: Number(e[3]),
+      voting_deadline: Number(e[4]),
+    }))
+  }
+
+  console.log("Project info:", project_parsed);
+  return project_parsed;
 }
 
 export async function changeImageId(imageId: string) {
@@ -165,10 +197,13 @@ export async function createProject(
   console.log("createProject result:", result);
 }
 
-export async function invest(projectId: number, signer: ethers.Signer) {
+export async function invest(projectId: number, amount: number, signer: ethers.Signer) {
+  console.log("invest:", projectId, amount);
   const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, signer);
 
-  const result = await buildfi.invest(projectId);
+  const result = await buildfi.invest(projectId, {
+    value: ethers.parseUnits(amount.toString(), "gwei"),
+  });
   console.log("invest result:", result);
 }
 

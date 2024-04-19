@@ -40,7 +40,7 @@ const Slug = (props: any) => {
 
   const investApi = async () => {
     try {
-      await invest(id, signer!);
+      await invest(id, 1000000, signer!);
       console.log("okay");
     } catch (error) {
       console.error("Error investing in project:", error);
