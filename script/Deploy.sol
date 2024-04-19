@@ -18,6 +18,7 @@ contract CounterScript is Script {
             0x4e4af2a21ebf62850fD99Eb6253E1eFBb56098cD
         );
 
+        console2.log("Control ids:", ControlID.CONTROL_ID_0, ControlID.CONTROL_ID_1);
         IRiscZeroVerifier verifier = new RiscZeroGroth16Verifier(
             ControlID.CONTROL_ID_0,
             ControlID.CONTROL_ID_1

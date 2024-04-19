@@ -51,6 +51,8 @@ contract BuildFi {
         // identity
         uint256 id;
         string name;
+        string image;
+        string description;
         string project_metadata_json;
         address owner;
         // milestones
@@ -85,6 +87,13 @@ contract BuildFi {
     mapping(uint256 => Project) public buildfi_projects;
 
     uint256 public projectCount;
+
+    struct Investor {
+        address investor;
+        uint256[] project_ids;
+        mapping(uint256 => uint256) investments;
+    }
+    mapping(address => Investor) public buildfi_investors;
 
     struct SCHEMA_IDS {
         uint64 committed;
@@ -163,6 +172,8 @@ contract BuildFi {
 
     function createProject(
         string memory _name,
+        string memory _image,
+        string memory _description,
         string memory _project_metadata_json,
         uint256[] memory _milestone_timestamps,
         uint16[] memory _payout_percentages,
@@ -206,6 +217,8 @@ contract BuildFi {
         Project storage project = buildfi_projects[projectCount];
         project.id = projectCount;
         project.name = _name;
+        project.image = _image;
+        project.description = _description;
         project.project_metadata_json = _project_metadata_json;
         project.owner = msg.sender;
         project.milestone_count = _milestones16;
@@ -374,6 +387,10 @@ contract BuildFi {
 
         // update project investments
         buildfi_projects[_projectId].investments[msg.sender] += _amount;
+
+        // update investor investments
+        buildfi_investors[msg.sender].project_ids.push(_projectId);
+        buildfi_investors[msg.sender].investments[_projectId] += _amount;
     }
 
     function start_voting(
@@ -599,5 +616,100 @@ contract BuildFi {
                 );
             }
         }
+    }
+
+    // Getter functions
+    function getProjectInfo(uint256 _projectId)
+        public
+        view
+        returns (uint256 id, string memory name, string memory image, string memory description, address owner, int16 milestone_count, int16 last_milestone_completed, uint256[] memory milestone_timestamps, uint16[] memory payout_percentages, uint256 total_budget, uint256 total_raised, address[] memory investors, address projectToken, bool token_set, uint256 tokens_commited, uint256 created_at, uint256 started_at, uint256 funding_ends_at, uint256 completed_at, bool abandoned, uint64 projectCommitted, uint64 projectWrapped, Milestone[] memory milestones)
+    {
+        // uint256 id;
+        // string name;
+        // string image;
+        // string description;
+        // string project_metadata_json;
+        // address owner;
+
+        // int16 milestone_count;
+        // int16 last_milestone_completed;
+        // uint256[] milestone_timestamps;
+        // uint16[] payout_percentages;
+        // string milestone_metadata_json;
+        // mapping(uint16 => Milestone) milestones;
+
+        // uint256 total_budget;
+        // uint256 total_raised;
+
+        // address[] investors;
+        // mapping(address => uint256) investments;
+
+        // address projectToken;
+        // bool token_set;
+        // uint256 tokens_commited;
+
+        // uint256 created_at;
+        // uint256 started_at;
+        // uint256 funding_ends_at;
+        // uint256 completed_at;
+
+        // bool abandoned;
+
+        // uint64 projectCommitted;
+        // uint64 projectWrapped;
+
+        Project storage project =  buildfi_projects[_projectId];
+        Milestone[] memory _milestones = new Milestone[](uint256(uint16(project.milestone_count)));
+        for (int16 i = 0; i < project.milestone_count; i++) {
+            _milestones[uint16(i)] = project.milestones[uint16(i)];
+        }
+        return (
+            project.id,
+            project.name,
+            project.image,
+            project.description,
+            project.owner,
+            project.milestone_count,
+            project.last_milestone_completed,
+            project.milestone_timestamps,
+            project.payout_percentages,
+            project.total_budget,
+            project.total_raised,
+            project.investors,
+            project.projectToken,
+            project.token_set,
+            project.tokens_commited,
+            project.created_at,
+            project.started_at,
+            project.funding_ends_at,
+            project.completed_at,
+            project.abandoned,
+            project.projectCommitted,
+            project.projectWrapped,
+            _milestones
+        );
+    }
+
+    function getInvestorInfo(address _investor)
+        public
+        view
+        returns (address investor, uint256[] memory project_ids, uint256[] memory investments)
+    {
+        Investor storage investor_ = buildfi_investors[_investor];
+        uint256[] memory _project_ids = new uint256[](investor_.project_ids.length);
+        uint256[] memory _investments = new uint256[](investor_.project_ids.length);
+        for (uint256 i = 0; i < investor_.project_ids.length; i++) {
+            _project_ids[i] = investor_.project_ids[i];
+            _investments[i] = investor_.investments[investor_.project_ids[i]];
+        }
+        return (investor_.investor, _project_ids, _investments);
+    }
+
+    function getDeveloperInfo(address _developer)
+        public
+        view
+        returns (Developer memory)
+    {
+        return buildfi_developers[_developer];
     }
 }
