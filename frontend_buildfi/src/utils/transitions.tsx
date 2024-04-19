@@ -232,8 +232,9 @@ export async function startVoting(
   signer: ethers.Signer
 ) {
   const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, signer);
-
-  const result = await buildfi.start_voting(projectId, milestoneId);
+  // unix timestamp
+  const timestamp = new Date().getTime() / 1000 + 2 * 61 * 60 * 24 * 7;
+  const result = await buildfi.start_voting(projectId, milestoneId, timestamp);
   console.log("start voting result:", result);
 }
 
