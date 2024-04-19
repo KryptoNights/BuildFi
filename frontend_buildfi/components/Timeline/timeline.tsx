@@ -64,8 +64,8 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
       try {
         console.log("check", data);
         const walletData = JSON.parse(data);
-        // setCurrentAddress(walletData.address);
-        return walletData.address === projectInfo.owner;
+        console.log("check", (walletData.address as string).toLowerCase(), (projectInfo.owner as string).toLowerCase(), (walletData.address as string).toLowerCase() === (projectInfo.owner as string).toLowerCase())
+        return (walletData.address as string).toLowerCase() === (projectInfo.owner as string).toLowerCase();
       } catch (error) {
         console.error("Error parsing wallet data:", error);
         return false;
@@ -94,6 +94,7 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
 
   const milestones = projectInfo.milestone_timestamps.map(
     (timestamp: number, index: number) => {
+      console.log("isOwner", isOwner());
       return (
         <li key={index} className="relative mb-6 sm:mb-0">
           <div className="flex items-center">
