@@ -57,15 +57,15 @@ const ProjectCreate = () => {
     console.log("fundPercentagesArray", fundPercentagesArray);
     console.log("datesArray", datesArray);
 
-    
+
     try {
       await createProject(
         name,
         image,
         description,
         metadata,
-        numMilestones,
-        milestones,
+        datesArray,
+        fundPercentagesArray,
         totalBudget,
         convertDateToMs(fundingEndDate),
         signer!

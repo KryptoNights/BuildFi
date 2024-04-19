@@ -176,11 +176,11 @@ export async function createProject(
   image: string,
   description: string,
   metadata: string,
-  milestones: number,
+  milestones: number[],
   payoutPercentages: number[],
   totalBudget: number,
   fundingEndsAt: number,
-  signer: ethers.Signer
+  signer: any
 ) {
   const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, signer);
 
