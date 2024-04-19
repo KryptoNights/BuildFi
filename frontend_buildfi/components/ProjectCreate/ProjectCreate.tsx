@@ -14,7 +14,7 @@ const ProjectCreate = () => {
   const convertDateToMs = (dateString: any) => {
     const date = new Date(dateString);
     const ms = date.getTime();
-    return ms * 1000;
+    return ms;
   };
 
   const milestonesWithIsoDate = milestones.map((milestone: any) => {
@@ -56,7 +56,6 @@ const ProjectCreate = () => {
     console.log("endDate", convertDateToMs(fundingEndDate));
     console.log("fundPercentagesArray", fundPercentagesArray);
     console.log("datesArray", datesArray);
-
 
     try {
       await createProject(
