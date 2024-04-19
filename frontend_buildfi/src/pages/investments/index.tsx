@@ -25,7 +25,7 @@ const index = () => {
   const handleClick = async (id: number) => {
     const project = projects.find((item) => item.id === id);
     if (project) {
-      router.push(`/projects/${project.id}`);
+      router.push(`/investments/${project.id}`);
       console.log("id", project.id);
     }
   };

@@ -10,7 +10,7 @@ const WrapperCards = ({
   data: any;
   handleClick: any;
 }) => {
-  console.log("wrapper", handleClick);
+  // console.log("wrapper", handleClick);
 
   return (
     <div className={styles.container}>

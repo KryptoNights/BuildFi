@@ -4,6 +4,7 @@ import { CircularProgress } from "@mui/material";
 import { getProjectInfo, invest } from "@/utils/transitions";
 import data from "../../../constant/constant";
 import useConnection from "@/utils/useConnection";
+import Timeline from "../../../components/Timeline/timeline";
 
 const Slug = (props: any) => {
   const router = useRouter();
@@ -60,31 +61,54 @@ const Slug = (props: any) => {
       {projectInfo && (
         <div className="max-w-xl mx-auto">
           <div className="flex items-center mb-4">
-            <img
-              src={projectInfo[2]}
-              alt="Project Image"
-              className="w-20 h-20 rounded-full mr-4"
-              width={250}
-              height={500}
-            />
+            <div className="w-1/2 pr-8">
+              <img
+                src={projectInfo.image}
+                alt="Project Image"
+                className="w-40 h-auto rounded-lg"
+                width={300}
+                height={300}
+              />
+            </div>
             <div
+              className="w-1/2"
               style={{
-                marginLeft: "4vh",
+                marginLeft: "6vw",
               }}
             >
-              <h1 className="text-xl font-bold">{projectInfo[1]}</h1>
-              <p className="text-gray-600">{projectInfo[3]}</p>
+              <div className="mb-4">
+                <h1 className="text-xl font-bold mb-2">Name of the Project:</h1>
+                <p className="text-gray-500">{projectInfo.name}</p>
+              </div>
+              <div className="mb-4">
+                <h1 className="text-xl font-bold mb-2">Description:</h1>
+                <p className="text-gray-500">{projectInfo.description}</p>
+              </div>
+              <div className="mb-4">
+                <h1 className="text-xl font-bold mb-2">Milestone Count:</h1>
+                <p className="text-gray-500">{projectInfo.milestone_count}</p>
+              </div>
+              <div className="mb-4">
+                <h1 className="text-xl font-bold mb-2">
+                  Number of Investors in this project:
+                </h1>
+                <p className="text-gray-500">{projectInfo.investors.length}</p>
+              </div>
+              <div className="mb-4">
+                <h1 className="text-xl font-bold mb-2">
+                  Owner of this project:
+                </h1>
+                <p className="text-gray-500">{projectInfo.owner}</p>
+              </div>
             </div>
           </div>
-          <p className="text-gray-700 mb-4">
-            Milestone Count: {projectInfo.milestone_count}
-          </p>
-          <button
+          <Timeline projectInfo={projectInfo} />
+          {/* <button
             className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
             onClick={investApi}
           >
             Invest in this project
-          </button>
+          </button> */}
         </div>
       )}
     </>
