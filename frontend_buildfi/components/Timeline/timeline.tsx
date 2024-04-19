@@ -95,7 +95,13 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
   const milestones = projectInfo.milestone_timestamps.map(
     (timestamp: number, index: number) => {
       return (
-        <li key={index} className="relative mb-6 sm:mb-0">
+        <li
+          key={index}
+          className="relative mb-6 sm:mb-0"
+          style={{
+            height: "45vh",
+          }}
+        >
           <div className="flex items-center">
             <div className="z-10 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
               <svg
@@ -117,51 +123,84 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
             <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
               {convertToNormalDate(timestamp)}
             </time>
-            <p className="text-base font-normal text-gray-500 dark:text-gray-400">
+            {/* <p className="text-base font-normal text-gray-500 dark:text-gray-400">
               Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            </p>
-            {(check(projectInfo.investors, walletInfo.address) || isOwner()) && (
+            </p> */}
+            {(check(projectInfo.investors, walletInfo.address) ||
+              isOwner()) && (
               <>
                 {index === Number(projectInfo.last_milestone_completed + 1) ? (
-                  <div className="mt-2">
+                  <div className="mt-2 flex flex-col">
                     <p>Voting active</p>
-                    <p>Upvotes: {milestoneData[index].votingUp}</p>
-
-                    {isOwner() ? (
-                      <button
-                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                        onClick={handleVoteWrapper(true, index)}
+                    <div
+                      className=""
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginBottom: "3vh",
+                      }}
+                    >
+                      <p
+                        style={{
+                          marginRight: "2vh",
+                        }}
                       >
-                        Start Vote
-                      </button>
-                    ) : (
-                      <button
-                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                        onClick={handleVoteWrapper(true, index)}
-                      >
-                        Upvote
-                      </button>
-                    )}
+                        Upvotes: {milestoneData[index].votingUp}
+                      </p>
 
-                    <p>Downvotes: {milestoneData[index].votingDown}</p>
-
-                    {isOwner() ? (
-                      <button
-                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                        onClick={handleVoteWrapper(false, index)}
+                      {isOwner() ? (
+                        <button
+                          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                          onClick={handleVoteWrapper(true, index)}
+                        >
+                          Start Vote
+                        </button>
+                      ) : (
+                        <button
+                          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                          onClick={handleVoteWrapper(true, index)}
+                        >
+                          Upvote
+                        </button>
+                      )}
+                    </div>
+                    <div
+                      className=""
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginBottom: "3vh",
+                      }}
+                    >
+                      <p
+                        style={{
+                          marginRight: "2vh",
+                        }}
                       >
-                        End Vote
-                      </button>
-                    ) : (
-                      <button
-                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                        onClick={handleVoteWrapper(false, index)}
-                      >
-                        Downvote
-                      </button>
-                    )}
+                        Downvotes: {milestoneData[index].votingDown}
+                      </p>
 
-                    <p>
+                      {isOwner() ? (
+                        <button
+                          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                          onClick={handleVoteWrapper(false, index)}
+                        >
+                          End Vote
+                        </button>
+                      ) : (
+                        <button
+                          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                          onClick={handleVoteWrapper(false, index)}
+                        >
+                          Downvote
+                        </button>
+                      )}
+                    </div>
+                    <p
+                      style={{
+                        marginBottom: "3vh",
+                      }}
+                    >
                       Voting ends on:{" "}
                       {convertToNormalDate(milestoneData[index].votingEndTime)}
                     </p>
