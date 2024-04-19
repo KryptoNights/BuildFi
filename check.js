@@ -993,22 +993,22 @@ import { ethers } from "ethers";
     // )
     // const res = await buildFi.projectCount()
     // console.log("Obtained value at deployed contract is: " + res);
-    // const res = await buildFi.createProject(
-    //     "BuildFi - test",
-    //     "https://github.com/KryptoNights/BuildFi/blob/main/frontend_buildfi/public/Build.png?raw=true",
-    //     "Raise funds from day 1",
-    //     "",
-    //     [1713901114000, 1714301114000, 1714901114000],
-    //     [10, 30, 60],
-    //     "10000000000000000000",
-    //     1713661114000
-    // )
-    const res = await buildFi.getProjectInfo(1)
+    const res = await buildFi.createProject(
+        "Mirror.xyz",
+        "https://assets-global.website-files.com/6364e65656ab107e465325d2/637aed954d38a6dbb814a324_TQmBbnIj5WL1b91F5Bx3PbEt6YPwS1QVmVNGV3l04lI.jpeg",
+        "Web 3 social media",
+        "",
+        [1713550000, 1713650000, 1713750000],
+        [10, 30, 60],
+        "10000000000000000000",
+        1713550000
+    )
+    // const res = await buildFi.getProjectInfo(1)
     // const res = await buildFi.makeNewAccount("deb", "debjitbhowal.db@gmail.com")
-    console.log("Obtained value at deployed contract is: " + res[7].map((e) => Number(e)));
-    for (let i = 0; i < res.length; i++) {
-        console.log(i, res[i])
-    }
+    // console.log("Obtained value at deployed contract is: " + res[7].map((e) => Number(e)));
+    // for (let i = 0; i < res.length; i++) {
+    //     console.log(i, res[i])
+    // }
 
 
     // console.log("Obtained value at deployed contract is: " + res);

@@ -1,4 +1,4 @@
-import { isKycDone, getAllProjects } from "@/utils/transitions";
+import { isKycDone, getAllProjects, vote_operator } from "@/utils/transitions";
 import useConnection from "@/utils/useConnection";
 import React, { useState } from "react";
 
@@ -16,8 +16,12 @@ const TestComp = () => {
     //   const isDone = await isKycDone(address);
     //   const isDone = await isKycDone((await signer?.getAddress())!)
     //   console.log("isDone", isDone);
-    const projects = await getAllProjects();
-    console.log("Projects:", projects);
+    
+    // const projects = await getAllProjects();
+    // console.log("Projects:", projects);
+
+    const vote = await vote_operator(1, 0, true, signer!);
+    console.log("vote result:", vote);
     } catch (error) {
     //   console.error("Error creating account:", error);
     }
