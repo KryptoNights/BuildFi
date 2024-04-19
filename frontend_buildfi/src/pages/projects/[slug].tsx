@@ -5,6 +5,7 @@ import { getProjectInfo, invest } from "@/utils/transitions";
 import data from "../../../constant/constant";
 import useConnection from "@/utils/useConnection";
 import Timeline from "../../../components/Timeline/timeline";
+import { showSuccessToast } from "@/utils/notifications";
 
 const Slug = (props: any) => {
   const router = useRouter();
@@ -41,8 +42,8 @@ const Slug = (props: any) => {
 
   const investApi = async () => {
     try {
-      const data = await invest(id, 1000000, signer!);
-      console.log("data", data);
+      await invest(id, 1000000, signer!);
+      showSuccessToast("Successfullyy invested in this project");
     } catch (error) {
       console.error("Error investing in project:", error);
     }
@@ -103,6 +104,39 @@ const Slug = (props: any) => {
               </div>
             </div>
           </div>
+          {/* <div
+            className="flex flex-row align-middle"
+            style={{
+              marginLeft: "34%",
+              marginRight: "25%",
+              marginBottom: "7vh",
+              alignItems: "center",
+            }}
+          >
+            <div
+              style={{
+                border: "1px solid white",
+                opacity: "0.3",
+                width: "30%",
+                height: "1px",
+              }}
+            ></div>
+            <h1
+              style={{
+                fontSize: "6vh",
+              }}
+            >
+              Timeline
+            </h1>
+            <div
+              style={{
+                border: "1px solid white",
+                opacity: "0.3",
+                width: "30%",
+                height: "1px",
+              }}
+            ></div>
+          </div> */}
           <Timeline projectInfo={projectInfo} />
 
           {Number(projectInfo.funding_ends_at*1000) < new Date().getTime() ? (
