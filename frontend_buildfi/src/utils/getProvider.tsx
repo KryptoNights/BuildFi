@@ -25,7 +25,7 @@ const useEthersProviderAndSigner = (): [ProviderType, SignerType] => {
       if ((window as any).ethereum == null) {
         console.log("MetaMask not installed; using read-only defaults");
       } else {
-        const browserProvider = new ethers.BrowserProvider(window.ethereum);
+        const browserProvider:any = new ethers.BrowserProvider(window.ethereum);
         const fetchedSigner = await new ethers.BrowserProvider(
           window.ethereum
         ).getSigner();
