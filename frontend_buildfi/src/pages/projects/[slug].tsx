@@ -137,7 +137,9 @@ const Slug = (props: any) => {
               }}
             ></div>
           </div> */}
-          <Timeline projectInfo={projectInfo} id={id}/>
+          <Timeline projectInfo={projectInfo} id={slug} />
+
+          
 
           {Number(projectInfo.funding_ends_at*1000) < new Date().getTime() ? (
             <button
