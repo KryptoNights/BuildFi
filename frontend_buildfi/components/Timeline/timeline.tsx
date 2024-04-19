@@ -53,6 +53,19 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
     };
   };
 
+  const isOwner = () => {
+    const data = localStorage.getItem("walletData");
+    if (data) {
+      try {
+        const walletData = JSON.parse(data);
+        return walletData.address === projectInfo.owner;
+      } catch (error) {
+        console.error("Error parsing wallet data:", error);
+        return false;
+      }
+    }
+  };
+
   const milestones = projectInfo.milestone_timestamps.map(
     (timestamp: number, index: number) => {
       return (
@@ -88,6 +101,7 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
                 <button
                   className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
                   onClick={handleVoteWrapper(true, index)}
+                  disabled={isOwner()}
                 >
                   Upvote
                 </button>
