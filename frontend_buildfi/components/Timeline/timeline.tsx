@@ -1,5 +1,6 @@
 import { RootState } from "@/store";
-import { vote_operator } from "@/utils/transitions";
+import { showSuccessToast } from "@/utils/notifications";
+import { closeVoting, startVoting, vote_operator } from "@/utils/transitions";
 import useConnection from "@/utils/useConnection";
 import { current } from "@reduxjs/toolkit";
 import React from "react";
@@ -44,10 +45,9 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
           return;
         }
         console.log(index);
-
         const result = await vote_operator(
           projectInfo.id,
-          index - 1,
+          index ,
           vote,
           signer
         );
@@ -57,6 +57,54 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
       }
     };
   };
+
+  const handleStartVote = (index: number) => {
+    return async (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+
+      try {
+        if (!signer) {
+          console.error("Signer not available.");
+          return;
+        }
+        console.log(index);
+
+        const result = await startVoting(
+          projectInfo.id,
+          index ,
+          signer
+        );
+        showSuccessToast("Voting have been Started");
+        console.log(result);
+      } catch (error) {
+        console.error("Error occurred while voting:", error);
+      }
+    };
+  };
+  const handleClosevote = (index: number) => {
+    return async (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+
+      try {
+        if (!signer) {
+          console.error("Signer not available.");
+          return;
+        }
+        console.log(index);
+
+        const result = await closeVoting(
+          projectInfo.id,
+          index ,
+          signer
+        );
+        showSuccessToast("Voting have been Closed");
+        console.log(result);
+      } catch (error) {
+        console.error("Error occurred while voting:", error);
+      }
+    };
+  };
+
 
   const isOwner = () => {
     const data = localStorage.getItem("walletData");
@@ -96,13 +144,7 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
     (timestamp: number, index: number) => {
       console.log("isOwner", isOwner());
       return (
-        <li
-          key={index}
-          className="relative mb-6 sm:mb-0"
-          style={{
-            height: "45vh",
-          }}
-        >
+        <li key={index} className="relative mb-6 sm:mb-0">
           <div className="flex items-center">
             <div className="z-10 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
               <svg
@@ -124,84 +166,51 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
             <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
               {convertToNormalDate(timestamp)}
             </time>
-            {/* <p className="text-base font-normal text-gray-500 dark:text-gray-400">
+            <p className="text-base font-normal text-gray-500 dark:text-gray-400">
               Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            </p> */}
-            {(check(projectInfo.investors, walletInfo.address) ||
-              isOwner()) && (
+            </p>
+            {(check(projectInfo.investors, walletInfo.address) || isOwner()) && (
               <>
                 {index === Number(projectInfo.last_milestone_completed + 1) ? (
-                  <div className="mt-2 flex flex-col">
+                  <div className="mt-2">
                     <p>Voting active</p>
-                    <div
-                      className=""
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginBottom: "3vh",
-                      }}
-                    >
-                      <p
-                        style={{
-                          marginRight: "2vh",
-                        }}
-                      >
-                        Upvotes: {milestoneData[index].votingUp}
-                      </p>
+                    <p>Upvotes: {milestoneData[index].votingUp}</p>
 
-                      {isOwner() ? (
-                        <button
-                          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                          onClick={handleVoteWrapper(true, index)}
-                        >
-                          Start Vote
-                        </button>
-                      ) : (
-                        <button
-                          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                          onClick={handleVoteWrapper(true, index)}
-                        >
-                          Upvote
-                        </button>
-                      )}
-                    </div>
-                    <div
-                      className=""
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginBottom: "3vh",
-                      }}
-                    >
-                      <p
-                        style={{
-                          marginRight: "2vh",
-                        }}
+                    {isOwner() ? (
+                      <button
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                        onClick={handleStartVote(index)}
                       >
-                        Downvotes: {milestoneData[index].votingDown}
-                      </p>
+                        Start Vote
+                      </button>
+                    ) : (
+                      <button
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                        onClick={handleVoteWrapper(true, index)}
+                      >
+                        Upvote
+                      </button>
+                    )}
 
-                      {isOwner() ? (
-                        <button
-                          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                          onClick={handleVoteWrapper(false, index)}
-                        >
-                          End Vote
-                        </button>
-                      ) : (
-                        <button
-                          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                          onClick={handleVoteWrapper(false, index)}
-                        >
-                          Downvote
-                        </button>
-                      )}
-                    </div>
-                    <p
-                      style={{
-                        marginBottom: "3vh",
-                      }}
-                    >
+                    <p>Downvotes: {milestoneData[index].votingDown}</p>
+
+                    {isOwner() ? (
+                      <button
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                        onClick={handleClosevote(index)}
+                      >
+                        End Vote
+                      </button>
+                    ) : (
+                      <button
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                        onClick={handleVoteWrapper(false, index)}
+                      >
+                        Downvote
+                      </button>
+                    )}
+
+                    <p>
                       Voting ends on:{" "}
                       {convertToNormalDate(milestoneData[index].votingEndTime)}
                     </p>
