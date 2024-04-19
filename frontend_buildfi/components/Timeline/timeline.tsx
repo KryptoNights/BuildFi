@@ -45,12 +45,7 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
           return;
         }
         console.log(index);
-        const result = await vote_operator(
-          projectInfo.id,
-          index ,
-          vote,
-          signer
-        );
+        const result = await vote_operator(projectInfo.id, index, vote, signer);
         console.log(result);
       } catch (error) {
         console.error("Error occurred while voting:", error);
@@ -69,11 +64,7 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
         }
         console.log(index);
 
-        const result = await startVoting(
-          projectInfo.id,
-          index ,
-          signer
-        );
+        const result = await startVoting(projectInfo.id, index, signer);
         showSuccessToast("Voting have been Started");
         console.log(result);
       } catch (error) {
@@ -92,11 +83,7 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
         }
         console.log(index);
 
-        const result = await closeVoting(
-          projectInfo.id,
-          index ,
-          signer
-        );
+        const result = await closeVoting(projectInfo.id, index, signer);
         showSuccessToast("Voting have been Closed");
         console.log(result);
       } catch (error) {
@@ -105,15 +92,23 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
     };
   };
 
-
   const isOwner = () => {
     const data = localStorage.getItem("walletData");
     if (data) {
       try {
         console.log("check", data);
         const walletData = JSON.parse(data);
-        console.log("check", (walletData.address as string).toLowerCase(), (projectInfo.owner as string).toLowerCase(), (walletData.address as string).toLowerCase() === (projectInfo.owner as string).toLowerCase())
-        return (walletData.address as string).toLowerCase() === (projectInfo.owner as string).toLowerCase();
+        console.log(
+          "check",
+          (walletData.address as string).toLowerCase(),
+          (projectInfo.owner as string).toLowerCase(),
+          (walletData.address as string).toLowerCase() ===
+            (projectInfo.owner as string).toLowerCase()
+        );
+        return (
+          (walletData.address as string).toLowerCase() ===
+          (projectInfo.owner as string).toLowerCase()
+        );
       } catch (error) {
         console.error("Error parsing wallet data:", error);
         return false;
@@ -144,7 +139,13 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
     (timestamp: number, index: number) => {
       console.log("isOwner", isOwner());
       return (
-        <li key={index} className="relative mb-6 sm:mb-0">
+        <li
+          key={index}
+          className="relative mb-6 sm:mb-0"
+          style={{
+            height: "45vh",
+          }}
+        >
           <div className="flex items-center">
             <div className="z-10 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
               <svg
@@ -169,7 +170,8 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
             <p className="text-base font-normal text-gray-500 dark:text-gray-400">
               Lorem ipsum dolor sit amet consectetur adipisicing elit.
             </p>
-            {(check(projectInfo.investors, walletInfo.address) || isOwner()) && (
+            {(check(projectInfo.investors, walletInfo.address) ||
+              isOwner()) && (
               <>
                 {index === Number(projectInfo.last_milestone_completed + 1) ? (
                   <div className="mt-2">
