@@ -82,7 +82,9 @@ def vote_through_witness(request):
 			witness_votes_doc.set(witness_votes)
 			return {
 				"error": False,
-				"message": "Vote casted"
+				"message": "Vote casted",
+				"votes_for": witness_votes["yes"],
+				"votes_against": witness_votes["no"],
 			}
 		except Exception as e:
 			return {

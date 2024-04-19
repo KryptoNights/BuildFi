@@ -47,74 +47,20 @@ export async function vote_operator(
     milestone_id: milestoneId,
   });
   // TODO logic to send data to chain
-  console.log("vote_intermediate", vote_intermediate);
-}
+  const response_json = vote_intermediate.data;
+  console.log("vote_intermediate", response_json);
 
-export async function getAllProjects() {
-  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
-  const projectCount = await buildfi.projectCount();
-  const projects = [];
-  for (let i = 1; i < projectCount; i++) {
-    const project = await buildfi.getProjectInfo(i);
-    // console.log("Project:", project);
-    projects.push({
-      id: Number(project[0]),
-      name: project[1],
-      image: project[2],
-      description: project[3],
-      owner: project[4],
-      milestone_count: Number(project[5]),
-      last_milestone_completed: Number(project[6]),
-      milestone_timestamps: project[7].map((e: BigInt) => Number(e)),
-      payout_percentages: project[8].map((e: BigInt) => Number(e)),
-      total_budget: Number(project[9]),
-      total_raised: Number(project[10]),
-      investors: project[11].map((e: string) => e),
-      project_token: project[12],
-      token_set: project[13],
-      tokens_commited: Number(project[14]),
-      created_at: Number(project[15]),
-      started_at: Number(project[16]),
-      funding_ends_at: Number(project[17]),
-      completed_at: Number(project[18]),
-      abandoned: project[19],
-      projectCommitted: Number(project[20]),
-      projectWrapped: Number(project[21]),
-      milestones: project[22].map((e: any) => ({
-        id: Number(e[0]),
-        voting_active: e[1],
-        votes_for: Number(e[2]),
-        votes_against: Number(e[3]),
-        voting_deadline: Number(e[4]),
-      }))
-      // milestone_timestamps: project[6],
-      // payout_percentages: project[7],
-      // milestone_metadata_json: project[8],
-    });
+  if (response_json.error === true && response_json.message === "Already voted") {
+    return "Already voted";
+  } else if (response_json.error === false) {
+    const result = await buildfi.witness_voting(projectId, milestoneId, response_json["votes_for"], response_json["votes_against"]);
+    console.log("vote result:", result);
+    return "Voted successfully";
   }
-  return projects;
 }
 
-export async function abondon_project(project_id: number) {
-  console.log(project_id);
-  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
-
-  const result = await buildfi.abandon_project(project_id);
-  console.log("abondon", result);
-}
-
-export async function getDeveloperInfo(address: string) {
-  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
-
-  const info = await buildfi.buildfi_developers(address);
-  console.log("Developer info:", info);
-}
-
-export async function getProjectInfo(projectId: number) {
-  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
-
-  const project = await buildfi.getProjectInfo(projectId);
-  const project_parsed = {
+export function parseProject(project: any) {
+  return {
     id: Number(project[0]),
     name: project[1],
     image: project[2],
@@ -144,7 +90,44 @@ export async function getProjectInfo(projectId: number) {
       votes_against: Number(e[3]),
       voting_deadline: Number(e[4]),
     }))
+    // milestone_timestamps: project[6],
+    // payout_percentages: project[7],
+    // milestone_metadata_json: project[8],
+  };
+}
+
+export async function getAllProjects() {
+  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
+  const projectCount = await buildfi.projectCount();
+  const projects = [];
+  for (let i = 1; i < projectCount; i++) {
+    const project = await buildfi.getProjectInfo(i);
+    // console.log("Project:", project);
+    projects.push(parseProject(project));
   }
+  return projects;
+}
+
+export async function abondon_project(project_id: number) {
+  console.log(project_id);
+  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
+
+  const result = await buildfi.abandon_project(project_id);
+  console.log("abondon", result);
+}
+
+export async function getDeveloperInfo(address: string) {
+  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
+
+  const info = await buildfi.buildfi_developers(address);
+  console.log("Developer info:", info);
+}
+
+export async function getProjectInfo(projectId: number) {
+  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
+
+  const project = await buildfi.getProjectInfo(projectId);
+  const project_parsed = parseProject(project);
 
   console.log("Project info:", project_parsed);
   return project_parsed;
@@ -254,14 +237,14 @@ export async function startVoting(
   console.log("start voting result:", result);
 }
 
-export async function vote(
-  projectId: number,
-  milestoneId: number,
-  vote: boolean,
-  signer: ethers.Signer
-) {
-  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
+// export async function vote(
+//   projectId: number,
+//   milestoneId: number,
+//   vote: boolean,
+//   signer: ethers.Signer
+// ) {
+//   const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
 
-  const result = await buildfi.vote(projectId, milestoneId, vote);
-  console.log("vote result:", result);
-}
+//   const result = await buildfi.vote(projectId, milestoneId, vote);
+//   console.log("vote result:", result);
+// }
