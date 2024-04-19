@@ -3,7 +3,6 @@ import useConnection from "@/utils/useConnection";
 import React from "react";
 
 const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
-  // const [signer, setSigner] = useState<any>(null);
   const { signer } = useConnection();
 
   console.log(projectInfo);
@@ -30,7 +29,7 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
     });
   });
 
-  const handleVoteWrapper = (vote: boolean) => {
+  const handleVoteWrapper = (vote: boolean, index: number) => {
     return async (event: React.MouseEvent<HTMLButtonElement>) => {
       event.preventDefault();
 
@@ -39,8 +38,14 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
           console.error("Signer not available.");
           return;
         }
+        console.log(index);
 
-        const result = await vote_operator(0, 0, vote, signer);
+        const result = await vote_operator(
+          projectInfo.id,
+          index - 1,
+          vote,
+          signer
+        );
         console.log(result);
       } catch (error) {
         console.error("Error occurred while voting:", error);
@@ -82,14 +87,14 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
                 <p>Upvotes: {milestoneData[index].votingUp}</p>
                 <button
                   className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                  onClick={handleVoteWrapper(true)}
+                  onClick={handleVoteWrapper(true, index)}
                 >
                   Upvote
                 </button>
                 <p>Downvotes: {milestoneData[index].votingDown}</p>
                 <button
                   className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                  onClick={handleVoteWrapper(false)}
+                  onClick={handleVoteWrapper(false, index)}
                 >
                   Downvote
                 </button>
