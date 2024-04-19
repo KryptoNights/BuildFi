@@ -57,6 +57,7 @@ const Slug = (props: any) => {
     return <div>{error}</div>;
   }
 
+ 
   return (
     <>
       {projectInfo && (
@@ -137,15 +138,23 @@ const Slug = (props: any) => {
             ></div>
           </div> */}
           <Timeline projectInfo={projectInfo} />
-          <button
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-            style={{
-              marginTop: "4vh"
-            }}
-            onClick={investApi}
-          >
-            Invest in this project
-          </button>
+
+          {Number(projectInfo.funding_ends_at*1000) < new Date().getTime() ? (
+            <button
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+              onClick={investApi}
+            >
+              Investment Closed
+            </button>
+          ) : (
+            <button
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+              onClick={investApi}
+            >
+              Invest in this project
+            </button>
+          )}
+          
         </div>
       )}
     </>
