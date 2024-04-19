@@ -982,30 +982,33 @@ import { ethers } from "ethers";
     }
     
     // // // Convert each element to hex string 
-    const kycof = oldwal
-    const sealHexString = ethers.hexlify(new Uint8Array(kycof.seal));
-    console.log("sealHexArray: ", sealHexString, typeof sealHexString)
-    const res = await buildFi.verificationCallback(
-        kycof.messageSender,
-        kycof.claimId,
-        kycof.postStateDigest,
-        sealHexString
-    )
+    // const kycof = oldwal
+    // const sealHexString = ethers.hexlify(new Uint8Array(kycof.seal));
+    // console.log("sealHexArray: ", sealHexString, typeof sealHexString)
+    // const res = await buildFi.verificationCallback(
+    //     kycof.messageSender,
+    //     kycof.claimId,
+    //     kycof.postStateDigest,
+    //     sealHexString
+    // )
     // const res = await buildFi.projectCount()
+    // console.log("Obtained value at deployed contract is: " + res);
     // const res = await buildFi.createProject(
-    //     "BuildFi: Raise funds from day 1",
+    //     "BuildFi - test",
     //     "https://github.com/KryptoNights/BuildFi/blob/main/frontend_buildfi/public/Build.png?raw=true",
-    //     [1713701114000, 1713901114000, 1714301114000, 1714901114000],
-    //     [10, 20, 30, 40],
+    //     "Raise funds from day 1",
+    //     "",
+    //     [1713901114000, 1714301114000, 1714901114000],
+    //     [10, 30, 60],
     //     "10000000000000000000",
     //     1713661114000
     // )
-    // const res = await buildFi.buildfi_projects(1)
+    const res = await buildFi.getProjectInfo(1)
     // const res = await buildFi.makeNewAccount("deb", "debjitbhowal.db@gmail.com")
-    // console.log("Obtained value at deployed contract is: " + res[5]);
-    // for (let i = 0; i < res.length; i++) {
-    //     console.log(i, res[i])
-    // }
+    console.log("Obtained value at deployed contract is: " + res[7].map((e) => Number(e)));
+    for (let i = 0; i < res.length; i++) {
+        console.log(i, res[i])
+    }
 
 
     // console.log("Obtained value at deployed contract is: " + res);

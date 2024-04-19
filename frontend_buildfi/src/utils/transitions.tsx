@@ -55,20 +55,38 @@ export async function getAllProjects() {
   const projectCount = await buildfi.projectCount();
   const projects = [];
   for (let i = 1; i < projectCount; i++) {
-    const project = await buildfi.buildfi_projects(i);
-    console.log("Project:", project);
+    const project = await buildfi.getProjectInfo(i);
+    // console.log("Project:", project);
     projects.push({
-      id: project[0],
+      id: Number(project[0]),
       name: project[1],
-      metadata: project[2],
-      owner: project[3],
-      milestone_count: project[4],
-      // last_milestone_completed: project[5],
-      total_budget: project[7],
-      token_set: project[10],
-      created_at: project[12],
-      funding_ends_at: project[12],
-      abandoned: project[16],
+      image: project[2],
+      description: project[3],
+      owner: project[4],
+      milestone_count: Number(project[5]),
+      last_milestone_completed: Number(project[6]),
+      milestone_timestamps: project[7].map((e: BigInt) => Number(e)),
+      payout_percentages: project[8].map((e: BigInt) => Number(e)),
+      total_budget: Number(project[9]),
+      total_raised: Number(project[10]),
+      investors: project[11].map((e: string) => e),
+      project_token: project[12],
+      token_set: project[13],
+      tokens_commited: Number(project[14]),
+      created_at: Number(project[15]),
+      started_at: Number(project[16]),
+      funding_ends_at: Number(project[17]),
+      completed_at: Number(project[18]),
+      abandoned: project[19],
+      projectCommitted: Number(project[20]),
+      projectWrapped: Number(project[21]),
+      milestones: project[22].map((e: any) => ({
+        id: Number(e[0]),
+        voting_active: e[1],
+        votes_for: Number(e[2]),
+        votes_against: Number(e[3]),
+        voting_deadline: Number(e[4]),
+      }))
       // milestone_timestamps: project[6],
       // payout_percentages: project[7],
       // milestone_metadata_json: project[8],
@@ -123,16 +141,21 @@ export async function closeVoting(projectId: number, milestoneId: number) {
 
 export async function createProject(
   name: string,
+  image: string,
+  description: string,
   metadata: string,
   milestones: number,
   payoutPercentages: number[],
   totalBudget: number,
-  fundingEndsAt: number
+  fundingEndsAt: number,
+  signer: ethers.Signer
 ) {
-  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
+  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, signer);
 
   const result = await buildfi.createProject(
     name,
+    image,
+    description,
     metadata,
     milestones,
     payoutPercentages,
