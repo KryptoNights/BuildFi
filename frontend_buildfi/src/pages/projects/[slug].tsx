@@ -5,6 +5,7 @@ import { getProjectInfo, invest } from "@/utils/transitions";
 import data from "../../../constant/constant";
 import useConnection from "@/utils/useConnection";
 import Timeline from "../../../components/Timeline/timeline";
+import { showSuccessToast } from "@/utils/notifications";
 
 const Slug = (props: any) => {
   const router = useRouter();
@@ -42,7 +43,7 @@ const Slug = (props: any) => {
   const investApi = async () => {
     try {
       await invest(id, 1000000, signer!);
-      console.log("okay");
+      showSuccessToast("Successfullyy invested in this project");
     } catch (error) {
       console.error("Error investing in project:", error);
     }
@@ -102,13 +103,49 @@ const Slug = (props: any) => {
               </div>
             </div>
           </div>
+          {/* <div
+            className="flex flex-row align-middle"
+            style={{
+              marginLeft: "34%",
+              marginRight: "25%",
+              marginBottom: "7vh",
+              alignItems: "center",
+            }}
+          >
+            <div
+              style={{
+                border: "1px solid white",
+                opacity: "0.3",
+                width: "30%",
+                height: "1px",
+              }}
+            ></div>
+            <h1
+              style={{
+                fontSize: "6vh",
+              }}
+            >
+              Timeline
+            </h1>
+            <div
+              style={{
+                border: "1px solid white",
+                opacity: "0.3",
+                width: "30%",
+                height: "1px",
+              }}
+            ></div>
+          </div> */}
           <Timeline projectInfo={projectInfo} />
-          {/* <button
+          <button
             className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+            style={{
+              marginTop: "4vh"
+            }}
             onClick={investApi}
           >
             Invest in this project
-          </button> */}
+          </button>
         </div>
       )}
     </>
