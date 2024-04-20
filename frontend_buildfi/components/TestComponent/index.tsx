@@ -1,4 +1,4 @@
-import { isKycDone, getAllProjects, vote_operator } from "@/utils/transitions";
+import { isKycDone, getAllProjects, vote_operator, circleOnLens } from "@/utils/transitions";
 import useConnection from "@/utils/useConnection";
 import React, { useState } from "react";
 
@@ -20,8 +20,12 @@ const TestComp = () => {
     // const projects = await getAllProjects();
     // console.log("Projects:", projects);
 
-    const vote = await vote_operator(1, 0, true, signer!);
-    console.log("vote result:", vote);
+    // const vote = await vote_operator(1, 0, true, signer!);
+    // console.log("vote result:", vote);
+
+    // const lens = circleOnLens("0xb42a8c62f3278AFc9343A8FcCD5232CBe8aA5117");
+    const lens = circleOnLens("0xDC148b5F7B208463535584882fF37C50491077Cd");
+    console.log("Lens:", lens);
     } catch (error) {
     //   console.error("Error creating account:", error);
     }

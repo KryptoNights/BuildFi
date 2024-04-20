@@ -59,6 +59,67 @@ export async function vote_operator(
   }
 }
 
+export async function circleOnLens(address: string) {
+  const response = await axios.post(
+    'https://api-v2.lens.dev/playground',
+    {
+      'query': 'query Profile($request: ProfilesRequest!) {\n  profiles(request: $request) {\n    items {\n      id\n      handle {\n        fullHandle\n      }\n    }\n  }\n}',
+      'variables': {
+        'request': {
+          'where': {
+            'ownedBy': address
+          }
+        }
+      }
+    },
+    {
+      headers: {
+        'content-type': 'application/json'
+      }
+    }
+  );
+  const profiles = response.data.data?.profiles?.items;
+  console.log(profiles);
+
+  for (const profile of profiles) {
+    console.log(profile.id, profile.handle.fullHandle);
+  }
+  const profileId = profiles[0].id;
+
+  const network_raw = await axios.post(
+    'https://api-v2.lens.dev/playground',
+    {
+      'query': 'query Profile($followersRequest2: FollowersRequest!, $followingRequest2: FollowingRequest!) {\n  followers(request: $followersRequest2) {\n    items {\n      ownedBy {\n        address\n      }\n      handle {\n        fullHandle\n      }\n    }\n  }\n  following(request: $followingRequest2) {\n    items {\n      ownedBy {\n        address\n      }\n      handle {\n        fullHandle\n      }\n    }\n  }\n}',
+      'variables': {
+        'followersRequest2': {
+          'of': '0x01ec4c'
+        },
+        'followingRequest2': {
+          'for': '0x01ec4c'
+        }
+      }
+    },
+    {
+      headers: {
+        'content-type': 'application/json'
+      }
+    }
+  );
+
+  const addresses_handles = new Map<string, string>();
+  const followers = network_raw.data.data?.followers?.items;
+  const following = network_raw.data.data?.following?.items;
+  for (const follower of followers) {
+    addresses_handles.set(follower.ownedBy.address, follower.handle.fullHandle);
+  }
+  for (const followee of following) {
+    addresses_handles.set(followee.ownedBy.address, followee.handle.fullHandle);
+  }
+  console.log(addresses_handles);
+
+
+}
+
 export function parseProject(project: any) {
   return {
     id: Number(project[0]),
@@ -149,7 +210,7 @@ export async function claim(address: string) {
 
 export async function closeVoting(projectId: number, milestoneId: number, signer: ethers.Signer) {
   const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, signer);
-
+  console.log("closeVoting:", projectId, milestoneId);
   const result = await buildfi.close_voting(projectId, milestoneId);
   console.log("close_voting result:", result);
 }
@@ -231,10 +292,11 @@ export async function startVoting(
   milestoneId: number,
   signer: ethers.Signer
 ) {
+  console.log("startVoting:", projectId, milestoneId);
   const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, signer);
   // unix timestamp
-  const timestamp = new Date().getTime() / 1000 + 2 * 61 * 60 * 24 * 7;
-  const result = await buildfi.start_voting(projectId, milestoneId, timestamp);
+  const timestamp = Math.ceil(new Date().getTime() / 1000 + 2 * 61 * 60 * 24 * 7);
+  const result = await buildfi.start_voting(projectId, milestoneId, timestamp as number);
   console.log("start voting result:", result);
 }
 
