@@ -78,46 +78,50 @@ export async function circleOnLens(address: string) {
       }
     }
   );
-  const profiles = response.data.data?.profiles?.items;
-  console.log(profiles);
+  try {
+    const profiles = response.data.data?.profiles?.items;
+    console.log(profiles);
 
-  for (const profile of profiles) {
-    console.log(profile.id, profile.handle.fullHandle);
-  }
-  const profileId = profiles[0].id;
+    for (const profile of profiles) {
+      console.log(profile.id, profile.handle.fullHandle);
+    }
+    const profileId = profiles[0].id;
 
-  const network_raw = await axios.post(
-    'https://api-v2.lens.dev/playground',
-    {
-      'query': 'query Profile($followersRequest2: FollowersRequest!, $followingRequest2: FollowingRequest!) {\n  followers(request: $followersRequest2) {\n    items {\n      ownedBy {\n        address\n      }\n      handle {\n        fullHandle\n      }\n    }\n  }\n  following(request: $followingRequest2) {\n    items {\n      ownedBy {\n        address\n      }\n      handle {\n        fullHandle\n      }\n    }\n  }\n}',
-      'variables': {
-        'followersRequest2': {
-          'of': '0x01ec4c'
-        },
-        'followingRequest2': {
-          'for': '0x01ec4c'
+    const network_raw = await axios.post(
+      'https://api-v2.lens.dev/playground',
+      {
+        'query': 'query Profile($followersRequest2: FollowersRequest!, $followingRequest2: FollowingRequest!) {\n  followers(request: $followersRequest2) {\n    items {\n      ownedBy {\n        address\n      }\n      handle {\n        fullHandle\n      }\n    }\n  }\n  following(request: $followingRequest2) {\n    items {\n      ownedBy {\n        address\n      }\n      handle {\n        fullHandle\n      }\n    }\n  }\n}',
+        'variables': {
+          'followersRequest2': {
+            'of': '0x01ec4c'
+          },
+          'followingRequest2': {
+            'for': '0x01ec4c'
+          }
+        }
+      },
+      {
+        headers: {
+          'content-type': 'application/json'
         }
       }
-    },
-    {
-      headers: {
-        'content-type': 'application/json'
-      }
+    );
+
+    const addresses_handles = new Map<string, string>();
+    const followers = network_raw.data.data?.followers?.items;
+    const following = network_raw.data.data?.following?.items;
+    for (const follower of followers) {
+      addresses_handles.set(follower.ownedBy.address, follower.handle.fullHandle);
     }
-  );
+    for (const followee of following) {
+      addresses_handles.set(followee.ownedBy.address, followee.handle.fullHandle);
+    }
+    console.log(addresses_handles);
 
-  const addresses_handles = new Map<string, string>();
-  const followers = network_raw.data.data?.followers?.items;
-  const following = network_raw.data.data?.following?.items;
-  for (const follower of followers) {
-    addresses_handles.set(follower.ownedBy.address, follower.handle.fullHandle);
+    return addresses_handles;
+  } catch (error) {
+    return new Map<string, string>();
   }
-  for (const followee of following) {
-    addresses_handles.set(followee.ownedBy.address, followee.handle.fullHandle);
-  }
-  console.log(addresses_handles);
-
-
 }
 
 export function parseProject(project: any) {
