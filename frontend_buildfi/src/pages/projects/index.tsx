@@ -24,7 +24,7 @@ const index = () => {
   const router = useRouter();
 
   const [projects, setProjects] = useState<Project[]>([]);
-  console.log(projects);
+  // console.log(projects);
 
   useEffect(() => {
     const fetchData = async () => {
