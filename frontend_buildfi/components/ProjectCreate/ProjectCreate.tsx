@@ -157,7 +157,7 @@ const ProjectCreate = () => {
           htmlFor="totalBudget"
           className="block mb-4  text-l font-medium text-gray-900 dark:text-white"
         >
-          Total Budget in Etherium
+          Total Budget in Ethereum
         </label>
         <input
           type="number"

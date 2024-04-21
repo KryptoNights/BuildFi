@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./header.module.css";
 import useConnection from "@/utils/useConnection";
 import { Button, CircularProgress } from "@mui/material";
@@ -13,12 +13,14 @@ interface HeaderProps {
 }
 import { useRouter } from "next/router";
 import { resetWalletInfo } from "@/store/slice/walletinfo";
+import { getDeveloperInfo } from "@/utils/transitions";
 
 const Header = ({ onConnect, onDisconnect }: HeaderProps) => {
   const walletInfo = useSelector((state: RootState) => state.walletInfo);
   const dispatch = useDispatch();
   const [show, setShow] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [DeveloperExists, setDeveloperExists] = useState(false);
 
   const controlNavbar = () => {
     if (window.scrollY > lastScrollY) {
@@ -56,6 +58,29 @@ const Header = ({ onConnect, onDisconnect }: HeaderProps) => {
   const handleRedirect2 = () => {
     router.push("./kyc");
   };
+  const handleCreateProject = () => {
+    router.push("/create");
+  };
+  useEffect(() => {
+    if (router.pathname === "/projects" && walletInfo.address) {
+      const fetchData = async () => {
+        try {
+          const developerInfo = await getDeveloperInfo(walletInfo.address);
+          console.log("Developer info:", developerInfo);
+          if (developerInfo[1]) {
+            // If developer info exists, redirect to projects page
+            // router.push("/projects");
+            setDeveloperExists(true);
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          // Handle error appropriately, e.g., display error message to the user
+        }
+      };
+
+      fetchData();
+    }
+  }, [router.pathname, walletInfo.address]);
 
   return (
     <div className={show ? styles.container : styles.ncontainer}>
@@ -77,6 +102,14 @@ const Header = ({ onConnect, onDisconnect }: HeaderProps) => {
         >
           Looking for Funding?{" "}
         </a>
+        {router.pathname === "/projects" && DeveloperExists && (
+          <button
+            className="bg-[#ffffff] hover:bg-[#b7b5b5] text-black font-bold py-2 px-4 rounded"
+            onClick={handleCreateProject}
+          >
+            Create Project
+          </button>
+        )}
       </div>
 
       {loading ? (
