@@ -23,7 +23,7 @@ interface Project {
 const index = () => {
   const router = useRouter();
 
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects]:any = useState<Project[]>([]);
   // console.log(projects);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const index = () => {
   }, []);
 
   const handleClick = async (id: number) => {
-    const project = projects.find((item) => item.id === id);
+    const project = projects.find((item:any) => item.id === id);
     if (project) {
       router.push(`/projects/${project.id}`);
       console.log("id", project.id);

@@ -29,6 +29,7 @@ const Card = ({ item, handleClick }: { item: any; handleClick: any }) => {
       }}
     >
       <div className="max-w-395 max-h-280 min-w-395 min-h-280">
+        
         <Image src={BitCoin} alt={"coin"} width={395} height={280} />
       </div>
       <div
