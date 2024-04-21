@@ -1,66 +1,43 @@
-## Foundry
+# BuildFi: Decentralized Crowdfunding Platform for Developers
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+BuildFi is a revolutionary decentralized crowdfunding platform tailored specifically for developers, empowering them to raise funds for their projects from day one. By leveraging blockchain technology and innovative features, BuildFi facilitates transparent and efficient fundraising while prioritizing user credibility and project accountability.
 
-Foundry consists of:
+## Features
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+### Crowd Investment
 
-## Documentation
+- Developers can commit a portion of their project's token to attract investors.
+- Funds raised are disbursed in stages based on milestones set by the developer during project creation.
 
-https://book.getfoundry.sh/
+### User Credibility Verification (RISC-ZERO)
 
-## Usage
+- Utilizes zero-knowledge proofs (zk-KYC) to verify the ownership of email addresses and wallet addresses.
+- Verification steps include connecting the wallet, logging into a Gmail account, and using off-chain zk-provers provided by RISC-0.
+- Once verified, investors can verify the authenticity and credibility of developers through linked platforms such as GitHub or LinkedIn.
 
-### Build
+### Irrevocable Proof (EthSign, Sign Protocol)
 
-```shell
-$ forge build
-```
+- Developers attest to starting the project after the funding deadline, providing an irrevocable on-chain proof or contract of the tokens they commit to investors.
+- Investors receive tokens proportionate to their investment.
 
-### Test
+### Milestone Management and Voting
 
-```shell
-$ forge test
-```
+- Project creation includes milestone timestamps and payout percentages set by the developer.
+- Each milestone undergoes voting by investors to judge completion, based on off-chain content published by the developer. A third-party verifier can also be utilized.
+- Witness feature seamlessly blends the storage layer of web2 with the security of web3, ensuring efficient management of voting lists and maintaining data integrity.
 
-### Format
+### Utility Features
 
-```shell
-$ forge fmt
-```
+- Your Circle on Lens allows users to discover people in their social circles who are building on BuildFi.
+- Enables small developers who build in public to raise funds from supporters who believe in the future of their projects.
 
-### Gas Snapshots
+## Getting Started
 
-```shell
-$ forge snapshot
-```
+To get started with BuildFi:
 
-### Anvil
+1. **Sign Up:** Create an account on BuildFi using your email address and wallet.
+2. **Connect Wallet:** Connect your Ethereum wallet to manage your tokens securely.
+3. **Create Project:** Define your project, set milestones, and commit tokens to attract investors.
+4. **Verify Credibility:** Verify your email address and link existing portfolios to enhance credibility.
+5. **Raise Funds:** Share your project with potential investors and start raising funds from day one.
 
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
