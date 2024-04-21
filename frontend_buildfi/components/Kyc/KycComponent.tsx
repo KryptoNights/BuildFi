@@ -39,7 +39,7 @@ const CodeForm = () => {
 
         if (isKyc && !developerInfo[1]) {
           window.location.href = "/signup";
-        } else if (developerInfo[1]) {
+        } else if (developerInfo[1]  !== "0x0000000000000000000000000000000000000000000000000000000000000000") {
           window.location.href = "/projects";
         }
       } catch (error) {
