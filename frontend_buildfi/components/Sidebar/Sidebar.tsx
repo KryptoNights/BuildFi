@@ -14,7 +14,8 @@ const Sidebar = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await circleOnLens(accountData.address!);
+        const response = await circleOnLens("0xDC148b5F7B208463535584882fF37C50491077Cd"!);
+        // const response = await circleOnLens(accountData.address!);
         // const response = await circleOnLens(
         //   "0xDC148b5F7B208463535584882fF37C50491077Cd"
         // );
@@ -66,7 +67,7 @@ const Sidebar = () => {
               paddingLeft: "1rem",
             }}
           >
-            Your Lens Circle
+            Your Circle on Lens
           </h4>
         </div>
 
