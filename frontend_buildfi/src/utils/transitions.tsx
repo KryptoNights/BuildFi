@@ -186,6 +186,7 @@ export async function getDeveloperInfo(address: string) {
 
   const info = await buildfi.buildfi_developers(address);
   console.log("Developer info:", info);
+  return info;
 }
 
 export async function getProjectInfo(projectId: number) {

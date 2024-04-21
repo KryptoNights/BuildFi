@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { isKycDone } from "@/utils/transitions";
+import { getDeveloperInfo, isKycDone } from "@/utils/transitions";
 import useConnection from "@/utils/useConnection";
 
 const CodeForm = () => {
@@ -31,19 +31,25 @@ const CodeForm = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const isDone = await isKycDone(accountData.address!);
-        setKycDone(isDone);
-        if (isDone) {
-          window.location.href = "/signin";
-        } else {
+        const isKyc = await isKycDone(accountData.address!);
+        console.log("KYC status:", isKyc);
+
+        const developerInfo = await getDeveloperInfo(accountData.address!);
+        console.log("Developer info:", developerInfo[1]);
+
+        if (isKyc && !developerInfo[1]) {
+          window.location.href = "/signup";
+        } else if (developerInfo[1]) {
+          window.location.href = "/projects";
         }
       } catch (error) {
-        console.error("Error fetching KYC status:", error);
+        console.error("Error fetching data:", error);
+        // Handle error appropriately, e.g., display error message to the user
       }
     };
 
-    fetchData(); // Call the async function immediately
-  }, []);
+    fetchData();
+  }, [accountData.address]);
 
   const handleGenerateCode = () => {
     const walletAddr = "0xd6f285aff13129F0e27A2079E343c9AF3b19A776";
@@ -65,7 +71,8 @@ const CodeForm = () => {
         style={{ width: "70%" }}
       >
         <h2 className="text-3xl font-bold mb-8 text-teal-900">
-        Empower Your Startup Success: Begin Your Founder's Journey with KYC Compliance Now!
+          Empower Your Startup Success: Begin Your Founder's Journey with KYC
+          Compliance Now!
         </h2>
         <form onSubmit={handleSubmit} className="mb-12">
           <input
@@ -84,7 +91,8 @@ const CodeForm = () => {
           </button>
         </form>
         <p className="text-xl text-gray-600 mb-4">
-          Unlock Your Startup Potential: Generate Your High-Security Code and Initiate KYC Now!
+          Unlock Your Startup Potential: Generate Your High-Security Code and
+          Initiate KYC Now!
         </p>
         <button
           className="w-full px-4 py-4 bg-blue-500 text-white text-2xl rounded-lg focus:outline-none hover:bg-blue-600"

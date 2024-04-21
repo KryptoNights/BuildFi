@@ -1,13 +1,13 @@
-import { makeNewAccount } from "@/utils/transitions";
+import { getDeveloperInfo, makeNewAccount } from "@/utils/transitions";
 import useConnection from "@/utils/useConnection";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const SignInComp = () => {
+const SignUpComp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const { signer } = useConnection();
   console.log(signer);
-  
+  const { accountData } = useConnection();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -29,11 +29,28 @@ const SignInComp = () => {
     setEmail(e.target.value);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const developerInfo = await getDeveloperInfo(accountData.address!);
+        console.log("Developer info:", developerInfo[1]);
+        if (developerInfo[1]) {
+          window.location.href = "/projects";
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // Handle error appropriately, e.g., display error message to the user
+      }
+    };
+
+    fetchData();
+  }, [accountData.address]);
+
   return (
     <div className="m-auto w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
       <form className="space-y-6" onSubmit={handleSubmit}>
         <h5 className=" text-xl font-medium text-gray-900 dark:text-white">
-          Sign in to our platform
+          Create new Account
         </h5>
         <div>
           <label
@@ -99,7 +116,7 @@ const SignInComp = () => {
           type="submit"
           className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
-          Login to your account
+          Create new Account
         </button>
         <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
           Not registered?{" "}
@@ -107,7 +124,7 @@ const SignInComp = () => {
             href="/kyc"
             className="text-blue-700 hover:underline dark:text-blue-500"
           >
-            Create account
+            Complete your KYC
           </a>
         </div>
       </form>
@@ -115,4 +132,4 @@ const SignInComp = () => {
   );
 };
 
-export default SignInComp;
+export default SignUpComp;
