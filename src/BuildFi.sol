@@ -195,10 +195,10 @@ contract BuildFi {
         );
 
         // ensure funding_ends_at is in the future
-        require(
-            funding_ends_at > block.timestamp,
-            "Invalid funding end timestamp"
-        );
+        // require(
+        //     funding_ends_at > block.timestamp,
+        //     "Invalid funding end timestamp"
+        // );
 
         // ensure payout percentages are valid
         require(

@@ -263,7 +263,8 @@ export async function invest(projectId: number, amount: number, signer: ethers.S
   const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, signer);
 
   const result = await buildfi.invest(projectId, {
-    value: ethers.parseUnits(amount.toString(), "gwei"),
+    value: ethers.parseUnits("1000", "gwei"),
+    // value: ethers.parseUnits(amount.toString(), "gwei"),
   });
   console.log("invest result:", result);
 }

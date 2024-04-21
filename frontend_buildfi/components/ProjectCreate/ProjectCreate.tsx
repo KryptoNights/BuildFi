@@ -14,8 +14,8 @@ const ProjectCreate = () => {
   const [milestones, setMilestones]: any = useState([]);
   const convertDateToMs = (dateString: any) => {
     const date = new Date(dateString);
-    const ms = Number(date.getTime()/1000);
-    return ms;
+    const ms = date.getTime();
+    return Math.floor(ms/1000);
   };
 
   const milestonesWithIsoDate = milestones.map((milestone: any) => {

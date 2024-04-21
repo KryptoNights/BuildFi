@@ -811,7 +811,7 @@ const ABI = [
         ]
     }
 ];
-const ADDR = "0x00922B24142217e7947D773Faaa2F3c4457c4CfA";
+const ADDR = "0x123c58b56AeeBE5317befb1DE825588FF49B0C89";
 
 const ISP_ABI = [
     {
@@ -980,8 +980,16 @@ import { ethers } from "ethers";
         messageSender: "0x48d74743caa686e52d77be3cdb90704e60e3b110",
         seal: [15, 99, 120, 156, 103, 232, 22, 43, 12, 83, 20, 199, 147, 228, 62, 229, 8, 172, 145, 227, 71, 41, 98, 47, 48, 173, 127, 121, 146, 140, 103, 155, 46, 163, 211, 191, 127, 242, 1, 62, 121, 0, 107, 77, 162, 91, 235, 93, 68, 168, 42, 3, 163, 186, 87, 39, 62, 106, 136, 160, 110, 205, 238, 95, 19, 60, 56, 65, 53, 80, 152, 25, 82, 62, 144, 46, 57, 138, 173, 232, 200, 253, 251, 144, 232, 126, 226, 196, 146, 203, 165, 43, 62, 79, 204, 204, 1, 252, 2, 14, 99, 211, 46, 189, 204, 201, 216, 19, 224, 123, 219, 88, 86, 23, 54, 192, 146, 101, 76, 53, 229, 9, 14, 66, 217, 187, 138, 46, 2, 183, 159, 200, 176, 185, 17, 247, 160, 137, 221, 41, 49, 168, 42, 220, 145, 116, 40, 119, 186, 84, 84, 139, 49, 201, 48, 59, 159, 58, 188, 109, 35, 38, 27, 14, 209, 0, 230, 130, 182, 186, 134, 139, 151, 197, 55, 13, 123, 179, 149, 140, 157, 250, 54, 139, 61, 12, 101, 42, 98, 130, 253, 254, 31, 59, 225, 227, 64, 175, 74, 252, 183, 28, 195, 69, 255, 70, 163, 93, 23, 180, 242, 23, 92, 152, 118, 99, 247, 94, 127, 93, 207, 140, 72, 107, 25, 163, 147, 239, 130, 130, 240, 235, 180, 37, 23, 132, 6, 112, 88, 5, 118, 9, 121, 111, 168, 156, 43, 182, 181, 113, 217, 163, 140, 159, 28, 32],
     }
+
+    const res = await buildFi.start_project(
+        1,
+        AbiCoder.encode(
+            ["address", "uint256", "bytes"],
+            ["0x48D74743caA686e52D77be3Cdb90704e60E3b110", 1, "0x73c09d2c8f161bab31f4ea1276f303abc84f2d7d0ee5396a7ffa9c87ded1cfc0"]
+        )
+    )
     
-    // // // Convert each element to hex string 
+    // // Convert each element to hex string 
     // const kycof = oldwal
     // const sealHexString = ethers.hexlify(new Uint8Array(kycof.seal));
     // console.log("sealHexArray: ", sealHexString, typeof sealHexString)
@@ -994,26 +1002,26 @@ import { ethers } from "ethers";
     // const res = await buildFi.projectCount()
     // console.log("Obtained value at deployed contract is: " + res);
     // const res = await buildFi.createProject(
-    //     "Mirror.xyz",
+    //     "EchoVerse: The Decentralized Conversation Hu",
     //     "https://assets-global.website-files.com/6364e65656ab107e465325d2/637aed954d38a6dbb814a324_TQmBbnIj5WL1b91F5Bx3PbEt6YPwS1QVmVNGV3l04lI.jpeg",
-    //     "Web 3 social media",
+    //     "EchoVerse is a decentralized platform designed to foster meaningful discussions across various topics. Users can initiate conversations on any subject and earn tokens based on the engagement their posts receive. Replies to posts incur a token cost, which is distributed among the original poster and participants in the thread. ",
     //     "",
-    //     [1713550000, 1713650000, 1713750000],
+    //     [1713685612, 1713686612, 1713687612],
     //     [10, 30, 60],
     //     "10000000000000000000",
-    //     1713550000
+    //     1713685612
     // )
     // const res = await buildFi.getProjectInfo(1)
-    // const res = await buildFi.makeNewAccount("deb", "debjitbhowal.db@gmail.com")
-    // console.log("Obtained value at deployed contract is: " + res[7].map((e) => Number(e)));
+    // const res2 = await buildFi.makeNewAccount("deb", "debjitbhowal.db@gmail.com")
+    // console.log("Obtained value at deployed contract is: " + res2[7].map((e) => Number(e)));
     // for (let i = 0; i < res.length; i++) {
     //     console.log(i, res[i])
     // }
 
-    const developer_info = await buildFi.buildfi_developers("0x48D74743caA686e52D77be3Cdb90704e60E3b110");
-    console.log("Obtained value at deployed contract is: ", developer_info[1]);
-    const claim = await buildFi.claims(String("0x48D74743caA686e52D77be3Cdb90704e60E3b110"));
-    console.log("Obtained value at deployed contract is: ", claim);
+    // const developer_info = await buildFi.buildfi_developers("0x48D74743caA686e52D77be3Cdb90704e60E3b110");
+    // console.log("Obtained value at deployed contract is: ", developer_info[1]);
+    // const claim = await buildFi.claims(String("0x48D74743caA686e52D77be3Cdb90704e60E3b110"));
+    // console.log("Obtained value at deployed contract is: ", claim);
 
     // console.log("Obtained value at deployed contract is: " + res);
 
