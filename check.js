@@ -993,22 +993,25 @@ import { ethers } from "ethers";
     // )
     // const res = await buildFi.projectCount()
     // console.log("Obtained value at deployed contract is: " + res);
-    const res = await buildFi.createProject(
-        "Mirror.xyz",
-        "https://assets-global.website-files.com/6364e65656ab107e465325d2/637aed954d38a6dbb814a324_TQmBbnIj5WL1b91F5Bx3PbEt6YPwS1QVmVNGV3l04lI.jpeg",
-        "Web 3 social media",
-        "",
-        [1713550000, 1713650000, 1713750000],
-        [10, 30, 60],
-        "10000000000000000000",
-        1713550000
-    )
+    // const res = await buildFi.createProject(
+    //     "Mirror.xyz",
+    //     "https://assets-global.website-files.com/6364e65656ab107e465325d2/637aed954d38a6dbb814a324_TQmBbnIj5WL1b91F5Bx3PbEt6YPwS1QVmVNGV3l04lI.jpeg",
+    //     "Web 3 social media",
+    //     "",
+    //     [1713550000, 1713650000, 1713750000],
+    //     [10, 30, 60],
+    //     "10000000000000000000",
+    //     1713550000
+    // )
     // const res = await buildFi.getProjectInfo(1)
     // const res = await buildFi.makeNewAccount("deb", "debjitbhowal.db@gmail.com")
     // console.log("Obtained value at deployed contract is: " + res[7].map((e) => Number(e)));
     // for (let i = 0; i < res.length; i++) {
     //     console.log(i, res[i])
     // }
+
+    const developer_info = await buildFi.buildfi_developers("0x48D74743caA686e52D77be3Cdb90704e60E3b110");
+    console.log("Obtained value at deployed contract is: ", developer_info[1]);
 
 
     // console.log("Obtained value at deployed contract is: " + res);
