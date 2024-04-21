@@ -1,3 +1,4 @@
+import { showFailureToast, showSuccessToast } from "@/utils/notifications";
 import { getDeveloperInfo, makeNewAccount } from "@/utils/transitions";
 import useConnection from "@/utils/useConnection";
 import React, { useEffect, useState } from "react";
@@ -15,7 +16,9 @@ const SignUpComp = () => {
     try {
       const result = await makeNewAccount(name, email, signer!);
       console.log("result", result);
+      showSuccessToast(result);
     } catch (error) {
+      showFailureToast(error);
       console.error("Error creating account:", error);
     }
   };
