@@ -79,8 +79,7 @@ const CodeForm = () => {
         style={{ width: "70%" }}
       >
         <h2 className="text-3xl font-bold mb-8 text-teal-900">
-          Empower Your Startup Success: Begin Your Founder's Journey with KYC
-          Compliance Now!
+          Let us know who you are, with zkKYC!
         </h2>
         <form onSubmit={handleSubmit} className="mb-12">
           <input
@@ -99,8 +98,7 @@ const CodeForm = () => {
           </button>
         </form>
         <p className="text-xl text-gray-600 mb-4">
-          Unlock Your Startup Potential: Generate Your High-Security Code and
-          Initiate KYC Now!
+          Use this to generate your code and paste it above:
         </p>
         <button
           className="w-full px-4 py-4 bg-blue-500 text-white text-2xl rounded-lg focus:outline-none hover:bg-blue-600"
