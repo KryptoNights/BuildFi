@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { CircularProgress } from "@mui/material";
-import { getProjectInfo, invest } from "@/utils/transitions";
+import { getProjectInfo, invest, startProject } from "@/utils/transitions";
 import data from "../../../constant/constant";
 import useConnection from "@/utils/useConnection";
 import Timeline from "../../../components/Timeline/timeline";
 import { showSuccessToast } from "@/utils/notifications";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 
 const Slug = (props: any) => {
   const router = useRouter();
   const { slug }: any = router.query;
   const { signer } = useConnection();
   // const project = data.find((item) => item.slug === slug);
-
+  const walletInfo = useSelector((state: RootState) => state.walletInfo);
   const id = slug;
   console.log(id);
 
@@ -49,6 +51,15 @@ const Slug = (props: any) => {
     }
   };
 
+  const StartProject = async () => {
+    try {
+      await startProject(id, walletInfo.address, signer!);
+      showSuccessToast("Project is Started ");
+    } catch (error) {
+      console.error("Error investing in project:", error);
+    }
+  };
+
   if (loading) {
     return <CircularProgress />;
   }
@@ -57,11 +68,13 @@ const Slug = (props: any) => {
     return <div>{error}</div>;
   }
 
+  console.log('sss',projectInfo)
+
   return (
     <>
       {projectInfo && (
         <div className="max-w-xl mx-auto">
-          <div className="flex items-center mb-4">
+          <div className="flex items-center justify-center mb-4">
             <div className="w-1/2 pr-8">
               <img
                 src={projectInfo.image}
@@ -81,10 +94,7 @@ const Slug = (props: any) => {
                 <h1 className="text-xl font-bold mb-2">Name of the Project:</h1>
                 <p className="text-gray-500">{projectInfo.name}</p>
               </div>
-              <div className="mb-4">
-                <h1 className="text-xl font-bold mb-2">Description:</h1>
-                <p className="text-gray-500">{projectInfo.description}</p>
-              </div>
+
               <div className="mb-4">
                 <h1 className="text-xl font-bold mb-2">Milestone Count:</h1>
                 <p className="text-gray-500">{projectInfo.milestone_count}</p>
@@ -103,56 +113,36 @@ const Slug = (props: any) => {
               </div>
             </div>
           </div>
-          {/* <div
-            className="flex flex-row align-middle"
-            style={{
-              marginLeft: "34%",
-              marginRight: "25%",
-              marginBottom: "7vh",
-              alignItems: "center",
-            }}
-          >
-            <div
-              style={{
-                border: "1px solid white",
-                opacity: "0.3",
-                width: "30%",
-                height: "1px",
-              }}
-            ></div>
-            <h1
-              style={{
-                fontSize: "6vh",
-              }}
+          <div style={{display:'flex',flexDirection:'row',gap:'12px',justifyContent:"center",width:'80%',margin:'auto'}}>
+            <h1 className="text-xl font-bold mb-2">Description:</h1>
+            <p className="text-gray-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde ipsum odio at repellendus libero reiciendis cum veritatis officia, ut exercitationem quo quisquam dolores natus ipsa laudantium architecto quia incidunt autLorem ipsum dolor sit amet consectetur adipisicing elit. Unde ipsum odio at repellendus libero reiciendis cum veritatis officia, ut exercitationem quo quisquam dolores natus ipsa laudantium architecto quia incidunt aut?Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde ipsum odio at repellendus libero reiciendis cum veritatis officia, ut exercitationem quo quisquam dolores natus ipsa laudantium architecto quia incidunt Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde ipsum odio at repellendus libero reiciendis cum veritatis officia, ut exercitationem quo quisquam dolores natus ipsa laudantium architecto quia incidunt aut?aut??</p>
+          </div>
+
+          { projectInfo.started_at===0 && (walletInfo.address==projectInfo.owner)  &&  (
+            <button
+              className="bg-blue-500 m-auto flex mt-4 mb-4 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+              onClick={investApi}
             >
-              Timeline
-            </h1>
-            <div
-              style={{
-                border: "1px solid white",
-                opacity: "0.3",
-                width: "30%",
-                height: "1px",
-              }}
-            ></div>
-          </div> */}
-          <Timeline projectInfo={projectInfo} id={slug} />
+             Start Project
+            </button>
+          )}
 
           {Number(projectInfo.funding_ends_at * 1000) < new Date().getTime() ? (
             <button
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+              className="bg-blue-500 m-auto flex mt-4 mb-4 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
               onClick={investApi}
             >
-              Investment Closed
+              Investment are Closed
             </button>
           ) : (
             <button
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+              className="bg-blue-500 m-auto flex mt-4 mb-4 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
               onClick={investApi}
             >
               Invest in this project
             </button>
           )}
+          <Timeline projectInfo={projectInfo} id={slug} />
         </div>
       )}
     </>

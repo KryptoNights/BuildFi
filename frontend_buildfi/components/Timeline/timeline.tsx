@@ -6,6 +6,35 @@ import { current } from "@reduxjs/toolkit";
 import React from "react";
 import { useSelector } from "react-redux";
 
+
+const generateMilestone = () => {
+  const milestones = [
+      "Implemented Redux state management for efficient data flow.",
+      "Designed and integrated reusable UI components using React hooks.",
+      "Optimized rendering performance with React.memo and useCallback.",
+      "Implemented client-side routing with React Router for seamless navigation.",
+      "Integrated Material-UI for beautiful and responsive UI design.",
+      "Implemented form validation and error handling using Formik and Yup.",
+      "Added internationalization support with React Intl for multilingual users.",
+      "Implemented authentication and authorization using JWT and OAuth.",
+      "Integrated Axios for making HTTP requests to backend APIs.",
+      "Implemented real-time updates using WebSockets with Socket.IO.",
+      "Optimized SEO with React Helmet for better search engine visibility.",
+      "Implemented lazy loading and code splitting for faster initial load times.",
+      "Integrated Redux Thunk for handling asynchronous actions.",
+      "Implemented drag-and-drop functionality with React DnD for interactive UI.",
+      "Added unit and integration tests with Jest and React Testing Library.",
+      "Implemented server-side rendering (SSR) with Next.js for improved SEO and performance.",
+      "Integrated Storybook for UI component development and testing.",
+      "Added error logging and monitoring with Sentry for better error tracking.",
+      "Implemented progressive web app (PWA) features for offline support and installation.",
+      "Implemented serverless functions with AWS Lambda for backend operations."
+  ];
+
+  const milestone = milestones[Math.floor(Math.random() * milestones.length)];
+  return milestone;
+};
+
 const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
   const { signer } = useConnection();
 
@@ -17,6 +46,8 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
     const date = new Date(timestamp);
     return date.toLocaleString();
   };
+
+  
 
   const milestoneData: any[] = [];
 
@@ -141,9 +172,12 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
       return (
         <li
           key={index}
-          className="relative mb-6 sm:mb-0"
+          className="relative mb-6 "
           style={{
-            height: "45vh",
+            marginTop:'22px',
+            marginBottom:'22px',
+            width:'80%',
+            height: "fit-content",
           }}
         >
           <div className="flex items-center">
@@ -162,13 +196,13 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
           </div>
           <div className="mt-3 sm:pe-8">
             <h3 className="text-lg font-semibold text-gray-300 dark:text-white">
-              Milestone {index + 1}
+              Milestone:  {index + 1}
             </h3>
             <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
               {convertToNormalDate(timestamp)}
             </time>
             <p className="text-base font-normal text-gray-500 dark:text-gray-400">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              {generateMilestone()}
             </p>
             {(check(projectInfo.investors, walletInfo.address) ||
               isOwner()) && (
@@ -176,7 +210,7 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
                 {index === Number(projectInfo.last_milestone_completed + 1) ? (
                   <div className="mt-2">
                     <p>Voting active</p>
-                    <p>Upvotes: {milestoneData[index].votingUp}</p>
+                    <p>Bump: {milestoneData[index].votingUp}</p>
 
                     {isOwner() ? (
                       <button
@@ -190,11 +224,11 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
                         className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
                         onClick={handleVoteWrapper(true, index)}
                       >
-                        Upvote
+                       Boost
                       </button>
                     )}
 
-                    <p>Downvotes: {milestoneData[index].votingDown}</p>
+                    <p>Bump: {milestoneData[index].votingDown}</p>
 
                     {isOwner() ? (
                       <button
@@ -208,7 +242,7 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
                         className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
                         onClick={handleVoteWrapper(false, index)}
                       >
-                        Downvote
+                        Bump
                       </button>
                     )}
 
@@ -220,7 +254,7 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
                 ) : (
                   <div className="mt-2">
                     <p>Voting active</p>
-                    <p>Upvotes: {milestoneData[index].votingUp}</p>
+                    <p>Boost: {milestoneData[index].votingUp}</p>
 
                     <div>Voting will start when previous milestone start</div>
                   </div>
@@ -233,7 +267,7 @@ const Timeline = ({ projectInfo, id }: { projectInfo: any; id: number }) => {
     }
   );
 
-  return <ol className="items-center sm:flex mt-3">{milestones}</ol>;
+  return <ol className="items-center md:flex justify-center flex-col mt-3" >{milestones}</ol>;
 };
 
 export default Timeline;
