@@ -192,7 +192,19 @@ export async function getProjectInfo(projectId: number) {
   const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, sepoliaProvider);
 
   const project = await buildfi.getProjectInfo(projectId);
-  const project_parsed = parseProject(project);
+  const _project_parsed = parseProject(project);
+
+  console.log("owner:", _project_parsed.owner);
+  const developer_info: any = await buildfi.buildfi_developers(_project_parsed.owner);
+  console.log("Developer info:", String(developer_info[1]));
+  const response = await axios.post("https://us-central1-my-project-5269-1684667148053.cloudfunctions.net/buildfi-email-claim", {
+    claim: String(developer_info[1])
+  });
+
+  const project_parsed = {
+    ..._project_parsed,
+    developer_email: response.data.email
+  }
 
   console.log("Project info:", project_parsed);
   return project_parsed;

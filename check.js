@@ -1012,7 +1012,8 @@ import { ethers } from "ethers";
 
     const developer_info = await buildFi.buildfi_developers("0x48D74743caA686e52D77be3Cdb90704e60E3b110");
     console.log("Obtained value at deployed contract is: ", developer_info[1]);
-
+    const claim = await buildFi.claims(String("0x48D74743caA686e52D77be3Cdb90704e60E3b110"));
+    console.log("Obtained value at deployed contract is: ", claim);
 
     // console.log("Obtained value at deployed contract is: " + res);
 
