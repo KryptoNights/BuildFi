@@ -14,9 +14,9 @@ export const showSuccessToast = (message: any) => {
     progress: undefined,
     theme: "colored",
     style: {
-      backgroundColor: '#1E8057', // Change the background color
-      borderRadius:'0px'
-    }
+      backgroundColor: "#1E8057", // Change the background color
+      borderRadius: "0px",
+    },
   });
 };
 
@@ -43,16 +43,16 @@ export const showWarningToast = (message: any) => {
     progress: undefined,
     theme: "colored",
     style: {
-      backgroundColor: '#EE4D37', // Change the background color
-      borderRadius:'0px'
-    }
+      backgroundColor: "#EE4D37", // Change the background color
+      borderRadius: "0px",
+    },
   });
 };
 
 export const showInfoToast = (message: any) => {
   toast.info(message, {
     position: "bottom-right",
-    autoClose: false,
+    autoClose: 5000,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,

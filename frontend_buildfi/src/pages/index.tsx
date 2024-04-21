@@ -62,7 +62,7 @@ const index = () => {
               margin: "20px 0px",
             }}
           >
-            Looking for Funding or looking for startups to invest?
+            Buidling something new or looking for good projects?
           </div>
           <p
             className="text-description-18px"
