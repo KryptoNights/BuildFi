@@ -9,8 +9,8 @@ pragma solidity ^0.8.20;
 // - a way for attestations to be added
 
 import {Ownable} from "openzeppelin/contracts/access/Ownable.sol";
-import {IERC20} from "openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {ERC20} from "openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {IIERC20} from "openzeppelin/contracts/token/IERC20/IIERC20.sol";
+import {IERC20} from "openzeppelin/contracts/token/IERC20/IERC20.sol";
 import {IRiscZeroVerifier} from "risc0/IRiscZeroVerifier.sol";
 import {IWitness, Proof} from "witness/interfaces/IWitness.sol";
 import {ISP} from "sign-protocol/interfaces/ISP.sol";
@@ -306,7 +306,7 @@ contract BuildFi {
         buildfi_projects[_projectId].projectToken = _projectToken;
         buildfi_projects[_projectId].token_set = true;
 
-        ERC20 token = ERC20(_projectToken);
+        IERC20 token = IERC20(_projectToken);
         uint256 decimals = token.decimals();
 
         // transfer the project token
@@ -596,7 +596,7 @@ contract BuildFi {
         payable(msg.sender).transfer(payout);
 
         // if last milestone also payout tokens to investors
-        ERC20 token = ERC20(buildfi_projects[_projectId].projectToken);
+        IERC20 token = IERC20(buildfi_projects[_projectId].projectToken);
         if (_milestoneId == buildfi_projects[_projectId].milestone_count) {
             for (
                 uint256 i = 0;

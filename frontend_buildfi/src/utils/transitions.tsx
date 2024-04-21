@@ -291,6 +291,19 @@ export async function setAndTransferTokens(
   console.log("set_and_transfer_tokens result:", result);
 }
 
+export async function startProject(_projectId: number, developer: string, project_id: string, kyc_identity: string, signer: ethers.Signer) {
+  // schema: 30
+  const AbiCoder = new ethers.AbiCoder();
+  const args = AbiCoder.encode(
+    ["address", "uint256", "bytes32"],
+    [developer, project_id, kyc_identity]
+  );
+  const buildfi = new Contract(sepolia.buildfi, BUILDFI_ABI, signer);
+
+  const result = await buildfi.start_project(_projectId, args);
+  console.log("start_project result:", result);
+}
+
 export async function startVoting(
   projectId: number,
   milestoneId: number,
