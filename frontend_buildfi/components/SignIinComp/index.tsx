@@ -13,8 +13,8 @@ const SignInComp = () => {
     e.preventDefault();
 
     try {
-      await makeNewAccount(name, email, signer!);
-      console.log("Account created successfully!");
+      const result = await makeNewAccount(name, email, signer!);
+      console.log("result", result);
     } catch (error) {
       console.error("Error creating account:", error);
     }
