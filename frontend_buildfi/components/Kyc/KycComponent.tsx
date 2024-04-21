@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { getDeveloperInfo, isKycDone } from "@/utils/transitions";
 import useConnection from "@/utils/useConnection";
+import { useRouter } from "next/router";
+import { showInfoToast } from "@/utils/notifications";
 
 const CodeForm = () => {
+  const router = useRouter();
   const [code, setCode] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [kycDone, setKycDone] = useState(false);
@@ -19,6 +22,8 @@ const CodeForm = () => {
         data
       );
       console.log("Response:", response.data);
+      showInfoToast("KYC in progress");
+      router.push("/signup");
       // Show success message or redirect user
     } catch (error) {
       console.error("Error submitting code:", error);
@@ -39,7 +44,10 @@ const CodeForm = () => {
 
         if (isKyc && !developerInfo[1]) {
           window.location.href = "/signup";
-        } else if (developerInfo[1]  !== "0x0000000000000000000000000000000000000000000000000000000000000000") {
+        } else if (
+          developerInfo[1] !==
+          "0x0000000000000000000000000000000000000000000000000000000000000000"
+        ) {
           window.location.href = "/projects";
         }
       } catch (error) {
