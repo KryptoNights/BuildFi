@@ -68,12 +68,28 @@ const Slug = (props: any) => {
     return <div>{error}</div>;
   }
 
-  console.log('sss',projectInfo)
+  console.log("sss", projectInfo);
 
   return (
     <>
       {projectInfo && (
         <div className="max-w-xl mx-auto">
+          <div className="mb-4">
+            <h1
+              className="text-6xl font-bold mb-2"
+              style={{
+                display: "flex",
+                justifyContent: "flex-start",
+                width: "80%",
+                marginTop: "12px",
+                marginBottom:'12px',
+                margin:'auto'
+              }}
+            >
+              {projectInfo.name}
+            </h1>
+          </div>
+
           <div className="flex items-center justify-center mb-4">
             <div className="w-1/2 pr-8">
               <img
@@ -84,26 +100,28 @@ const Slug = (props: any) => {
                 height={300}
               />
             </div>
+
             <div
               className="w-1/2"
               style={{
                 marginLeft: "6vw",
               }}
             >
-              <div className="mb-4">
-                <h1 className="text-xl font-bold mb-2">Name of the Project:</h1>
-                <p className="text-gray-500">{projectInfo.name}</p>
-              </div>
-
-              <div className="mb-4">
+              <div
+                className="mb-4 flex flex-row  items-center gap-4"
+                style={{ gap: "12px" }}
+              >
                 <h1 className="text-xl font-bold mb-2">Milestone Count:</h1>
                 <p className="text-gray-500">{projectInfo.milestone_count}</p>
               </div>
-              <div className="mb-4">
-                <h1 className="text-xl font-bold mb-2">
-                  Number of Investors in this project:
-                </h1>
-                <p className="text-gray-500">{projectInfo.investors.length}</p>
+              <div
+                className="mb-4 flex flex-row  items-center gap-4"
+                style={{ gap: "12px" }}
+              >
+                <h1 className="text-xl font-bold ">Investors:</h1>
+                <p className="text-xl text-gray-500">
+                  {projectInfo.investors.length}
+                </p>
               </div>
               <div className="mb-4">
                 <h1 className="text-xl font-bold mb-2">
@@ -111,21 +129,57 @@ const Slug = (props: any) => {
                 </h1>
                 <p className="text-gray-500">{projectInfo.owner}</p>
               </div>
+              <div className="mb-4">
+                <h1 className="text-xl font-bold mb-2">KYC Identity</h1>
+                <p
+                  className=" text-l  font-bold mt-2 "
+                  style={{
+                    textDecoration: "underline",
+                  }}
+                >
+                  {projectInfo.developer_email}
+                </p>
+              </div>
             </div>
           </div>
-          <div style={{display:'flex',flexDirection:'row',gap:'12px',justifyContent:"center",width:'80%',margin:'auto'}}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              gap: "12px",
+              justifyContent: "center",
+              width: "80%",
+              margin: "auto",
+            }}
+          >
             <h1 className="text-xl font-bold mb-2">Description:</h1>
-            <p className="text-gray-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde ipsum odio at repellendus libero reiciendis cum veritatis officia, ut exercitationem quo quisquam dolores natus ipsa laudantium architecto quia incidunt autLorem ipsum dolor sit amet consectetur adipisicing elit. Unde ipsum odio at repellendus libero reiciendis cum veritatis officia, ut exercitationem quo quisquam dolores natus ipsa laudantium architecto quia incidunt aut?Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde ipsum odio at repellendus libero reiciendis cum veritatis officia, ut exercitationem quo quisquam dolores natus ipsa laudantium architecto quia incidunt Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde ipsum odio at repellendus libero reiciendis cum veritatis officia, ut exercitationem quo quisquam dolores natus ipsa laudantium architecto quia incidunt aut?aut??</p>
+            <p className="text-gray-500">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde
+              ipsum odio at repellendus libero reiciendis cum veritatis officia,
+              ut exercitationem quo quisquam dolores natus ipsa laudantium
+              architecto quia incidunt autLorem ipsum dolor sit amet consectetur
+              adipisicing elit. Unde ipsum odio at repellendus libero reiciendis
+              cum veritatis officia, ut exercitationem quo quisquam dolores
+              natus ipsa laudantium architecto quia incidunt aut?Lorem ipsum
+              dolor sit amet consectetur adipisicing elit. Unde ipsum odio at
+              repellendus libero reiciendis cum veritatis officia, ut
+              exercitationem quo quisquam dolores natus ipsa laudantium
+              architecto quia incidunt Lorem ipsum dolor sit amet consectetur
+              adipisicing elit. Unde ipsum odio at repellendus libero reiciendis
+              cum veritatis officia, ut exercitationem quo quisquam dolores
+              natus ipsa laudantium architecto quia incidunt aut?aut??
+            </p>
           </div>
 
-          { projectInfo.started_at===0 && (walletInfo.address==projectInfo.owner)  &&  (
-            <button
-              className="bg-blue-500 m-auto flex mt-4 mb-4 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-              onClick={investApi}
-            >
-             Start Project
-            </button>
-          )}
+          {projectInfo.started_at === 0 &&
+            walletInfo.address == projectInfo.owner && (
+              <button
+                className="bg-blue-500 m-auto flex mt-4 mb-4 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                onClick={investApi}
+              >
+                Start Project
+              </button>
+            )}
 
           {Number(projectInfo.funding_ends_at * 1000) < new Date().getTime() ? (
             <button
