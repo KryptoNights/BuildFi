@@ -508,8 +508,8 @@ contract BuildFi {
         );
 
         // ensure the proof is valid
-        // bool isValid = IWitness.safeVerifyProof(proof);
-        // require(isValid, "Invalid proof");
+        bool isValid = IWitness.safeVerifyProof(proof);
+        require(isValid, "Invalid proof");
 
         // update milestone votes
         buildfi_projects[_projectId]
