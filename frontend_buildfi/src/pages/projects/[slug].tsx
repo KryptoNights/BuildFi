@@ -51,7 +51,7 @@ const Slug = (props: any) => {
     }
   };
 
-  const StartProject = async () => {
+  const handleStartProject = async () => {
     try {
       await startProject(id, walletInfo.address, signer!);
       showSuccessToast("Project is Started ");
@@ -162,7 +162,7 @@ const Slug = (props: any) => {
             walletInfo.address == projectInfo.owner && (
               <button
                 className="bg-blue-500 m-auto flex mt-4 mb-4 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                onClick={investApi}
+                onClick={handleStartProject}
               >
                 Start Project
               </button>
