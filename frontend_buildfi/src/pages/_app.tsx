@@ -7,17 +7,18 @@ import { Provider } from "react-redux";
 import Layout from "../../components/Layout/Layout";
 import { store } from "../store/index";
 import { useRouter } from "next/router";
+import { ToastContainer } from "react-toastify";
 
 function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  const isDefaultPage = (router.pathname === "/" ||router.pathname === "/kyc");
+  const isDefaultPage = router.pathname === "/" || router.pathname === "/kyc";
   const containerStyle = isDefaultPage
     ? {
         backgroundColor: "rgba(39, 46, 53, 0)",
         backgroundImage:
           "url(https://assets-global.website-files.com/63996d8b3c061af402fa0609/65c1a9a0012fe086763d8e0c_Illustration.png)",
         backgroundPosition: "0 0",
-        backgroundRepeat:"round",
+        backgroundRepeat: "round",
       }
     : {};
   return (
@@ -48,6 +49,18 @@ function App({ Component, pageProps }: AppProps) {
           <Provider store={store}>
             <Layout>
               <Component {...pageProps} />
+              <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+              />
             </Layout>
           </Provider>
         </div>
