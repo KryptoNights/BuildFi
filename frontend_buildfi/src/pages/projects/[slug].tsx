@@ -154,20 +154,7 @@ const Slug = (props: any) => {
           >
             <h1 className="text-xl font-bold mb-2">Description:</h1>
             <p className="text-gray-500">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde
-              ipsum odio at repellendus libero reiciendis cum veritatis officia,
-              ut exercitationem quo quisquam dolores natus ipsa laudantium
-              architecto quia incidunt autLorem ipsum dolor sit amet consectetur
-              adipisicing elit. Unde ipsum odio at repellendus libero reiciendis
-              cum veritatis officia, ut exercitationem quo quisquam dolores
-              natus ipsa laudantium architecto quia incidunt aut?Lorem ipsum
-              dolor sit amet consectetur adipisicing elit. Unde ipsum odio at
-              repellendus libero reiciendis cum veritatis officia, ut
-              exercitationem quo quisquam dolores natus ipsa laudantium
-              architecto quia incidunt Lorem ipsum dolor sit amet consectetur
-              adipisicing elit. Unde ipsum odio at repellendus libero reiciendis
-              cum veritatis officia, ut exercitationem quo quisquam dolores
-              natus ipsa laudantium architecto quia incidunt aut?aut??
+          {projectInfo.description}
             </p>
           </div>
 
